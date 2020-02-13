@@ -1,12 +1,10 @@
 # BattleCastle
-## Einführung
-> Dies ist eine Ausarbeitung für den Kurs Skriptsprachen 2019 der Fachhochschule Südwestfalen.
+> Dies ist eine Ausarbeitung für den Kurs _Skriptsprachen 2019_ der **Fachhochschule Südwestfalen**.
 > Die Ersteller und Eigentümer dieses Projektes sind **Alex Schäfer** und **Nils Liefländer**.
 
-## Inhalt
-ein Python Game, in dem 2 Spieler in einem vertikalen labyrinth gegeneinander kämpfen.
+## Einführung
+Dies ist ein Geschicklichtkeitsspiel, in dem 2 Spieler in einem vertikalen labyrinth gegeneinander kämpfen.
 Die beiden Spieler können in dem Labyrinth emporspringen um Deckung zu finden oder ein besseres Schussfeld zu erhalten.
-
 Es sind Healpacks um Labyrinth verteilt.
 
 
