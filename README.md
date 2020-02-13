@@ -1,7 +1,7 @@
 # BattleCastle
 ## Einführung
-<Dies ist eine Ausarbeitung für den Kurs Skriptsprachen 2019 der Fachhochschule Südwestfalen.
-Die Ersteller und Eigentümer dieses Projektes sind **Alex Schäfer** und **Nils Liefländer**.>
+> Dies ist eine Ausarbeitung für den Kurs Skriptsprachen 2019 der Fachhochschule Südwestfalen.
+> Die Ersteller und Eigentümer dieses Projektes sind **Alex Schäfer** und **Nils Liefländer**.
 
 ## Inhalt
 ein Python Game, in dem 2 Spieler in einem vertikalen labyrinth gegeneinander kämpfen.
