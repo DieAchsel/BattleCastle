@@ -1,8 +1,9 @@
-import pygame, os
+import os
+import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((1200, 750))
 
 pygame.display.set_caption("Battle Castle")
 
