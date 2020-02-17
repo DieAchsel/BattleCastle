@@ -19,6 +19,7 @@ http://programarcadegames.com/python_examples/sprite_sheets/
 """
  
 import pygame
+import os
  
 # Global constants
  
@@ -50,8 +51,8 @@ class Player(pygame.sprite.Sprite):
         width = 40
         height = 60
         self.image = pygame.Surface([width, height])
-        self.image.fill(RED)
- 
+        image = pygame.image.load(os.path.join('../img/char/01_Woodcutter', 'Woodcutter.png'))
+        self.image.blit(image, (0,0))
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
  
@@ -102,7 +103,7 @@ class Player(pygame.sprite.Sprite):
         if self.change_y == 0:
             self.change_y = 1
         else:
-            self.change_y += 0.75
+            self.change_y += 1.1
  
         # See if we are on the ground.
         if self.rect.y >= SCREEN_HEIGHT - self.rect.height and self.change_y >= 0:
@@ -121,7 +122,7 @@ class Player(pygame.sprite.Sprite):
  
         # If it is ok to jump, set our speed upwards
         if len(platform_hit_list) > 0 or self.rect.bottom >= SCREEN_HEIGHT:
-            self.change_y = -15
+            self.change_y = -18
  
     # Player-controlled movement:
     def go_left(self):
@@ -201,7 +202,6 @@ class Level_01(Level):
                  [30, 30, 70, 70],
                  [30, 30, 50, 50],
                  [10, 10, 100, 100],
-                 [300, 30, 130, 140],
                  [30, 10, 160, 150],
                  [30, 10, 200, 200],
                  [30, 10, 160, 150],
