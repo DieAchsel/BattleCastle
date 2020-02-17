@@ -10,6 +10,7 @@ icon = pygame.image.load(os.path.join('../img/icon', 'castle.png'))
 
 pygame.display.set_icon(icon)
 
+#GameLoop
 running = True
 while running:
     for event in pygame.event.get():
