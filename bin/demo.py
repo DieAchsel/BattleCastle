@@ -34,7 +34,7 @@ BLUE = (0, 0, 255)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
  
- 
+print(os.getcwd())
 class Player(pygame.sprite.Sprite):
     """ This class represents the bar at the bottom that the player
         controls. """
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         width = 40
         height = 60
         self.image = pygame.Surface([width, height])
-        image = pygame.image.load(os.path.join('../img/char/01_Woodcutter', 'Woodcutter.png'))
+        image = pygame.image.load(os.path.join('img\char\GraveRobber','GraveRobber.png')).convert_alpha()
         self.image.blit(image, (0,0))
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
