@@ -52,7 +52,8 @@ class Player(pygame.sprite.Sprite):
         width = 40
         height = 60
         #self.image = pygame.Surface([width, height])
-        self.image = pygame.image.load(os.path.join('img/char/GraveRobber', 'GraveRobber.png')).convert_alpha()
+        game_folder = os.path.dirname(__file__)
+        self.image = pygame.image.load(os.path.join(game_folder, 'img', 'char','GraveRobber', 'GraveRobber.png')).convert_alpha()
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
  
