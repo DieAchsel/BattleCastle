@@ -1,5 +1,5 @@
 #baut die Map
-from bin.src.classFighter import Fighter
+from bin.src.classPlayer import Fighter
 
 def buildMap():
     char1 = Fighter(200, 500)
