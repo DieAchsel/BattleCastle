@@ -49,14 +49,14 @@ class Player(pygame.sprite.Sprite):
  
         # Create an image of the block, and fill it with a color.
         # This could also be an image loaded from the disk.
-        width = 25
-        height = 40
+        width = 17
+        height = 38
         self.image = pygame.Surface([width, height])
         game_folder = os.path.dirname(__file__)
         im = pygame.image.load(os.path.join(game_folder, 'img', 'char','GraveRobber', 'GraveRobber.png'))
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
-        self.image.blit(im, (0,0), self.rect)
+        self.image.blit(im, (-1,3), self.rect)
         # Set speed vector of player
         self.change_x = 0
         self.change_y = 0
