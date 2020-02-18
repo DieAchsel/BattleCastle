@@ -8,6 +8,7 @@ from bin.src.main import SCREEN_HEIGHT
 #Classe für die spielbaren Spielfigur
 class Player(pygame.sprite.Sprite):
     def __init__(self):
+        
         """ Constructor function """
 
         # Call the parent's constructor
@@ -18,8 +19,8 @@ class Player(pygame.sprite.Sprite):
         width = 40
         height = 60
         self.image = pygame.Surface([width, height])
-        image = pygame.image.load(os.path.join('../img/char/GraveRobber', 'GraveRobber.png')).convert_alpha()
-        self.image.blit(image, (0, 0))
+        im = pygame.image.load(os.path.join('../img/char/GraveRobber', 'GraveRobber.png')).convert_alpha()
+        self.image.blit(im, (0, 0))
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
 

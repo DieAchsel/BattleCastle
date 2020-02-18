@@ -1,9 +1,11 @@
 from bin.src.classPlayer import *
 
-# Constanses
+
+game_folder = os.path.dirname(__file__)
+
 # Screen dimensions
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 750
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 
 
 
