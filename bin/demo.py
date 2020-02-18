@@ -18,9 +18,10 @@ http://programarcadegames.com/python_examples/f.php?file=platform_moving.py
 http://programarcadegames.com/python_examples/sprite_sheets/
 """
  
-import pygame
 import os
- 
+
+import pygame
+
 # Global constants
  
 # Colors
@@ -50,9 +51,8 @@ class Player(pygame.sprite.Sprite):
         # This could also be an image loaded from the disk.
         width = 40
         height = 60
-        self.image = pygame.Surface([width, height])
-        image = pygame.image.load(os.path.join('img\char\GraveRobber','GraveRobber.png')).convert_alpha()
-        self.image.blit(image, (0,0))
+        #self.image = pygame.Surface([width, height])
+        self.image = pygame.image.load(os.path.join('img/char/GraveRobber', 'GraveRobber.png')).convert_alpha()
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
  

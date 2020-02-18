@@ -7,7 +7,6 @@ from bin.src.main import SCREEN_HEIGHT
 
 #Classe für die spielbaren Spielfigur
 class Player(pygame.sprite.Sprite):
-
     def __init__(self):
         """ Constructor function """
 
