@@ -53,7 +53,7 @@ class Player(pygame.sprite.Sprite):
         height = 38
         self.image = pygame.Surface([width, height])
         game_folder = os.path.dirname(__file__)
-        im = pygame.image.load(os.path.join(game_folder, 'img', 'char','GraveRobber', 'GraveRobber.png'))
+        im = pygame.image.load(os.path.join(game_folder, 'img', 'char','02_GraveRobber', 'GraveRobber.png'))
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
         self.image.blit(im, (-1,3), self.rect)
