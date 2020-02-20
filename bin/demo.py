@@ -36,6 +36,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
  
 print(os.getcwd())
+game_folder = os.path.dirname(__file__)
 class Player(pygame.sprite.Sprite):
     """ This class represents the bar at the bottom that the player
         controls. """
@@ -51,12 +52,18 @@ class Player(pygame.sprite.Sprite):
         # This could also be an image loaded from the disk.
         width = 17
         height = 38
-        self.image = pygame.Surface([width, height])
-        game_folder = os.path.dirname(__file__)
+        self.image = pygame.Surface([width, height], depth=24)
+        key = (0,255,0)
+        self.rect = self.image.get_rect()
+        self.image.fill(key, self.image.get_rect())
+        self.image.set_colorkey(key)
         im = pygame.image.load(os.path.join(game_folder, 'img', 'char','GraveRobber', 'GraveRobber.png'))
         # Set a referance to the image rect.
-        self.rect = self.image.get_rect()
-        self.image.blit(im, (-1,3), self.rect)
+        im.convert_alpha()
+        
+        
+        self.image.blit(im, (-1,4), self.rect)
+    
         # Set speed vector of player
         self.change_x = 0
         self.change_y = 0
@@ -226,8 +233,8 @@ def main():
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
  
-    pygame.display.set_caption("Platformer Jumper")
- 
+    pygame.display.set_caption("BattleCastle", "BC")
+    pygame.display.set_icon(pygame.image.load(os.path.join(game_folder, "img", "icon", "castle.png")))
     # Create the player
     player = Player()
  
