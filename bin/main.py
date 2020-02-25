@@ -1,3 +1,29 @@
+#HauptProgramm:
+#Hier wird pygame initialisiert und
+#die Sprite-grouppen auf die Display-Oberfläche gezeichnet.
+#
+#DesWeiteren befindet sich hier die Spielschleife. in der sämtliche Klassen geupdated werden
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from bin.src.classPlayer import *
 
 
