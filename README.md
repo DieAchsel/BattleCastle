@@ -6,12 +6,14 @@
 Dies ist ein Geschicklichtkeitsspiel, in dem 2 Spieler in einem vertikalen labyrinth gegeneinander kämpfen.
 Die beiden Spieler können in dem Labyrinth emporspringen um Deckung zu finden oder ein besseres Schussfeld zu erhalten.
 Es sind Healpacks um Labyrinth verteilt.
+[embed]/Klassendiagramm.pdf[/embed]
 
-
-# Überschrift
+## Überschrift
 
 ## überschr2
+
 ### überschr3
+
 ...
 
 *kursiv*
