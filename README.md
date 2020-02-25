@@ -6,7 +6,18 @@
 Dies ist ein Geschicklichtkeitsspiel, in dem 2 Spieler in einem vertikalen labyrinth gegeneinander kämpfen.
 Die beiden Spieler können in dem Labyrinth emporspringen um Deckung zu finden oder ein besseres Schussfeld zu erhalten.
 Es sind Healpacks um Labyrinth verteilt.
-[embed]/Klassendiagramm.pdf[/embed]
+
+<object data="https://github.com/DieAchsel/BattleCastle/blob/master/Spieloberfl%C3%A4che%20und%20Steuerung.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://github.com/DieAchsel/BattleCastle/blob/master/Spieloberfl%C3%A4che%20und%20Steuerung.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/DieAchsel/BattleCastle/blob/master/Spieloberfl%C3%A4che%20und%20Steuerung.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
+
+## Spielfeld
+
+Das Spielfeld ist in ein Raster aufgeteilt, nach welchem sich der Levelaufbau orientiert, nicht jedoch der Spieler.
+Ist das Raster an den Rändern geöffnet (keine blockierenden Objekte im weg), dann ist es möglich von z.B. der rechten seite rechts rau auf die Linke Seite zu laufen, genauso wird mit der Y-Achse verfahren.
+Wenn jedoch die offene Seite von einem Objekt an der äquivalenten unteren Stelle blockiert werden, dann sind für den RandTile collisionen aktiv
 
 ## Überschrift
 
