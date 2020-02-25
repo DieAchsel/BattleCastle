@@ -7,9 +7,9 @@ Dies ist ein Geschicklichtkeitsspiel, in dem 2 Spieler in einem vertikalen labyr
 Die beiden Spieler können in dem Labyrinth emporspringen um Deckung zu finden oder ein besseres Schussfeld zu erhalten.
 Es sind Healpacks um Labyrinth verteilt.
 
-<object data="https://github.com/DieAchsel/BattleCastle/blob/master/Spieloberfl%C3%A4che%20und%20Steuerung.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="https://github.com/DieAchsel/BattleCastle/blob/master/Spieloberfl%C3%A4che%20und%20Steuerung.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/DieAchsel/BattleCastle/blob/master/Spieloberfl%C3%A4che%20und%20Steuerung.pdf">Download PDF</a>.</p>
+<object data="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">Download PDF</a>.</p>
     </embed>
 </object>
 
