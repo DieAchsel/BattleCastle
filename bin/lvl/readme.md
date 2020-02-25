@@ -5,8 +5,8 @@ Dieser Integer bestimmt, ob sich an dieser Position ein Tile befindet oder nicht
 
 TileIDs:
 
--  1 = defaultTile
--  0 = leer (kein Tile)
+- 1 = defaultTile
+- 0 = leer (kein Tile)
 - -1 = LavaTile
 - -2 = rockFormationTile
 - ... (in Zukunft zu erweitern)
