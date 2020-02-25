@@ -1,3 +1,4 @@
+#DEPRECATED: neue Konfig in bin/config/
 import os
 
 # Absoluter Path zum ordner
