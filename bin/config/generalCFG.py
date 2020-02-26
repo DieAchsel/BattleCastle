@@ -11,4 +11,13 @@ SCREEN_SIZE = {
 }
 
 
+#SMOOTH_SCALE wählt genutzte Methode zum Skalieren von Oberflächen, True für Smoothscale Methode
+#Smoothscale liefert ein besseres Ergebnis als scale, ist aber auch langsamer
+# weitere Infos hier: https://www.pygame.org/docs/ref/transform.html#pygame.transform.scale
+SMOOTH_SCALE = True
+SMOOTH_SCALE_FILTER = 'GENERIC' # 'GENERIC', 'MMX', oder 'SSE' verfügbar
+
+
+
+
 # Spezieldatentypen hier nachgucken: https://www.w3schools.com/python/python_dictionaries.asp
