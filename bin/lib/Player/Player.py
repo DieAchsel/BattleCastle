@@ -2,7 +2,7 @@ import os
 
 import pygame
 
-from bin.src.main import SCREEN_HEIGHT
+from bin.main import SCREEN_HEIGHT
 
 
 #Classe für die spielbaren Spielfigur
