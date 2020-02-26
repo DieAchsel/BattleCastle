@@ -22,9 +22,6 @@ class Tile (pygame.sprite.Sprite):
         else:
             return pygame.transform.scale(texture, self.tileSize["X"], self.tileSize["Y"])
 
-        
-
-#Anpassung notwendig!! TileSize richtet sich nach der gridSize im geladenen Level
     def calc_tileSize(self, gridSize = DEFAULT_GRID_SIZE):
         self.tileSize["X"] = gridSize["X"] // ARENA_SIZE["X"]
         self.tileSize["Y"] = gridSize["Y"] // ARENA_SIZE["Y"]
