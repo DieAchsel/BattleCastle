@@ -8,7 +8,9 @@ GAME_DIR = (os.path.join("..", os.path.dirname(__file__)))
 screenSize = {
     "X": 1280,
     "Y": 720}
-
+#globaler Colorkey
+COLORKEY = (0,255,0)#giftgrün (wird normalerweise nicht verwendet)
+MISSING_TEXTURE_COLOR = (255,0,0) # Anstelle von fehlenden Texturen wird diese Farbe angezeigt
 #Folgende Variablen vllt in playerConfig einfügen
 playerSize = {
     "X": 7,
