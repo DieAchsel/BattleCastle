@@ -12,6 +12,10 @@ pygame.init()
 # create the screen
 screen = pygame.display.set_mode((SCREEN_SIZE["X"], SCREEN_SIZE["Y"]))
 
+#Stellt SmoothScale Filter ein
+if(SMOOTH_SCALE):
+    pygame.transform.set_smoothscale_backend(SMOOTH_SCALE_FILTER)
+    
 # Background
 background = pygame.image.load(os.path.join(GAME_DIR, 'gfx', 'bg', '02', '02Full.png'))
 
