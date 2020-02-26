@@ -20,20 +20,20 @@ class Level:
         super().__init__()
 
     def getID(self):
-        return id
-        
+        return self.id
+
     def getTile(self, pos = {"X": 0, "Y": 0}):
-        if(pos.X < tilemap.len & pos.Y < tilemap[pos.X].len):
-            return tilemap[pos.X[pos.Y]]
+        if(pos.X < self.tilemap.len & pos.Y < self.tilemap[pos.X].len):
+            return self.tilemap[pos.X[pos.Y]]
 
 
     def setTile(self, pos = {"X": 0, "Y": 0}, type = 1):
-        if(pos.X < tilemap.len & pos.Y < tilemap[pos.X].len):
-            tilemap[pos.X[pos.Y]] = type
+        if(pos.X < self.tilemap.len & pos.Y < self.tilemap[pos.X].len):
+            self.tilemap[pos.X[pos.Y]] = type
 
     def unsetTile(self, pos ={"X": 0, "Y": 0}):
-        if(pos.X < tilemap.len & pos.Y < tilemap[pos.X].len):
-            tilemap[pos.X[pos.Y]] = 0
+        if(pos.X < self.tilemap.len & pos.Y < self.tilemap[pos.X].len):
+            self.tilemap[pos.X[pos.Y]] = 0
     
     def getUsedTiles(self):
         used = []
@@ -54,8 +54,12 @@ class Level:
     def setTextures(self, imObj, id, neighbors = [[0,0,0],
                                                   [0,1,0],
                                                   [0,0,0]]):
-        textureList.add(texture["textureSeq"].add(imObj)) #wird der textureSeqListe in texture so ein image übergeben?
-
+        temp = texture.copy()
+        temp["TextureSeq"].add(imObj)
+        temp["id"] = id
+        temp["Neighbors"] = neighbors
+        textureList.add(texture) #wird der textureSeqListe in texture so ein image übergeben?
+        
     def getTextures(self):
         return texture["textureSeq"]
         
