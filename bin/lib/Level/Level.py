@@ -5,6 +5,7 @@ import pygame
 class Level:
     difficulty = 0
     name = ""
+    id
     tilemap = []
     texture = {# hier komme ich etwas durcheinander mit den Datentypen: textureSeq soll eine Lise mit texturen beinhalten
     #texture selber soll wie ein struct (c++) agieren und nur diese 3 subtypen haben.
@@ -18,6 +19,9 @@ class Level:
     def __init__(self):
         super().__init__()
 
+    def getID(self):
+        return id
+        
     def getTile(self, pos = {"X": 0, "Y": 0}):
         if(pos.X < tilemap.len & pos.Y < tilemap[pos.X].len):
             return tilemap[pos.X[pos.Y]]
