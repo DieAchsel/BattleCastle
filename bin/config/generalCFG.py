@@ -1,3 +1,4 @@
+#generelle Imports hier einfügen
 import os
 import pygame
 # Absoluter Pfad zum bin-Ordner
