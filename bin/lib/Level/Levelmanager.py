@@ -2,7 +2,7 @@ import pygame
 from bin.lib.Level import Level
 from bin.lib.Level import Tile
 class Levelmanager:
-    Levels = {Level} 
+    Levels = [Level] 
     activeLevel = Level
     loadedTilesY = [Tile]
     loadedLevel = pygame.sprite.sprite.pygame.sprite.Group
