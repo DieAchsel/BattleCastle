@@ -42,7 +42,7 @@ class Levelmanager:
         #In Zukunft soll der Nutzer eigene Level erstellen können.
         #Da dies ein "NiceToHave"-Feature ist wird dies zunächst nicht implementiert
         pass
-    
+
     def getLoadedSprites(self):
         return loadedLevel
 
