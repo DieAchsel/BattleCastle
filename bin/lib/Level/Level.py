@@ -1,14 +1,12 @@
 import pygame
 
 
-#fertig/muss noch getestet werden (speziell das texture Obj testen)
+#Lesen von Leveln muss noch implementiert werden
 class Level:
     self.difficulty = 1
     self.name = "Level"
     self.tilemap = []
-
-    #texture selber soll wie ein struct (c++) agieren und nur diese 3 subtypen haben.
-    #hier komme ich etwas durcheinander mit den Datentypen: textureSeq soll eine Lise mit texturen beinhalten
+    self.textureList = []
     self.texture = {
         "textureSeq": [pygame.image],
         "id": 0,
@@ -16,10 +14,16 @@ class Level:
                       [0,1,0],
                       [0,0,0]]}
     
-    self.textureList = []
+    
 
     def __init__(self):
         super().__init__()
+
+    def add(self, rawLevel = [[]]):
+        for line in rawLevel:
+            for cell in line:
+                if(cell != 0)
+        pass
 
     def field_exist(self, pos = {"X": 0, "Y": 0}):
         return (0 <= pos["X"] < len(self.tilemap) & 0 <= pos["Y"] < len(self.tilemap[pos["X"]]))
@@ -55,7 +59,11 @@ class Level:
                     unused.add(y)
         return unused
 
-    def set_textures(self, imObj, id, neighbors = [[0,0,0],
+
+
+#Das kann noch nicht funktionieren, für jede textur muss erst den entsprechenden Slot mit der gleichen ID ermittelt werden und diesem Objekt die Textur angehängt werden
+#Die Slots müssen noch beim parsen der rohen levelDaten angelegt werden, (nur die die für das level benutzt werden)
+    def add_texture(self, imObj, id, neighbors = [[0,0,0],
                                                   [0,1,0],
                                                   [0,0,0]]):
         temp = self.texture.copy()
