@@ -11,7 +11,7 @@ class Progressbar(pygame.sprite.Sprite):
     innerBorderTexture = pygame.image
     innerCornerTexture = pygame.image
 
-    def __init__(self, newRect = self.rect, newProgress = DEFAULT_PROGRESS):
+    def __init__(self, newRect = DEFAULT_SIZE, newProgress = DEFAULT_PROGRESS):
         self.image = pygame.surface()
         super().__init__()
         self.rect = newRect

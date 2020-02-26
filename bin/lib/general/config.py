@@ -1,5 +1,5 @@
 #config-Datei für Progressbar
-defaultSize = {
+DEFAULT_SIZE = {
     "X": 100,
     "Y": 10
 }
