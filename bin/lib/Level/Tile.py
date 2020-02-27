@@ -1,3 +1,8 @@
+#nach Möglichkeit umbauen um eine dynamische Tileskalierung zu ermöglichen
+#hierzu darf tile keine konstanten zur skalierung von tile verwenden
+#stattdessen muss entweder die tilegröße woanders berechnet werden oder dem Konstruktor wird gridsize und screensize/areaSize übergeben
+
+#Tiles können auch gut von StatusArea mitbenutzt werden
 import pygame
 
 
@@ -15,7 +20,9 @@ class Tile (pygame.sprite.Sprite):
     self.damageOnCollision = 0   #negative Werte = heal
     self.damageOverTime = 0      #negative Werte = heal
 
-
+    #Diese Funktion am besten in den Levelmanager verschieben und tile über den init die Größe von extern beziehen
+    #wenn keine größe übergeben, dann grösse der Textur übernehmen
+    #dient unteranderem dazu die obtimale Feldgröße des StatusArea-raster zu ermitteln
     def scale_texture(self, texture = pygame.image):
         if(SMOOTH_SCALE):
             return pygame.transform.smoothscale(texture, self.tileSize["X"], self.tileSize["Y"])
