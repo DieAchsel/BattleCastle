@@ -1,4 +1,5 @@
 import pygame
+from bin.lib.Level import Tile
 
 
 #Lesen von Leveln muss noch implementiert werden
@@ -24,9 +25,23 @@ class Level:
             for cell in line:
                 if(cell != 0)
         pass
+    #Lese .lvl Datei
+    def parseFile(self, Filename = ""):
+        pass
 
-    def field_exist(self, pos = {"X": 0, "Y": 0}):
+    #kompiliere Raster und sprites (noch ohne textur)
+    def compile(self):
+        pass
+
+    #baue Level mit Texturen, entsprechend der Nachbarn
+    def build(self):
+        pass
+
+    def tile_exists(self, pos = {"X": 0, "Y": 0}):
         return (0 <= pos["X"] < len(self.tilemap) & 0 <= pos["Y"] < len(self.tilemap[pos["X"]]))
+
+    def get_tile_type(self, pos = {"X": 0, "Y": 0}):
+
 
     def get_ID(self):
         return self.id

@@ -1,0 +1,4 @@
+#in dieser Datei werden die Tile-namen mit den entsprechenden TileIDs(für tiletyp) verknüpft.
+#wenn Tiletypen für ein level benötigt werden aber nicht existieren wird das erstbeste andere Tileset mitgenutzt
+#Bsp (Rauten weglassen):
+#lava00 = -1;...
