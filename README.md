@@ -2,6 +2,7 @@
 > Dies ist eine Ausarbeitung für den Kurs _Skriptsprachen 2019_ der **Fachhochschule Südwestfalen**.
 > Die Ersteller und Eigentümer dieses Projektes sind **Alex Schäfer** und **Nils Liefländer**.
 
+
 ## Einführung
 Dies ist ein Geschicklichtkeitsspiel, in dem 2 Spieler in einem vertikalen labyrinth gegeneinander kämpfen.
 Die beiden Spieler können in dem Labyrinth emporspringen um Deckung zu finden oder ein besseres Schussfeld zu erhalten.
