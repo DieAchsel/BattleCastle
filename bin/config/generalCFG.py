@@ -3,7 +3,9 @@ import os
 import pygame
 # Absoluter Pfad zum bin-Ordner
 GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
-
+#globaler Colorkey
+COLORKEY = (0,255,0)#giftgrün (wird normalerweise nicht verwendet)
+MISSING_TEXTURE_COLOR = (255,0,0) # Anstelle von fehlenden Texturen wird diese Farbe angezeigt
 #Fenster-Auflösung
 SCREEN_SIZE = {
     "X": 1280,
