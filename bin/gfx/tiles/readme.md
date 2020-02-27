@@ -1,0 +1,2 @@
+Hier wird das Default_tilSet gespeichert. wenn neue Tiletypen erstellt werden müssen mindestens in default entsprechende Texturen enthalten sein.
+ansonsten wird eine solide Farbe gewählt, die dem durchschnittlichen Farbwert des restlichen Bildschirms beinhaltet
