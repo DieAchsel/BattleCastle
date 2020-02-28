@@ -11,11 +11,11 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_SIZE["X"], SCREEN_SIZE["Y"]))
 
 #Stellt SmoothScale Filter für Skalierungen ein
-if(SMOOTH_SCALE & SMOOTH_SCALE_ACCELERATION != 'AUTO'):
+if SMOOTH_SCALE != 'AUTO' and SMOOTH_SCALE_ACCELERATION != 'AUTO':
     pygame.transform.set_smoothscale_backend(SMOOTH_SCALE_ACCELERATION)
 
 # Background
-background = pygame.image.load(os.path.join(GAME_DIR, 'gfx', 'bg', '02', '02Full.png'))
+background = pygame.image.load(os.path.join(GAME_DIR, 'gfx', 'bg', 'default', 'Full.png'))
 
 # Caption and Icon
 pygame.display.set_caption("Battle Castle")
@@ -56,7 +56,10 @@ while True:
             if event.key == PLAYER_CONTROL[0]["LT"]:
                 player.go_left()
         if event.type == pygame.KEYUP:
-            player.stop()
+            if event.key == PLAYER_CONTROL[0]["RT"]:
+                player.stop()
+            if event.key == PLAYER_CONTROL[0]["LT"]:
+                player.stop()
 
 
     active_sprite_list.update()

@@ -37,6 +37,8 @@ class Player(pygame.sprite.Sprite):
             self.left = True
 
         # todo load image
+        self.image = startImage
+        self.rect = self.image.get_rect()
 
         # Player Speed
         self.speed_x = 0
@@ -58,17 +60,18 @@ class Player(pygame.sprite.Sprite):
         self.speed_x = 0
 
     def jump(self):
-        self.rect.y += 2
-        list_hit_platform = pygame.sprite.spritecollide(self, self.level.platformlist, False)
-        self.rect.y -= 2
-        if (len(list_hit_platform)) > 0 or self.rect.bottom >= SCREEN_SIZE["Y"]:
-            self.speed_y = -JUMP_HEIGHT
+        #self.rect.y += 2
+        #list_hit_platform = pygame.sprite.spritecollide(self, self.level.platformlist, False)
+        #self.rect.y -= 2
+        #if (len(list_hit_platform)) > 0 or self.rect.bottom >= SCREEN_SIZE["Y"]:
+        self.speed_y = -JUMP_HEIGHT
 
     def gravity(self):
+        """Effect of gravity"""
         if self.speed_y == 0:
             self.speed_y = 1
         else:
-            self.speed_y = 1.1
+            self.speed_y += 1.3
 
         if self.rect.y >= SCREEN_SIZE["Y"] - self.rect.height and self.speed_y >= 0:
             self.speed_y = 0
@@ -76,9 +79,11 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         # todo gravity
-
+        self.gravity()
         # Moving
         self.rect.x += self.speed_x
+        # Jumping
+        self.rect.y += self.speed_y
 
 
 

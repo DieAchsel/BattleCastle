@@ -63,4 +63,4 @@ JUMP_HEIGHT = 20
 # Sequence Frames
 
 # Spezieldatentypen hier nachgucken: https://www.w3schools.com/python/python_dictionaries.asp
-FRAMES_PER_SEQUENCE = 18
+FRAMES_PER_SEQUENCE = 36

@@ -53,7 +53,7 @@ class Player(pygame.sprite.Sprite):
         width = 17
         height = 38
         self.image = pygame.Surface([width, height], depth=24)
-        key = (0,255,0)
+        key = (0, 255, 0)
         self.rect = self.image.get_rect()
         self.image.fill(key, self.image.get_rect())
         self.image.set_colorkey(key)
@@ -61,7 +61,7 @@ class Player(pygame.sprite.Sprite):
         # Set a referance to the image rect.
         im.convert_alpha()
 
-        self.image.blit(im, (-1,4), self.rect)
+        self.image.blit(im, (-1, 4), self.rect)
     
         # Set speed vector of player
         self.change_x = 0
