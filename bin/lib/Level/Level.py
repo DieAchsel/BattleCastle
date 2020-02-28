@@ -63,7 +63,7 @@ class Level:
 
     #kompiliere Raster und sprites (noch ohne textur)
     def compile(self, rawLvl = DEFAULT_LVL):
-        
+        #baue die tileMap mit allen pygame.surfacebjekten (ohne geladenem image)
         pass
 
     #baue Level mit Texturen, entsprechend der Nachbarn
