@@ -9,9 +9,9 @@ Dies ist ein Geschicklichtkeitsspiel, in dem 2 Spieler in einem vertikalen labyr
 Die beiden Spieler können in dem Labyrinth emporspringen um Deckung zu finden oder ein besseres Schussfeld zu erhalten.
 Es sind Healpacks um Labyrinth verteilt.
 
-<object data="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">
-        <p>PDF kann nicht angezeigt werden. Hier herunterladen: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">Klassendiagramm</a>.</p>
+<object data="/Dokumentation/Klassendiagramm.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="/Dokumentation/Klassendiagramm.pdf">
+        <p>PDF kann nicht angezeigt werden. Hier herunterladen: <a href="/Dokumentation/Klassendiagramm.pdf">Klassendiagramm</a>.</p>
     </embed>
 </object>
 
@@ -22,7 +22,7 @@ Ist das Raster an den Rändern geöffnet (keine blockierenden Objekte im weg), d
 Wenn jedoch die offene Seite von einem Objekt an der äquivalenten unteren Stelle blockiert werden, dann sind für den RandTile collisionen aktiv
 <object data="/Dokumentation/Oberfl%C3%A4che.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="/Dokumentation/Oberfl%C3%A4che.pdf">
-        <p>PDF kann nicht angezeigt werden. Hier herunterladen: <a href="/Dokumentation/Oberfl%C3%A4che.pdf">Spielfeld</a>.</p>
+        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Oberfl%C3%A4che.pdf">Spielfeld</a>.</p>
     </embed>
 </object>
 
@@ -33,7 +33,7 @@ Die fehlenden Module lassen sich jedoch sehr einfach mit pip installieren.
 Eine Liste sämtlicher verwendeter Module findet sich in requirements.txt
 <object data="/requirements.txt" type="application/pdf" width="700px" height="700px">
     <embed src="/requirements.txt">
-        <p>txt kann nicht angezeigt werden. Hier herunterladen: <a href="/requirements.txt">Abhängigkeiten</a>.</p>
+        <p>txt kann nicht angezeigt werden. Hier öffnen: <a href="/requirements.txt">Abhängigkeiten</a>.</p>
     </embed>
 </object>
 Weitere Installations-Schritte sind nicht notwendig.
