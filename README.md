@@ -58,7 +58,7 @@ Weitere Installations-Schritte sind nicht notwendig.
 in dem Quellenverzeichnis lassen sich die für die Implementierung hinzugezogenen Quellen nachvollziehen:
 <object data="/Dokumentation/Quellen.txt" type="application/pdf" width="700px" height="700px">
     <embed src="/Dokumentation/Quellen.txt">
-        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Quellen.txt">Steuerung</a>.</p>
+        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Quellen.txt">Quellen</a>.</p>
     </embed>
 </object>
 
