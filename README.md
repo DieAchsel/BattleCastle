@@ -26,6 +26,37 @@ Wenn jedoch die offene Seite von einem Objekt an der äquivalenten unteren Stell
     </embed>
 </object>
 
+## Bedienung
+
+Die Bedienung ist sehr einfach gehalten.
+Standardmäßig haben 2 Spieler bereits eine vordefinierte Tastenbelegung:
+<object data="/Dokumentation/Steuerung.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="/Dokumentation/Steuerung.pdf">
+        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Steuerung.pdf">Steuerung</a>.</p>
+    </embed>
+</object>
+
+Es können weitere Spieler hinzugefügt werden. Diese benötigen, wenn mit der Tastatur gespielt wird, jedoch je weiteren Spieler eine Zusätzliches KeyMapping
+Dies kann (in Zukunft) über das Menü erstellt werden. (Aktuell muss das mapping in der playerCFG.py hinzugefügt werden)
+
+Wenn über die Spieleigenen Controller gespielt wird, ist diese Beschränkung nicht mehr vorhanden, da jeder Controller über den jeweiligen seriellen Port erkannt wird.
+
+
+# Quellen
+
+in dem Quellenverzeichnis lassen sich die für die Implementierung hinzugezogenen Quellen nachvollziehen:
+<object data="/Dokumentation/Quellen.txt" type="application/pdf" width="700px" height="700px">
+    <embed src="/Dokumentation/Quellen.txt">
+        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Quellen.txt">Steuerung</a>.</p>
+    </embed>
+</object>
+
+
+
+
+
+
+
 ## Installation
 
 Das Spiel benötigt verschiedene Module die nicht im Standard-Package enthalten sind.
