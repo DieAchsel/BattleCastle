@@ -1,16 +1,17 @@
 # BattleCastle
+
 > Dies ist eine Ausarbeitung für den Kurs _Skriptsprachen 2019_ der **Fachhochschule Südwestfalen**.
 > Die Ersteller und Eigentümer dieses Projektes sind **Alex Schäfer** und **Nils Liefländer**.
 
-
 ## Einführung
+
 Dies ist ein Geschicklichtkeitsspiel, in dem 2 Spieler in einem vertikalen labyrinth gegeneinander kämpfen.
 Die beiden Spieler können in dem Labyrinth emporspringen um Deckung zu finden oder ein besseres Schussfeld zu erhalten.
 Es sind Healpacks um Labyrinth verteilt.
 
 <object data="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">Klassendiagramm</a>.</p>
+        <p>PDF kann nicht angezeigt werden. Hier herunterladen: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">Klassendiagramm</a>.</p>
     </embed>
 </object>
 
@@ -21,15 +22,20 @@ Ist das Raster an den Rändern geöffnet (keine blockierenden Objekte im weg), d
 Wenn jedoch die offene Seite von einem Objekt an der äquivalenten unteren Stelle blockiert werden, dann sind für den RandTile collisionen aktiv
 <object data="https://github.com/DieAchsel/BattleCastle/raw/master/Dokumentation/Oberfl%C3%A4che.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="https://github.com/DieAchsel/BattleCastle/raw/master/Dokumentation/Oberfl%C3%A4che.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Dokumentation/Oberfl%C3%A4che.pdf">Klassendiagramm</a>.</p>
+        <p>PDF kann nicht angezeigt werden. Hier herunterladen: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Dokumentation/Oberfl%C3%A4che.pdf">Spielfeld</a>.</p>
     </embed>
 </object>
+
 ## Installation
 
 Das Spiel benötigt verschiedene Module die nicht im Standard-Package enthalten sind.
 Die fehlenden Module lassen sich jedoch sehr einfach mit pip installieren.
 Eine Liste sämtlicher verwendeter Module findet sich in requirements.txt
-
+<object data="/requirements.txt" type="application/pdf" width="700px" height="700px">
+    <embed src="/requirements.txt">
+        <p>txt kann nicht angezeigt werden. Hier herunterladen: <a href="/requirements.txt">Abhängigkeiten</a>.</p>
+    </embed>
+</object>
 Weitere Installations-Schritte sind nicht notwendig.
 
 ## überschr2
