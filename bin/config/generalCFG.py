@@ -7,7 +7,7 @@ GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
 SCREEN_SIZE = {
     #"X": 1280,
     #"Y": 720
-    "X" : 500,
+    "X" : 800,
     "Y" : 500
 }
 

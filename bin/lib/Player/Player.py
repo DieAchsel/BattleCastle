@@ -1,3 +1,4 @@
+from bin.config.levelCFG import ARENA_AREA
 from bin.config.playerCFG import *
 import glob
 
@@ -85,6 +86,12 @@ class Player(pygame.sprite.Sprite):
         # Jumping
         self.rect.y += self.speed_y
 
+        if self.rect.x < 0:
+            self.rect.x = SCREEN_SIZE["X"]
+            #self.rect.x = ARENA_AREA.x
+        elif self.rect.x > SCREEN_SIZE["X"]:
+            self.rect.x = 0
+            #self.rect.x = ARENA_AREA.y
 
 
         # Animation sequence
