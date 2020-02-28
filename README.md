@@ -10,7 +10,7 @@ Es sind Healpacks um Labyrinth verteilt.
 
 <object data="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">Download PDF</a>.</p>
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/DieAchsel/BattleCastle/raw/master/Klassendiagramm.pdf">Klassendiagramm</a>.</p>
     </embed>
 </object>
 
@@ -19,8 +19,18 @@ Es sind Healpacks um Labyrinth verteilt.
 Das Spielfeld ist in ein Raster aufgeteilt, nach welchem sich der Levelaufbau orientiert, nicht jedoch der Spieler.
 Ist das Raster an den Rändern geöffnet (keine blockierenden Objekte im weg), dann ist es möglich von z.B. der rechten seite rechts rau auf die Linke Seite zu laufen, genauso wird mit der Y-Achse verfahren.
 Wenn jedoch die offene Seite von einem Objekt an der äquivalenten unteren Stelle blockiert werden, dann sind für den RandTile collisionen aktiv
+<object data="Dokumentation/Oberfläche.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="Dokumentation/Oberfläche.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="Dokumentation/Oberfläche.pdf">Klassendiagramm</a>.</p>
+    </embed>
+</object>
+## Installation
 
-## Überschrift
+Das Spiel benötigt verschiedene Module die nicht im Standard-Package enthalten sind.
+Die fehlenden Module lassen sich jedoch sehr einfach mit pip installieren.
+Eine Liste sämtlicher verwendeter Module findet sich in requirements.txt
+
+Weitere Installations-Schritte sind nicht notwendig.
 
 ## überschr2
 
