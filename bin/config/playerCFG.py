@@ -47,8 +47,7 @@ SERIAL_REGEX = {
     "DN": "",
     "RT": "",
     "LT": "",
-    "AIM_RT": "",
-    "AIM_LT": "",
+    "AIM_VAL": "[0-9A-F]{2}",
     "FIRE": ""
 }
 

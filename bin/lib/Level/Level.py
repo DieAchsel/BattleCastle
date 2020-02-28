@@ -1,12 +1,15 @@
-import pygame
+import pygame, os
 from bin.lib.Level import Tile
+from bin.config.levelCFG import *
 
 
 #Lesen von Leveln muss noch implementiert werden
 class Level:
     self.difficulty = 1
     self.name = "Level"
+    self.gridSize = {"X": 0, "Y": 0}
     self.tilemap = []
+    self.playerStartPositions = []
     self.textureList = []
     self.texture = {
         "textureSeq": [pygame.image],
@@ -14,23 +17,53 @@ class Level:
         "Neighbors": [[0,0,0],
                       [0,1,0],
                       [0,0,0]]}
-    
-    
+
 
     def __init__(self):
         super().__init__()
-
-    def add(self, rawLevel = [[]]):
-        for line in rawLevel:
-            for cell in line:
-                if(cell != 0)
-        pass
+    
     #Lese .lvl Datei
-    def parseFile(self, Filename = ""):
-        pass
+    def parseFile(self, FilePath = ""):
+        self.playerStartPositions = DEFAULT_PLAYER_STARTPOS.copy()
+        if(os.path.isFile(FilePath)): #datei vorhanden?
+                lvlFile = open(FilePath, "r")
+                if(len(lvlFile) > 0): #inhalt nicht leer?
+                    lvlData = lvlData.replace(" ", "")
+                    rawLvl = DEFAULT_LVL.copy()
+                    rawLvl["grid"].clear()
+                    for line in lvlFile:
+                        for conditionName in DATA_CONDITIONS:
+                            condition = DATA_CONDITIONS[conditionName]
+                            results = re.search(condition, line)    #hier testen, ob auch lvlFile übergeben werden kann (denn dann ist zeile 32 unnötig)
+                            if(results[-1] != 'none'): 
+                                if conditionName == "grid":
+                                    for x in results:
+                                        tileTypeList = x.split(';')
+                                        if(len(tileTypeList) > rawLvl["maxWidth"]):
+                                            rawLvl["maxWidth"] = len(tileTypeList)   
+                                        rawLvl["grid"].add(list(map(int, tileTypeList))) #wandelt String-liste in int-liste um und fügt sie der tilemap zu
+                                elif conditionName == "difficulty":
+                                    extractedDifficulties = list(map(int, results.replace("difficulty=", "")))
+                                    rawLvl["difficulty"] = extractedDifficulties[-1]
+                                elif conditionName == "playerStartPos":
+                                    self.playerStartPositions.clear()
+                                    extractedplayerStartPositions = list(map(int, results.replace("playerStartPos=", "")))
+                                    startPosList = extractedplayerStartPositions[-1].split(')(')
+                                    for x in startPosList:
+                                        self.playerStartPositions = list(map(int, x.replace("(", "").replace(")", "").split(';') ))
+                            re.purge() #re-Chache leeren
+                else: 
+                    print("kann .lvl-Datei nicht lesen. (leer?) falle zurück auf Default Level")
+                    rawLvl = DEFAULT_LVL
+
+        else:
+            print("kann .lvl-Datei nicht lesen. (existiert?, ist es eine Datei?")
+            rawLvl = DEFAULT_LVL
+        return rawLvl
 
     #kompiliere Raster und sprites (noch ohne textur)
-    def compile(self):
+    def compile(self, rawLvl = DEFAULT_LVL):
+        
         pass
 
     #baue Level mit Texturen, entsprechend der Nachbarn
@@ -74,6 +107,7 @@ class Level:
                     unused.add(y)
         return unused
 
+    def set_grid(self, gridSize = DEFAULT_GRID_SIZE):
 
 
 #Das kann noch nicht funktionieren, für jede textur muss erst den entsprechenden Slot mit der gleichen ID ermittelt werden und diesem Objekt die Textur angehängt werden

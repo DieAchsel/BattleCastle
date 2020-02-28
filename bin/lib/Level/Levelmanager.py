@@ -1,6 +1,6 @@
-import pygame
-from bin.lib.Level import Level
-from bin.lib.Level import Tile
+import pygame, glob, os, re
+from bin.lib.Level import Level, Tile
+from bin.config.levelCFG import LEVEL_DIR
 class Levelmanager:
     Levels = [Level] 
     activeLevel = Level
@@ -32,8 +32,18 @@ class Levelmanager:
     def add(self, newFiles):
         pass
 
-    def load(self, levelID = activeLevel.getID() + 1):
-        pass
+    
+    
+    def load_levels(self, dir = LEVEL_DIR):
+        lvlPaths = os.listdir(LEVEL_DIR) #to be tested
+        #lvlFilePaths = glob.glob(LEVEL_DIR + '[0-9][0-9][0-9]') #deprectated, too complicated, /wo need
+        #lvlFilePaths.sort()
+        for singleLvlPath in lvlPaths:  #jeden Ordner in lvl/ einbeziehen
+            LvlFilePaths = glob.blod(os.path.join(singleLvlPath, '') + '*.lvl')
+            for singleLvlFilePath in LvlFilePaths:  #wenn in einem Ordner mehrere .lvl Dateien existieren, dann lade diese als individuelle Lvl
+                newLevel = Level()
+                newLevel.compile(newLevel.parseFile(singleLvlFilePath))
+
 
     def save(self):
         #In Zukunft sollen hier selbst erstellte Level gespeichert werden können
