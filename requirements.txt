@@ -4,4 +4,4 @@ pygame
 os
 re
 PySerial #für serielle Kommunikation mit BattleCastle Input Device
-#pandas
+glob
