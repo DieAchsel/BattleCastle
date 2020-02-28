@@ -11,7 +11,7 @@ Es sind Healpacks um Labyrinth verteilt.
 
 <object data="/Dokumentation/Klassendiagramm.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="/Dokumentation/Klassendiagramm.pdf">
-        <p>PDF kann nicht angezeigt werden. Hier herunterladen: <a href="/Dokumentation/Klassendiagramm.pdf">Klassendiagramm</a>.</p>
+        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Klassendiagramm.pdf">Klassendiagramm</a>.</p>
     </embed>
 </object>
 
