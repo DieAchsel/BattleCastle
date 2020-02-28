@@ -1,2 +1,7 @@
+#hier werden sämtliche benötigten Pakete aufgelistet
+#diese müssen ggfs mit pip nach-installiert werden
 pygame
 os
+re
+PySerial #für serielle Kommunikation mit BattleCastle Input Device
+#pandas

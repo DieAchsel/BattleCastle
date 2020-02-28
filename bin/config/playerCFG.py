@@ -11,8 +11,13 @@ CHARACTERS = {
 }
 
 PLAYER_SIZE = {
-    "X": 30,
-    "Y": 30}
+    "X": 7,
+    "Y": 14
+    }
+#Anzahl der Spieler.
+#bei mehr als 2 Spieler müssen für jeden weiteren Spieler Tastenbelegungen festgelegt werden.
+#Bei seriellen InputDevices ist dies nicht notwendig. Es werden die serialPortIDs mitgenutzt um die InputDevices auf die spieler zu mappen
+PLAYER_COUNT = 2
 
 #In zukunft soll man aus dem Menü Tastenbelegungen ändern können. dazu sollten die Tastenbelegungen ggfs in eine .txt ausgelagert werden
 PLAYER_CONTROL = [{
@@ -30,7 +35,22 @@ PLAYER_CONTROL = [{
     "LT": K_KP4,
     "AIM_RT": K_KP9,
     "AIM_LT": K_KP7,
-    "FIRE": K_KP_PERIOD}]
+    "FIRE": K_KP_PERIOD
+    }]
+
+#RegEx für serial-Input-Device
+#Das Input-Device sendet 9byte-Pakete, der Einfachheit und Lesbarkeit halber dezimal codiert.
+#Ein serialInput besteht aus sliderValue[0-1024], isPressedAttack[bool], isPressedUP[bool], isPressedDN[bool], isPressedRT[bool], isPressedLT[bool]
+#(ggfs in serialCFG.py verschieben)
+SERIAL_REGEX = {
+    "UP": "",
+    "DN": "",
+    "RT": "",
+    "LT": "",
+    "AIM_RT": "",
+    "AIM_LT": "",
+    "FIRE": ""
+}
 
 # Laufgeschwindigkeit der Charaktere
 RUNNING_SPEED = 5

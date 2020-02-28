@@ -1,25 +1,37 @@
+#nach Möglichkeit umbauen um eine dynamische Tileskalierung zu ermöglichen
+#hierzu darf tile keine konstanten zur skalierung von tile verwenden
+#stattdessen muss entweder die tilegröße woanders berechnet werden oder dem Konstruktor wird gridsize und screensize/areaSize übergeben
+
+#Tiles können auch gut von StatusArea mitbenutzt werden
 import pygame
 
 
-from bin.config.levelCFG import gridSize, arenaSize
-from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR
+from bin.config.levelCFG import DEFAULT_GRID_SIZE, ARENA_SIZE, DEFAULT_LAYER_ID, DEFAULT_TILE_SIZE
+from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SMOOTH_SCALE
 
 class Tile (pygame.sprite.Sprite):
-    tileSize = {"X": 64,
-                "Y": 64}
-    activeTexture = pygame.image
-    passiveTextureSeq = [pygame.image]
-    ActionTextureSeq = [pygame.image]
-    damageOnCollision = 0   #negative Werte = heal
-    damageOverTime = 0      #negative Werte = heal
+    self.layer = DEFAULT_LAYER_ID
+    self.tileSize = {
+        "X": DEFAULT_TILE_SIZE,
+        "Y": DEFAULT_TILE_SIZE}
+    self.activeTexture = pygame.image
+    self.passiveTextureSeq = [pygame.image]
+    self.ActionTextureSeq = [pygame.image]
+    self.damageOnCollision = 0   #negative Werte = heal
+    self.damageOverTime = 0      #negative Werte = heal
 
-
+    #Diese Funktion am besten in den Levelmanager verschieben und tile über den init die Größe von extern beziehen
+    #wenn keine größe übergeben, dann grösse der Textur übernehmen
+    #dient unteranderem dazu die obtimale Feldgröße des StatusArea-raster zu ermitteln
     def scale_texture(self, texture = pygame.image):
-        pass #skaliere übergebenes image Objekt auf tileSize
+        if(SMOOTH_SCALE):
+            return pygame.transform.smoothscale(texture, self.tileSize["X"], self.tileSize["Y"])
+        else:
+            return pygame.transform.scale(texture, self.tileSize["X"], self.tileSize["Y"])
 
-    def calc_tileSize(self):
-        self.tileSize["X"] = gridSize["X"] // arenaSize["X"]
-        self.tileSize["Y"] = gridSize["Y"] // arenaSize["Y"]
+    def calc_tileSize(self, gridSize = DEFAULT_GRID_SIZE):
+        self.tileSize["X"] = gridSize["X"] // ARENA_SIZE["X"]
+        self.tileSize["Y"] = gridSize["Y"] // ARENA_SIZE["Y"]
 
     def __init__(self, pos = {"X": 0, "Y": 0}, texture = pygame.image):
         super().__init__()
