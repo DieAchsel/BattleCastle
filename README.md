@@ -41,22 +41,6 @@ Dies kann (in Zukunft) über das Menü erstellt werden. (Aktuell muss das mappin
 
 Wenn über die Spieleigenen Controller gespielt wird, ist diese Beschränkung nicht mehr vorhanden, da jeder Controller über den jeweiligen seriellen Port erkannt wird.
 
-
-# Quellen
-
-in dem Quellenverzeichnis lassen sich die für die Implementierung hinzugezogenen Quellen nachvollziehen:
-<object data="/Dokumentation/Quellen.txt" type="application/pdf" width="700px" height="700px">
-    <embed src="/Dokumentation/Quellen.txt">
-        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Quellen.txt">Steuerung</a>.</p>
-    </embed>
-</object>
-
-
-
-
-
-
-
 ## Installation
 
 Das Spiel benötigt verschiedene Module die nicht im Standard-Package enthalten sind.
@@ -69,7 +53,16 @@ Eine Liste sämtlicher verwendeter Module findet sich in requirements.txt
 </object>
 Weitere Installations-Schritte sind nicht notwendig.
 
-## überschr2
+## Quellen
+
+in dem Quellenverzeichnis lassen sich die für die Implementierung hinzugezogenen Quellen nachvollziehen:
+<object data="/Dokumentation/Quellen.txt" type="application/pdf" width="700px" height="700px">
+    <embed src="/Dokumentation/Quellen.txt">
+        <p>PDF kann nicht angezeigt werden. Hier öffnen: <a href="/Dokumentation/Quellen.txt">Steuerung</a>.</p>
+    </embed>
+</object>
+
+
 
 ### überschr3
 
