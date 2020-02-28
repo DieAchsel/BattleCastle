@@ -53,16 +53,15 @@ class Player(pygame.sprite.Sprite):
         width = 17
         height = 38
         self.image = pygame.Surface([width, height], depth=24)
-        key = (0,255,0)
+        key = (0, 255, 0)
         self.rect = self.image.get_rect()
         self.image.fill(key, self.image.get_rect())
         self.image.set_colorkey(key)
         im = pygame.image.load(os.path.join(game_folder, 'img', 'char','GraveRobber', 'GraveRobber.png'))
         # Set a referance to the image rect.
         im.convert_alpha()
-        
-        
-        self.image.blit(im, (-1,4), self.rect)
+
+        self.image.blit(im, (-1, 4), self.rect)
     
         # Set speed vector of player
         self.change_x = 0
@@ -240,7 +239,7 @@ def main():
  
     # Create all the levels
     level_list = []
-    level_list.append( Level_01(player) )
+    level_list.append(Level_01(player))
  
     # Set the current level
     current_level_no = 0

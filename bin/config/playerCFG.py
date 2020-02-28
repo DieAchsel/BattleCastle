@@ -15,7 +15,7 @@ PLAYER_SIZE = {
     "Y": 14
     }
 #Anzahl der Spieler.
-#bei mehr als 2 Spieler müssen für jeden weiteren Spieler Tastenbelegungen festgelegt werden. 
+#bei mehr als 2 Spieler müssen für jeden weiteren Spieler Tastenbelegungen festgelegt werden.
 #Bei seriellen InputDevices ist dies nicht notwendig. Es werden die serialPortIDs mitgenutzt um die InputDevices auf die spieler zu mappen
 PLAYER_COUNT = 2
 
@@ -40,7 +40,7 @@ PLAYER_CONTROL = [{
 
 #RegEx für serial-Input-Device
 #Das Input-Device sendet 9byte-Pakete, der Einfachheit und Lesbarkeit halber dezimal codiert.
-#Ein serialInput besteht aus sliderValue[0-1024], isPressedAttack[bool], isPressedUP[bool], isPressedDN[bool], isPressedRT[bool], isPressedLT[bool] 
+#Ein serialInput besteht aus sliderValue[0-1024], isPressedAttack[bool], isPressedUP[bool], isPressedDN[bool], isPressedRT[bool], isPressedLT[bool]
 #(ggfs in serialCFG.py verschieben)
 SERIAL_REGEX = {
     "UP": "",
@@ -53,13 +53,14 @@ SERIAL_REGEX = {
 }
 
 # Laufgeschwindigkeit der Charaktere
-RUNNING_SPEED = 50
+RUNNING_SPEED = 5
 
 FALLING_SPEED_MULTIPLIER = 1.0
 
 # Skalierung der Map wird aufgerechnet
 JUMP_HEIGHT = 20
 
-#
+# Sequence Frames
 
 # Spezieldatentypen hier nachgucken: https://www.w3schools.com/python/python_dictionaries.asp
+FRAMES_PER_SEQUENCE = 36
