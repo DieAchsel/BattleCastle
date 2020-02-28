@@ -10,5 +10,6 @@ SCREEN_SIZE = {
     "Y": 720
 }
 
+FPS = 60
 
 # Spezieldatentypen hier nachgucken: https://www.w3schools.com/python/python_dictionaries.asp

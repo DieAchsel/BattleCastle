@@ -11,8 +11,8 @@ CHARACTERS = {
 }
 
 PLAYER_SIZE = {
-    "X": 7,
-    "Y": 14}
+    "X": 30,
+    "Y": 30}
 
 #In zukunft soll man aus dem Menü Tastenbelegungen ändern können. dazu sollten die Tastenbelegungen ggfs in eine .txt ausgelagert werden
 PLAYER_CONTROL = [{
@@ -33,13 +33,14 @@ PLAYER_CONTROL = [{
     "FIRE": K_KP_PERIOD}]
 
 # Laufgeschwindigkeit der Charaktere
-RUNNING_SPEED = 50
+RUNNING_SPEED = 5
 
 FALLING_SPEED_MULTIPLIER = 1.0
 
 # Skalierung der Map wird aufgerechnet
 JUMP_HEIGHT = 20
 
-#
+# Sequence Frames
 
 # Spezieldatentypen hier nachgucken: https://www.w3schools.com/python/python_dictionaries.asp
+FRAMES_PER_SEQUENCE = 18
