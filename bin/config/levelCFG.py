@@ -45,6 +45,23 @@ TILE_ID_RANGE_MAP = {
 
 #Standard-Texture-Set für Tile
 DEFAULT_TEXTURE_SET_PATH = os.path.join(GAME_DIR, "gfx", "tiles", "default")
+DEFAULT_TILE_PARAMETERS ={
+    "groupID": 1, # Tilegruppe (Tiles die für verchiedene Nachbar-Konstellationen eigene tiles haben werden zu einer Gruppe zusammengefasst, wenn nicht genutzt, leerlassen oder weglassen)
+    "isclippable": True,
+    "isAnimated": False, #wenn flag = false, dann werden weitere Texturen _1, _2 usw genutzt um aus diesen eine zufällige zu wählen
+    "dmgNeededToDestroy": -1, #Schaden der benötigt wird um tile zu zerstören (in 000 umwandeln) -1 = unendlich
+    "damageOnCollision": 0,
+    "damageOverTime": 0,
+    "layerID": 1, # Layer ID (0 liegt hinter dem Spieler, 1 auf Höhe des Spielers, 2 vor dem Spieler, usw.)
+    "playMvSlowDown": 0, # reduzierung der Geschwindigkeit des betr. spielers bei collision um angegebenen Faktor
+    "playerMvManipulation": [0,0], #on collision wird die bewegungsgeschwindigkeit und richtung des betr. Spielers entsprechend der X und Y werte geändert (wird weggeschubst)
+    "preferredNeighborIDs": [[000,000,000],
+                            [000,000,000],
+                            [000,000,000],]
+    }
+
+
+
 
 #Harming-Tiles:
 DEFAULT_DMG_ON_COLLISION = 10
