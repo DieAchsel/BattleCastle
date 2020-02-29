@@ -30,8 +30,8 @@ class Tile (pygame.sprite.Sprite):
             return pygame.transform.scale(texture, self.tileSize["X"], self.tileSize["Y"])
 
     def calc_tileSize(self, gridSize = DEFAULT_GRID_SIZE):
-        self.tileSize["X"] = gridSize["X"] // ARENA_SIZE["X"]
-        self.tileSize["Y"] = gridSize["Y"] // ARENA_SIZE["Y"]
+        self.tileSize["X"] = gridSize["X"] // ARENA_AREA.w
+        self.tileSize["Y"] = gridSize["Y"] // ARENA_AREA.h
 
     def __init__(self, pos = {"X": 0, "Y": 0}, texturePath = "DEFAULT_TEXTURE_SET_PATH"):
         super().__init__()
