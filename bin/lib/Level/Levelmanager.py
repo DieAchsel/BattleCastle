@@ -42,7 +42,7 @@ class Levelmanager:
             LvlFilePaths = glob.blod(os.path.join(singleLvlPath, '') + '*.lvl')
             for singleLvlFilePath in LvlFilePaths:  #wenn in einem Ordner mehrere .lvl Dateien existieren, dann lade diese als individuelle Lvl
                 newLevel = Level()
-                newLevel.compile(newLevel.parseFile(singleLvlFilePath))
+                newLevel.parseFile(singleLvlFilePath)
 
 
     def save(self):

@@ -6,7 +6,7 @@ from bin.config.levelCFG import *
 #Lesen von Leveln muss noch implementiert werden
 class Level:
     self.difficulty = 1
-    self.name = "Level"
+    self.title = "Level"
     self.gridSize = {"X": 0, "Y": 0}
     self.tilemap = []
     self.playerStartPositions = []
@@ -21,7 +21,13 @@ class Level:
 
     def __init__(self):
         super().__init__()
-    
+        self.difficulty = DEFAULT_LVL["difficulty"]
+        self.name = DEFAULT_LVL["title"]
+        self.tilemap = DEFAULT_LVL["grid"]
+    def __init__(self, FilePath = ""):
+        super().__init__()
+        if(FilePath != ""):
+            self.parseFile(FilePath)
     #Lese .lvl Datei
     def parseFile(self, FilePath = ""):
         self.playerStartPositions = DEFAULT_PLAYER_STARTPOS.copy()
@@ -59,16 +65,24 @@ class Level:
         else:
             print("kann .lvl-Datei nicht lesen. (existiert?, ist es eine Datei?")
             rawLvl = DEFAULT_LVL
-        return rawLvl
+        self.difficulty = rawLvl["difficulty"]
+        self.title = rawLvl["title"]
+        self.tilemap = rawLvl["grid"]
 
-    #kompiliere Raster und sprites (noch ohne textur)
-    def compile(self, rawLvl = DEFAULT_LVL):
-        #baue die tileMap mit allen pygame.surfacebjekten (ohne geladenem image)
+#gibt die NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
+    def getNeighbors(self, position = {"X": 0, "Y": 0}):
         pass
 
-    #baue Level mit Texturen, entsprechend der Nachbarn
+
+
+    #ersetze sämtlichen tileTypeIDs mit entsprechenden Texturen (pygame.image Objekte)
     def build(self):
         pass
+    
+    def unbuild(self):
+        for line in self.tilemap:
+            for field in line:
+                field = field.get_type()
 
     def tile_exists(self, pos = {"X": 0, "Y": 0}):
         return (0 <= pos["X"] < len(self.tilemap) & 0 <= pos["Y"] < len(self.tilemap[pos["X"]]))

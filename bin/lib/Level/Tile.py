@@ -6,19 +6,19 @@
 import pygame
 
 
-from bin.config.levelCFG import DEFAULT_GRID_SIZE, ARENA_SIZE, DEFAULT_LAYER_ID, DEFAULT_TILE_SIZE
+from bin.config.levelCFG import DEFAULT_GRID_SIZE, ARENA_SIZE, DEFAULT_LAYER_ID, DEFAULT_TILE_SIZE, DEFAULT_TILE_ID, DEFAULT_TEXTURE_SET_PATH, TILE_ID_RANGE_MAP
 from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SMOOTH_SCALE
 
 class Tile (pygame.sprite.Sprite):
     self.layer = DEFAULT_LAYER_ID
+    self.ID = DEFAULT_TILE_ID
     self.tileSize = {
         "X": DEFAULT_TILE_SIZE,
         "Y": DEFAULT_TILE_SIZE}
     self.activeTexture = pygame.image
     self.passiveTextureSeq = [pygame.image]
     self.ActionTextureSeq = [pygame.image]
-    self.damageOnCollision = 0   #negative Werte = heal
-    self.damageOverTime = 0      #negative Werte = heal
+
 
     #Diese Funktion am besten in den Levelmanager verschieben und tile über den init die Größe von extern beziehen
     #wenn keine größe übergeben, dann grösse der Textur übernehmen
@@ -33,9 +33,32 @@ class Tile (pygame.sprite.Sprite):
         self.tileSize["X"] = gridSize["X"] // ARENA_SIZE["X"]
         self.tileSize["Y"] = gridSize["Y"] // ARENA_SIZE["Y"]
 
-    def __init__(self, pos = {"X": 0, "Y": 0}, texture = pygame.image):
+    def __init__(self, pos = {"X": 0, "Y": 0}, texturePath = "DEFAULT_TEXTURE_SET_PATH"):
         super().__init__()
         calc_tileSize()
+        
+        if( TILE_ID_RANGE_MAP["uncollidable"]["first"] <= self.ID <= TILE_ID_RANGE_MAP["collidable"]["last"]):
+            self.damageOnCollision = 0   #negative Werte = heal
+            self.damageOverTime = 0      #negative Werte = heal
+        elif(self.ID):
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
         self.rect = self.image.get_rect()
@@ -132,10 +155,9 @@ class Tile (pygame.sprite.Sprite):
     def getTexture(self):
         return self.activeTexture
 
-
     def getTextureSeq(self):
         return self.passiveTextureSeq
-
+    def get_type(self)
 
     def update(self): #Muss noch implementiert werden
         pass 
