@@ -8,6 +8,7 @@ class Level:
     self.difficulty = 1
     self.title = "Level"
     self.gridSize = {"X": 0, "Y": 0}
+    self.currentTile = {"X": 0, "Y": 0} # gibt an, welche tilePosition grade betrachtet wird
     self.tilemap = []
     self.playerStartPositions = []
     self.textureList = []
@@ -72,10 +73,16 @@ class Level:
 #gibt die NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
     def getNeighbors(self, position = {"X": 0, "Y": 0}):
         pass
+    
+    #lade sämtliche Texturen und zugehörige IDs aus texturOrdner
+    def load_textureSet(self, path = "DEFAULT_TEXTURE_SET_PATH"):
 
 
 
     #ersetze sämtlichen tileTypeIDs mit entsprechenden Texturen (pygame.image Objekte)
+    #erstelle eine sprite.group mit sämtlichen tiles, passiven tiles, animierten tiles, 
+    #wenn IS_BUILD_ON_UPDATE = True, dann wird mit jedem build aufruf nur ein tile verändert und currentTile auf dieses gesetzt
+
     def build(self):
         pass
     
