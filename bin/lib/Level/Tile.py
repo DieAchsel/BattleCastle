@@ -6,133 +6,73 @@
 import pygame
 
 
-from bin.config.levelCFG import DEFAULT_GRID_SIZE, ARENA_SIZE, DEFAULT_LAYER_ID, DEFAULT_TILE_SIZE, DEFAULT_TILE_ID, DEFAULT_TEXTURE_SET_PATH, TILE_ID_RANGE_MAP
-from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SMOOTH_SCALE
+from bin.config.levelCFG import *
+from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SCALING, SMOOTH_SCALE
 
 class Tile (pygame.sprite.Sprite):
     self.layer = DEFAULT_LAYER_ID
     self.ID = DEFAULT_TILE_ID
+    self.isclippable = False
+    self.groupID = DEFAULT_TILE_GROUP_ID
     self.tileSize = {
         "X": DEFAULT_TILE_SIZE,
         "Y": DEFAULT_TILE_SIZE}
-    self.activeTexture = pygame.image
-    self.passiveTextureSeq = [pygame.image]
-    self.ActionTextureSeq = [pygame.image]
+    self.textureSequences = {
+        "passive": [],
+        "active": []
+    }
 
 
-    #Diese Funktion am besten in den Levelmanager verschieben und tile über den init die Größe von extern beziehen
-    #wenn keine größe übergeben, dann grösse der Textur übernehmen
-    #dient unteranderem dazu die obtimale Feldgröße des StatusArea-raster zu ermitteln
+    #skaliert imageObjekt auf eigene Tile-Größe
     def scale_texture(self, texture = pygame.image):
         if(SMOOTH_SCALE):
             return pygame.transform.smoothscale(texture, self.tileSize["X"], self.tileSize["Y"])
         else:
             return pygame.transform.scale(texture, self.tileSize["X"], self.tileSize["Y"])
 
-    def calc_tileSize(self, gridSize = DEFAULT_GRID_SIZE):
-        self.tileSize["X"] = gridSize["X"] // ARENA_AREA.w
-        self.tileSize["Y"] = gridSize["Y"] // ARENA_AREA.h
+    #berechnet die tileSize anhand der größe der Arena und der übergenebenen Anzahl der tiles in X und Y richtung
+    def calc_tileSize(self, gridSize = {}):
+        if(len(gridSize == 2)):
+            self.tileSize["X"] = gridSize["X"] // ARENA_AREA.w
+            self.tileSize["Y"] = gridSize["Y"] // ARENA_AREA.h
+        else:
+            self.tileSize = DEFAULT_TILE_SIZE
 
-    def __init__(self, pos = {"X": 0, "Y": 0}, texturePath = "DEFAULT_TEXTURE_SET_PATH"):
+    #erstellt ein tileObjekt. 
+    #wenn keine textur übergeben wird, wird das Objekt zunächst ohne textur erstellt
+    def __init__(self, pos = {"X": 0, "Y": 0}, texturePath = "", parameters = DEFAULT_TILE_CONF_PARAMETERS, gridSize = {}):
         super().__init__()
-        calc_tileSize()
         
-        if( TILE_ID_RANGE_MAP["uncollidable"]["first"] <= self.ID <= TILE_ID_RANGE_MAP["collidable"]["last"]):
-            self.damageOnCollision = 0   #negative Werte = heal
-            self.damageOverTime = 0      #negative Werte = heal
-        elif(self.ID):
-            
-
-            
-
+        calc_tileSize(gridSize)#berechne tileSize anhand der lvlgröße
         self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
         self.rect = self.image.get_rect()
         self.image.fill(COLORKEY, self.image.get_rect())
         self.image.set_colorkey(COLORKEY)
+        self.add_texture(texturePath)
 
-        self.image.blit(texture.convert(), self.image.get_rect)
-        self.activeTexture = self.image
-
-    def __init__(self, newRect = pygame.Rect, texture = [pygame.image]):
-        super().__init__()
-
-        calc_tileSize()
-
-        self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
-        self.rect = self.image.get_rect()
-        
-        self.image.set_colorkey(COLORKEY)
-        if(len(texture) > 0):
-            #skaliere jede Textur in der Liste auf die tileMaße und setze den Hintergrund entsprechend COLORKEY
-            for x in texture:
-                self.image.fill(COLORKEY, self.image.get_rect())
-                self.image.blit(x.convert(), self.image.get_rect())
-                self.passiveTextureSeq.append(self.image)
-            self.hasAnimation = True
+    #fügt eine Textur hinzu, über die Flag isActive kann die übergebene Textur zusätzlich als aktive texture markiert werden
+    def add_texture(self, FilePath = "", isActiveTexture = False):
+        texture = pygame.image()
+        if(os.path.isfile(FilePath)):
+            texture = pygame.image.load(FilePath)
+            if(SCALING):
+                texture = self.scale_texture(texture) #passe Textur auf tilegröße an
         else:
-            self.image.fill(MISSING_TEXTURE_COLOR, self.image.get_rect())
-            self.hasAnimation = False
-
-        self.hasAction = False
-        self.activeTexture = self.image
-        
-    def __init__(self, newRect = pygame.Rect, texture = pygame.image, actionTexture = pygame.image):
-        super().__init__()
-
-        calc_tileSize()
-
-        self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
-        self.rect = self.image.get_rect()
-
-        self.image.fill(COLORKEY, self.image.get_rect())
-        self.image.set_colorkey(COLORKEY)
-
-        self.image.blit(actionTexture.convert(), self.image.get_rect)
-        self.activeTextureSeq.append(self.image)
-
-        self.image.fill(COLORKEY, self.image.get_rect())
-        self.image.blit(texture.convert(), self.image.get_rect)
-        self.passiveTextureSeq.append(self.image)
-        self.activeTexture = self.image
-        self.hasAnimation = False
-        self.hasAction = True
-
-    def __init__(self, newRect = pygame.Rect, texture = [pygame.image], actionTexture = [pygame.image]):
-        super().__init__()
-
-        calc_tileSize()
-
-        self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
-        self.rect = self.image.get_rect()
-        
-        self.image.set_colorkey(COLORKEY)
-        if(len(actionTexture) > 0):
-            #skaliere jede Textur in der Liste auf die tileMaße und setze den Hintergrund entsprechend COLORKEY
-            for x in actionTexture:
-                self.image.fill(COLORKEY, self.image.get_rect())
-                self.image.blit(x.convert(), self.image.get_rect())
-                self.actionTextureSeq.append(self.image)
-            self.hasAction = True
+            #Falle hier in Zukunft auf eine benachbarte Textur oder auf StandardTexturen zurück
+            texture = pygame.image.fill(MISSING_TEXTURE_COLOR, self.image.get_rect())
+        if(isActiveTexture):
+            self.textureSequences["active"].add(texture)
         else:
-             hasAction = False
-        if(len(texture) > 0):
-            for x in texture:
-                self.image.fill(COLORKEY, self.image.get_rect())
-                self.image.blit(x.convert(), self.image.get_rect())
-                self.textureSeq.append(self.image)
-            self.activeTexture = self.image
-            self.hasAnimation = True
+            self.textureSequences["passive"].add(texture)
+        #self.image.blit(texture.convert(), self.image.get_rect)
+        #self.activeTexture = self.image
+
+    def has_animation(self, isActiveSequence = False):
+        if(isActiveSequence):
+            x = "active"
         else:
-            self.image.fill(MISSING_TEXTURE_COLOR, self.image.get_rect())
-            self.activeTexture = self.image
-            self.hasAnimation = False
-        
-
-        
-
-
-    def has_animation(self):
-        return self.hasAnimation
+            x = "passive"
+        if(len(textureSequences[x]))
 
     def has_action(self):
         return self.hasAction
@@ -142,7 +82,9 @@ class Tile (pygame.sprite.Sprite):
 
     def getTextureSeq(self):
         return self.passiveTextureSeq
-    def get_type(self)
-
+    def get_ID(self):
+        return self.ID
+    def get_group_ID(self):
+        return self.groupID
     def update(self): #Muss noch implementiert werden
         pass 

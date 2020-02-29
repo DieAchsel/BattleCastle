@@ -5,14 +5,21 @@ from bin.config.levelCFG import *
 
 #Lesen von Leveln muss noch implementiert werden
 class Level:
-    self.difficulty = 1
+    self.difficulty = DEFAULT_DIFFICULTY
     self.title = "Level"
-    self.gridSize = {"X": 0, "Y": 0}
+    self.gridSize = pygame.rect(0, 0, 0, 0) #zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
     self.currentTile = {"X": 0, "Y": 0} # gibt an, welche tilePosition grade betrachtet wird
     self.tilemap = []
-    self.playerStartPositions = []
-    self.textureList = []
-    self.texture = {
+    self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
+    self.loadedTileIDs = [
+        {
+            "ID": 0, #TileID
+            "Parameters": DEFAULT_TILE_CONF_PARAMETERS #zugehöriges ausgelesenes ParameterDict
+        }
+    ]
+
+    self.textureList = [] #DEPRECATED (to be removed)
+    self.texture = {    #DEPRECATED (to be removed)
         "textureSeq": [pygame.image],
         "id": 0,
         "Neighbors": [[0,0,0],
@@ -28,9 +35,9 @@ class Level:
     def __init__(self, FilePath = ""):
         super().__init__()
         if(FilePath != ""):
-            self.parseFile(FilePath)
+            self.parseLvl(FilePath)
     #Lese .lvl Datei
-    def parseFile(self, FilePath = ""):
+    def parseLvl(self, FilePath = ""):
         self.playerStartPositions = DEFAULT_PLAYER_STARTPOS.copy()
         if(os.path.isFile(FilePath)): #datei vorhanden?
                 lvlFile = open(FilePath, "r")
@@ -62,20 +69,33 @@ class Level:
                 else: 
                     print("kann .lvl-Datei nicht lesen. (leer?) falle zurück auf Default Level")
                     rawLvl = DEFAULT_LVL
+                    self.gridSize = (0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"]) #explizit festlegen, da normalerweise gridSize on the fly berechnet wird
 
         else:
             print("kann .lvl-Datei nicht lesen. (existiert?, ist es eine Datei?")
             rawLvl = DEFAULT_LVL
+            self.gridSize = (0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"]) #explizit festlegen, da normalerweise gridSize on the fly berechnet wird
         self.difficulty = rawLvl["difficulty"]
         self.title = rawLvl["title"]
         self.tilemap = rawLvl["grid"]
+        
+    #lade und parse textureSetConf
+    def parseTextureSet(self, FilePath = ""):
+
+        tileObject = DEFAULT_TILE_CONF_PARAMETERS.copy()
+        #ausgelesene ID Objekt in tileObjet parsen und self.loadedTileIDs hinzufügen
+        #
+        pass
 
 #gibt die NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
     def getNeighbors(self, position = {"X": 0, "Y": 0}):
-        pass
+        return neigbhors
     
-    #lade sämtliche Texturen und zugehörige IDs aus texturOrdner
-    def load_textureSet(self, path = "DEFAULT_TEXTURE_SET_PATH"):
+    #1. lade textureSetConf und beschreibe sämtliche geladenen Tiles mit den zu GroupID entsprechenden Eigenschaften
+    #2. wähle im 2. Schritt die passende TileID(entsprechend der Neighbors) aus der geöffneten Gruppe aus
+    #3. erstelle ein tile und übergebe den texturepfad des entsprechenden tiles
+    #das bild wird erst mit build() geladen um zu verhindern dass alle lvl parallel offen sind
+    def compileLvl(self, path = "DEFAULT_TEXTURE_SET_PATH"):
 
 
 
@@ -86,6 +106,8 @@ class Level:
     def build(self):
         pass
     
+    #wenn das level wechselt, setze die tiles zurück auf
+    #das geladene Bild wird durch eine solide Farbe ersetzt, oder das imageObjekt wird sogar zerstört
     def unbuild(self):
         for line in self.tilemap:
             for field in line:
@@ -128,11 +150,10 @@ class Level:
                     unused.add(y)
         return unused
 
-    def set_grid(self, gridSize = DEFAULT_GRID_SIZE):
-
 
 #Das kann noch nicht funktionieren, für jede textur muss erst den entsprechenden Slot mit der gleichen ID ermittelt werden und diesem Objekt die Textur angehängt werden
 #Die Slots müssen noch beim parsen der rohen levelDaten angelegt werden, (nur die die für das level benutzt werden)
+#-----DEPRECATED(to be removed)
     def add_texture(self, imObj, id, neighbors = [[0,0,0],
                                                   [0,1,0],
                                                   [0,0,0]]):
@@ -145,4 +166,4 @@ class Level:
         
     def get_textures(self):
         return self.textureList
-        
+#-----DEPRECATED(to be removed)
