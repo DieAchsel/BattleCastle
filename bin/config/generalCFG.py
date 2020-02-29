@@ -19,6 +19,7 @@ FPS = 60
 #SMOOTH_SCALE wählt genutzte Methode zum Skalieren von Oberflächen, True für Smoothscale Methode
 #Smoothscale liefert ein besseres Ergebnis als scale, ist aber auch langsamer
 #weitere Infos hier: https://www.pygame.org/docs/ref/transform.html#pygame.transform.scale
+SCALING = True # schaltet Skalierung der Tiles ein
 SMOOTH_SCALE = True 
 #SmoothScale Beschleunigung 
 SMOOTH_SCALE_ACCELERATION = 'AUTO' #'AUTO', 'GENERIC' (Ohne Bescheunigung), 'MMX' (mit MMX Instruktionen), 'SSE' (MMX + SSE Erweiterung)
