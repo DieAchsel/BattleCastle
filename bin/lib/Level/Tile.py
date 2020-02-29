@@ -43,22 +43,7 @@ class Tile (pygame.sprite.Sprite):
         elif(self.ID):
             
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            
 
         self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
         self.rect = self.image.get_rect()
