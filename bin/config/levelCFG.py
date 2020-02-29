@@ -34,7 +34,8 @@ ARENA_POSITION = (0,0)
 #-----------------------------Tile-Parameter--------------------------------
 #Standard-tile-typ, wenn kein tile-typ zugeordnet werden kann (sollte nicht passieren)
 DEFAULT_TILE_ID = 0   #0 = unsichtbar(wird beim level.build() in die spritegroup unusedTiles verschoben)
-
+DEFAULT_TILE_GROUP_ID = 0
+#DEPRECATED-----
 TILE_ID_RANGE_MAP = {
     "harmful_collidable": {"first": 51, "last": 100},
     "collidable": {"first": 1, "last": 50},
@@ -42,10 +43,11 @@ TILE_ID_RANGE_MAP = {
     "uncollidable": {"first": -50, "last": -1},
     "harmful_uncollidable": {"first": -100, "last": -51}
 }
+#-----DEPRECATED
 
 #Standard-Texture-Set für Tile
 DEFAULT_TEXTURE_SET_PATH = os.path.join(GAME_DIR, "gfx", "tiles", "default")
-DEFAULT_TILE_PARAMETERS ={
+DEFAULT_TILE_CONF_PARAMETERS ={
     "groupID": 1, # Tilegruppe (Tiles die für verchiedene Nachbar-Konstellationen eigene tiles haben werden zu einer Gruppe zusammengefasst, wenn nicht genutzt, leerlassen oder weglassen)
     "isclippable": True,
     "isAnimated": False, #wenn flag = false, dann werden weitere Texturen _1, _2 usw genutzt um aus diesen eine zufällige zu wählen
@@ -59,8 +61,18 @@ DEFAULT_TILE_PARAMETERS ={
                             [000,000,000],
                             [000,000,000],]
     }
-
-
+TILE_CONF_REGEX ={
+    "groupID": "", # Tilegruppe (Tiles die für verchiedene Nachbar-Konstellationen eigene tiles haben werden zu einer Gruppe zusammengefasst, wenn nicht genutzt, leerlassen oder weglassen)
+    "isclippable": "",
+    "isAnimated": "", #wenn flag = false, dann werden weitere Texturen _1, _2 usw genutzt um aus diesen eine zufällige zu wählen
+    "dmgNeededToDestroy": "", #Schaden der benötigt wird um tile zu zerstören (in 000 umwandeln) -1 = unendlich
+    "damageOnCollision": "",
+    "damageOverTime": "",
+    "layerID": "", # Layer ID (0 liegt hinter dem Spieler, 1 auf Höhe des Spielers, 2 vor dem Spieler, usw.)
+    "playMvSlowDown": "", # reduzierung der Geschwindigkeit des betr. spielers bei collision um angegebenen Faktor
+    "playerMvManipulation": "", #on collision wird die bewegungsgeschwindigkeit und richtung des betr. Spielers entsprechend der X und Y werte geändert (wird weggeschubst)
+    "preferredNeighborIDs": ["",""]
+    }
 
 
 #Harming-Tiles:
@@ -72,6 +84,7 @@ DEFAULT_DMG_OVER_TIME = 4
 #spart RAM, jedoch muss das Level beim erneuten Laden neu gebaut (build()) werden
 IS_UNBUILDING_ON_UNLOAD = True
 IS_BUILD_ON_UPDATE = True #mit jedem UpdateProzess wird ein Tile gebaut. 
+
 #------------------------------Datei-Handling-------------------------------
 #RegEx Ausdrücke zum Parsen der .lvl Dateien
 #jede zu lesende Variable wird hier registriert
@@ -87,13 +100,10 @@ LEVEL_DIR = os.path.join(GAME_DIR, 'lvl', '')
 
 #-------------------------------Default Level--------------------------------
 #Werte, die genutzt werden, wenn es Probleme mit dem Laden der .lvl Dateien gibt
+#DIESE WERTE DÜRFEN NICHT ZUR LAUFZEIT VERÄNDERT WERDEN! ES HANDELT SICH UM FALLBACK-DATEN
 DEFAULT_TEXTURE_PATH = os.path.join(GAME_DIR, "gfx", "tiles", "00")
 DEFAULT_BG_PATH = os.path.join(GAME_DIR, "gfx", "bg", "00", "Full.png")
 DEFAULT_DIFFICULTY = 0
-
-
-
-#In zukunft ein defaultGrid anhand der oberen defaultinformationen generieren
 DEFAULT_LVL = { 
     "title" : "default Level",
     "difficulty" : 0,
@@ -131,9 +141,12 @@ DEFAULT_LVL = {
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
     "maxWidth" : 32}
+DEFAULT_GRID_SIZE = {
+    "X": DEFAULT_LVL["maxWidth"],
+    "Y": len(DEFAULT_LVL["grid"])}
 
-DEFAULT_TILE_SIZE = {
-"X": ARENA_AREA.w // DEFAULT_LVL["maxWidth"],
-"Y": ARENA_AREA.h // len(DEFAULT_LVL["grid"])
+DEFAULT_TILE_SIZE = { #statische TileSize berechnet von auf DEFAULT_LVL (nnur für Fallback auf DEFAULT)
+"X": ARENA_AREA.w // DEFAULT_GRID_SIZE["X"],
+"Y": ARENA_AREA.h // DEFAULT_GRID_SIZE["Y"]
 }
-DEFAULT_PLAYER_STARTPOS = [[1, (len(DEFAULT_LVL["grid"]) - 1)], [len(DEFAULT_LVL["maxWidth"]) - 1, DEFAULT_LVL["maxWidth"] - 2]]
+DEFAULT_PLAYER_STARTPOS = [[1, (len(DEFAULT_LVL["grid"]) - 1)], [len(DEFAULT_LVL["maxWidth"]) - 1, DEFAULT_LVL["maxWidth"] - 2]] #NUR FÜR FALLBACK AUF DEFAULT
