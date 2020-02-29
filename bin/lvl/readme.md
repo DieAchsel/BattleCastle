@@ -5,6 +5,8 @@ Dieser Integer bestimmt, ob sich an dieser Position ein Tile befindet oder nicht
 Diese TileIDs bestimmen, welche TexturListe genutzt wird. viele Texturen haben verschiedene Varianten mit verschiedenen Seiten, die Variante wird von den Nachbarn im Lvl-Raster bestimmt.
 
 ## Verteilung der TileIDs
+> Es handelt sich hierbei um Richtwerte, die eingehalten werden sollten aber nicht müssen.
+> Da jedes tileSet sein eigenes Mapping mitbringt ist die unten angegebene Verteilung kein Muss
 
     [-X] - [-1]    <      0      <     [1] - [X]
 [clipping_erlaubt] < [kein_tile] < [clipping_verboten]
