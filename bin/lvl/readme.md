@@ -6,8 +6,9 @@ Diese TileIDs bestimmen, welche TexturListe genutzt wird. viele Texturen haben v
 
 ## Verteilung der TileIDs
 > Es handelt sich hierbei um Richtwerte, die eingehalten werden sollten aber nicht müssen.
-> Da jedes tileSet sein eigenes Mapping mitbringt ist die unten angegebene Verteilung kein Muss
-
+> Da jedes tileSet sein eigenes Mapping mitbringt ist die unten angegebene Verteilung kein Muss.
+> lediglich die 0 ist reserviert für [kein Tile]
+ 
     [-X] - [-1]    <      0      <     [1] - [X]
 [clipping_erlaubt] < [kein_tile] < [clipping_verboten]
 
