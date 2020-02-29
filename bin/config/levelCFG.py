@@ -54,7 +54,7 @@ DEFAULT_DMG_OVER_TIME = 4
 #Ersetzt beim Levelwechsel die surfaceObjekte im Raster durch ihre TypeID. 
 #spart RAM, jedoch muss das Level beim erneuten Laden neu gebaut (build()) werden
 IS_UNBUILDING_ON_UNLOAD = True
-
+IS_BUILD_ON_UPDATE = True #mit jedem UpdateProzess wird ein Tile gebaut. 
 #------------------------------Datei-Handling-------------------------------
 #RegEx Ausdrücke zum Parsen der .lvl Dateien
 #jede zu lesende Variable wird hier registriert
