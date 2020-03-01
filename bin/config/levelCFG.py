@@ -59,19 +59,20 @@ DEFAULT_TILE_CONF_PARAMETERS ={
     "playerMvManipulation": [0,0], #on collision wird die bewegungsgeschwindigkeit und richtung des betr. Spielers entsprechend der X und Y werte geändert (wird weggeschubst)
     "preferredNeighborIDs": [[000,000,000],
                             [000,000,000],
-                            [000,000,000],]
+                            [000,000,000]]
     }
 TILE_CONF_REGEX ={
-    "groupID": "", # Tilegruppe (Tiles die für verchiedene Nachbar-Konstellationen eigene tiles haben werden zu einer Gruppe zusammengefasst, wenn nicht genutzt, leerlassen oder weglassen)
-    "isclippable": "",
-    "isAnimated": "", #wenn flag = false, dann werden weitere Texturen _1, _2 usw genutzt um aus diesen eine zufällige zu wählen
-    "dmgNeededToDestroy": "", #Schaden der benötigt wird um tile zu zerstören (in 000 umwandeln) -1 = unendlich
-    "damageOnCollision": "",
-    "damageOverTime": "",
-    "layerID": "", # Layer ID (0 liegt hinter dem Spieler, 1 auf Höhe des Spielers, 2 vor dem Spieler, usw.)
-    "playMvSlowDown": "", # reduzierung der Geschwindigkeit des betr. spielers bei collision um angegebenen Faktor
-    "playerMvManipulation": "", #on collision wird die bewegungsgeschwindigkeit und richtung des betr. Spielers entsprechend der X und Y werte geändert (wird weggeschubst)
-    "preferredNeighborIDs": ["",""]
+    "ID": "^ID:\d+\{$",
+    "groupID": "^groupID=\d+$", # Tilegruppe (Tiles die für verchiedene Nachbar-Konstellationen eigene tiles haben werden zu einer Gruppe zusammengefasst, wenn nicht genutzt, leerlassen oder weglassen)
+    "isclippable": "^isclippable=[True | False]$",
+    "isAnimated": "^isAnimated=[True | False]$", #wenn flag = false, dann werden weitere Texturen _1, _2 usw genutzt um aus diesen eine zufällige zu wählen
+    "dmgNeededToDestroy": "^dmgNeededToDestroy=[ -1 | \d]+$", #Schaden der benötigt wird um tile zu zerstören (in 000 umwandeln) -1 = unendlich
+    "damageOnCollision": "^damageOnCollision=\d+$",
+    "damageOverTime": "^damageOverTime=\d+$",
+    "layerID": "^layerID=\d+$", # Layer ID (0 liegt hinter dem Spieler, 1 auf Höhe des Spielers, 2 vor dem Spieler, usw.)
+    "playMvSlowDown": "^playMvSlowDown=\d+$", # reduzierung der Geschwindigkeit des betr. spielers bei collision um angegebenen Faktor
+    "playerMvManipulation": "playerMvManipulation=\[\d+,\d+\]$", #on collision wird die bewegungsgeschwindigkeit und richtung des betr. Spielers entsprechend der X und Y werte geändert (wird weggeschubst)
+    "preferredNeighborIDs": "^preferredNeighborIDs=\[(\[((\d+),?){3}\]){3}\]$"
     }
 
 
@@ -94,7 +95,7 @@ DATA_CONDITIONS = {
 #    "gridSize": "^gridSize=[0-9]*;[0-9]*$",
     "difficulty": "^difficulty=[0-9]$",
     "playerStartPos": "^playerStartPos=(\(\d+;\d+\))+$",
-    "grid": "^GRID=(([\d+|-\d+]+)+)$" #hier stimmt was nicht mehr, ich hab nur ein semikolon entfernt. zudem hat die regEx negative werte glaub ich übersprungen
+    "grid": "^GRID=(\d\;)+\d$" #hier stimmt was nicht mehr, ich hab nur ein semikolon entfernt. zudem hat die regEx negative werte glaub ich übersprungen
 }
 LEVEL_DIR = os.path.join(GAME_DIR, 'lvl', '')
 
