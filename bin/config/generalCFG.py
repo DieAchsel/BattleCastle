@@ -3,6 +3,8 @@ import os
 import pygame
 # Absoluter Pfad zum bin-Ordner
 GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
+
+NULL_TYPE = 0
 #Fenster-Auflösung
 SCREEN_SIZE = {
     #"X": 1280,
