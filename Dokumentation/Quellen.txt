@@ -1,6 +1,7 @@
 https://www.instructables.com/id/Interface-Python-and-Arduino-with-pySerial/ #serielle Kommunikation mit Arduino
 https://www.pygame.org/docs/genindex.html #Befehls-Referenz von pygame
 https://craftpix.net/ #kostenfreie Texturen
+https://loading.io/ #kostenfreie LadeAnimation
 
 ProgrammBeispiel Kollision und Gravitation
 
