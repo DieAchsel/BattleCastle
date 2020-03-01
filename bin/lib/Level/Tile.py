@@ -7,8 +7,7 @@ import pygame
 
 
 from bin.config.levelCFG import *
-from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SCALING, SMOOTH_SCALE
-
+from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SCALING, SMOOTH_SCALE, NULL_TYPE
 class Tile (pygame.sprite.Sprite):
     self.layer = DEFAULT_LAYER_ID
     self.ID = DEFAULT_TILE_ID
@@ -42,7 +41,7 @@ class Tile (pygame.sprite.Sprite):
     #wenn keine textur übergeben wird, wird das Objekt zunächst ohne textur erstellt
     def __init__(self, pos = {"X": 0, "Y": 0}, texturePath = "", parameters = DEFAULT_TILE_CONF_PARAMETERS, gridSize = {}):
         super().__init__()
-        
+
         calc_tileSize(gridSize)#berechne tileSize anhand der lvlgröße
         self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
         self.rect = self.image.get_rect()
@@ -67,12 +66,16 @@ class Tile (pygame.sprite.Sprite):
         #self.image.blit(texture.convert(), self.image.get_rect)
         #self.activeTexture = self.image
 
+    #gibt true zurück, wenn mehr als 1 Bild geladen ist (wenn isActiveSequence = true, dann prüfe die ActiveSequence
     def has_animation(self, isActiveSequence = False):
         if(isActiveSequence):
             x = "active"
         else:
             x = "passive"
-        if(len(textureSequences[x]))
+        if(len(self.textureSequences[x]) > 1):
+            return True
+        else:
+            return False
 
     def has_action(self):
         return self.hasAction
