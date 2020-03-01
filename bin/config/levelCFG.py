@@ -24,7 +24,7 @@ ARENA_WIDTH_PERCENT = 100 #Bei Größen unter 100% wird Arena auf der Display-Su
 ARENA_X_POS = round(((SCREEN_SIZE["X"]/100) * (100 - ARENA_WIDTH_PERCENT)),0)
 ARENA_Y_POS = 0
 #Rect mit sämtlichen Informationen (in Pixel übersetzt) für Programm-Zugriff
-ARENA_AREA = Rect(ARENA_X_POS, ARENA_Y_POS, round((SCREEN_SIZE["X"] * (ARENA_WIDTH_PERCENT / 100)),0), round((SCREEN_SIZE["Y"] * (ARENA_HEIGHT_PERCENT / 100)),0))
+ARENA_AREA = Rect(ARENA_X_POS, ARENA_Y_POS, (round((SCREEN_SIZE["X"] * (ARENA_WIDTH_PERCENT / 100)),0), round((SCREEN_SIZE["Y"] * (ARENA_HEIGHT_PERCENT / 100)),0)))
 
 #DEPRECATED--
 ARENA_SIZE = {
@@ -95,7 +95,7 @@ IS_BUILD_ON_UPDATE = True #mit jedem UpdateProzess wird ein Tile gebaut.
 #wenn die Ausdrücke in der Datei nicht gefunden wurden oder unzulässig sind, werden Default-Werte verwendet
 #Obige Bedingung wird für jede gesuchte Variable einzeln geprüft, ausser bei gridSize und grid (die beiden Daten stehen in direkter Beziehung)
 DATA_CONDITIONS = {
-#    "gridSize": "^gridSize=[0-9]*;[0-9]*$",
+#    "gridSize": "^gridSize=[0-9]*;[0-9]*$", #DEPRECATED
     "difficulty": "^difficulty=[0-9]$",
     "playerStartPos": "^playerStartPos=(\(\d+;\d+\))+$",
     "grid": "^GRID=(\d\;)+\d$" #hier stimmt was nicht mehr, ich hab nur ein semikolon entfernt. zudem hat die regEx negative werte glaub ich übersprungen

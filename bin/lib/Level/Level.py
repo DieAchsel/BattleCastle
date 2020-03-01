@@ -8,16 +8,24 @@ from bin.config.levelCFG import *
 class Level:
 
 #---------------------------------------Klassen-Variablen--------------------------------------------------
-    self.levelPath = ""
-    self.difficulty = DEFAULT_DIFFICULTY
+    self.parameters = {
+        "title" : "Level",
+        "levelDir" : "", #UNUSED #Datei-Pfad zu Ordner, der 
+        "difficulty" : DEFAULT_DIFFICULTY,
+        "playerStartPositions" : DEFAULT_PLAYER_STARTPOS
+    }
+    
     self.title = "Level"
+    self.levelDir = "" #UNUSED #Datei-Pfad zu Ordner, der 
+    self.difficulty = DEFAULT_DIFFICULTY
+    self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
     self.gridSize = pygame.rect(0, 0, 0, 0) #zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
     self.currentTile = {"X": 0, "Y": 0} # gibt an, welche tilePosition grade betrachtet wird
     
-    #diese (zukünftige) 2D Liste wird zur Datenhaltung beim parsen und kompilieren des LevelFiles genutzt
-    self.tileIDMap = []
+    #diese 2D Liste wird zur Datenhaltung beim parsen und kompilieren des LevelFiles genutzt
+    self.tileIDMap = [list()]
     #diese (zukünftige) 2D Liste wird zu Datenhaltung beim build genutzt (ggfs später unnötig, da build() bereits die zur Spielzeit benötgten spritegruppen erstellt)
-    self.tileSurfaceMap = []
+    self.tileSurfaceMap = [] #DEPRECATED (beim buildVorgang erstellte Tiles werden direkt in die spriteListe eingefügt)
 
     #Zustands-Indikatoren für Level
     #Das level muss alle 3 Phasen nacheinander durchlaufen, um gefüllte SpriteGroups zu besitzen
@@ -25,7 +33,7 @@ class Level:
     self.isMapCompiled = False
     self.isMapBuild = False
     
-    self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
+    
 
     #jede geladene tile aus dem TileSet wird hierein geparst und geladen
     self.loadedTiles = [
@@ -48,15 +56,17 @@ class Level:
 #---------------------------------------Klassen-Methoden--------------------------------------------------
 
     #konstruktor, ruft parse auf
-    def __init__(self, FilePath = NULL_TYPE):
-        DEBUG("Level.__init__(FilePath = DEFAULT_LVL_DIR)", 0)
-        DEBUG("Level.__init__:übergebener FilePath",1 , FilePath)
+    def __init__(self, lvlDir = NULL_TYPE):
+        DEBUG("Level.__init__(lvlDir = NULL_TYPE)", 0)
+        DEBUG("Level.__init__:übergebener filePath",1 , filePath)
 
         super().__init__()
-        DEBUG("Level.__init__(FilePath = DEFAULT_LVL_DIR): rufe Level.compile(FilePath) auf", 1)
-        self.compile(FilePath)
-        DEBUG("Level.__init__(FilePath = DEFAULT_LVL_DIR): abgeschlossen", 1)
-        
+        DEBUG("Level.__init__(lvlDir = NULL_TYPE): rufe Level.compile(filePath) auf", 1)
+        if(os.path.isdir(lvlDir) == False):
+            #hier gäb es die Möglichkeit eine Suche ausgehend von übergebenem Pfad anstoßen und nach einem Ordner im übergelegenen Verzeichnis suchen
+            DEBUG("Level.__init__(lvlDir = NULL_TYPE): Level-Directory nicht gefunden, überlasse das Problem den folgenden build-Prozess...", 0)
+        self.compile(lvlDir)
+        DEBUG("Level.__init__(lvlDir = NULL_TYPE): Init abgeschlossen", 1)
     #gibt die NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
     def get_neighbors(self, position = {"X": 0, "Y": 0}):
         DEBUG("Level.get_neighbors(position{})", 1, position)
@@ -99,12 +109,28 @@ class Level:
         return neighbors
     
     #Lese .lvl Datei (debugging implementiert)
-    def parse_lvl(self, FilePath = ""):
-        DEBUG("Level.parse_lvl(FilePath)", 0)
-        DEBUG("Level.parse_lvl: übergebener FilePath",1, FilePath)
+    def parse_lvl(self, lvlDir = ""):
+        DEBUG("Level.parse_lvl(lvlDir)", 0)
+        DEBUG("Level.parse_lvl: übergebenes LVL-Directory",1, lvlDir)
         self.playerStartPositions = DEFAULT_PLAYER_STARTPOS.copy()
-        if(os.path.isFile(FilePath)): #datei vorhanden?
-                lvlFile = open(FilePath, "r")
+
+        #hier müssen noch alle .lvl Datei-pfade in foundLvlFiles geladen werden
+        foundLvlFilePaths = []
+        lvlPaths = os.listdir(lvlDir) #to be tested
+        #lvlFilePaths = glob.glob(LEVEL_DIR + '[0-9][0-9][0-9]') #deprectated, too complicated, /wo need
+        #lvlFilePaths.sort()
+        for singleLvlPath in lvlPaths:  #jeden Ordner in lvl/ einbeziehen
+            LvlFilePaths = glob.blod(os.path.join(singleLvlPath, '') + '*.lvl')
+            for singleLvlFilePath in LvlFilePaths:  #wenn in einem Ordner mehrere .lvl Dateien existieren, dann lade diese als individuelle Lvl
+                newLevel = Level()
+                newLevel.parseFile(singleLvlFilePath)
+
+
+
+
+        filePath = foundLvlFilePaths[-1]    #optimierbar: erstellle für jede gefundene Datei ein unterlevel
+        if(os.path.isFile(filePath)): #datei vorhanden?
+                lvlFile = open(filePath, "r")
                 DEBUG("Level.parse_lvl: Datei geöffnet:\n", 1) 
                 DEBUG("Level.parse_lvl: DateiInhalt: ", 2, lvlFile)                  
                 if(len(lvlFile) > 0): #inhalt nicht leer?
@@ -189,7 +215,7 @@ class Level:
 
 
 
-
+                pass
 
             else:
                 DEBUG("Level.parse_texture_set(levelPath): Default-TexturPfad nicht gefunden, Falle auf solidColor zurück", 0, textureSetPath)
@@ -201,11 +227,11 @@ class Level:
     #2. wähle im 2. Schritt die passende TileID(entsprechend der Neighbors) aus der geöffneten Gruppe aus
     #3. erstelle ein tile und übergebe den texturepfad des entsprechenden tiles
     #das bild wird erst mit build() geladen um zu verhindern dass alle lvl parallel offen sind
-    def compile_lvl(self, levelPath = ""):
-        DEBUG("Level.compile(FilePath)", 0)
-        DEBUG("Level.compile(FilePath): rufe parse_lvl(FilePath) auf", 1)
-        self.parse_lvl(levelPath)
-        self.parse_texture_set(levelPath)
+    def compile_lvl(self, levelDir = ""):
+        DEBUG("Level.compile(levelPath)", 0)
+        DEBUG("Level.compile(levelPath): rufe parse_lvl(levelPath) auf", 1)
+        self.parse_lvl()
+        self.parse_texture_set()
         self.load_bg()
 
         
@@ -218,10 +244,10 @@ class Level:
 
 
 
-    #2. ließt alle tileIDs ein und lädt jewils die entsprechende textur
-    #3. erstelle eine sprite.group mit sämtlichen tiles, passiven tiles, animierten tiles, 
+    #1. ließt alle tileIDs ein und lädt jewils die entsprechende textur
+    #2. erstelle eine sprite.group mit sämtlichen tiles, passiven tiles, animierten tiles, 
     #wenn IS_BUILD_ON_UPDATE = True, dann wird mit jedem build aufruf nur ein tile erstellt und currentTile auf dieses gesetzt. 
-    #überprüfen lässt sich der aktuelle Build-Zustand mit self.isBuild
+    #(überprüfen lässt sich der aktuelle Build-Zustand mit bool self.isBuild())
     def build(self):
         pass
     #führe alle benötigten Ladefunktionen(compile und build) hintereinander aus
@@ -229,6 +255,7 @@ class Level:
         pass
     #leert sämtliche Spritegruppen und zerstört dessen Tiles (Schafft platz im RAM)
     def unload(self):
+
         pass
     #führe ein unload() aus und lade erneut mit load()
     def reload(self):
@@ -253,15 +280,18 @@ class Level:
             return NULL_TYPE
         else:
             self.get_tile_surface(pos).getType()
-
+    #gibt
     def get_ID(self):
         return self.id
 
+    #DEPRECATED-----
+    #gibt die Oberfläche an pos zurück
     def get_tile_surface(self, pos = {"X": 0, "Y": 0}):
         if(self.tile_exists(pos)):
             return self.tileSurfaceMap[pos.X][pos.Y]
         else: 
             return NULL_TYPE
+    #DEPRECATED-----
 
     #ändert tile in tileIDMap auf übergebenen ID
     def set_tile(self, pos = {"X": 0, "Y": 0}, ID = 1):
@@ -298,3 +328,7 @@ class Level:
                 if(y == 0):
                     unused.add(y)
         return unused
+
+    #gebe den aktuellen Build-Zustand zurück (bool)
+    def is_build(self):
+        return self.isBuild

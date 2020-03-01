@@ -21,7 +21,6 @@ http://programarcadegames.com/python_examples/sprite_sheets/
 import os
 
 import pygame
-
 # Global constants
  
 # Colors
