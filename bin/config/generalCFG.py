@@ -2,9 +2,12 @@
 import os
 import pygame
 
+
+VERSION = "0.1.1"
 NULL_TYPE = 0
 
-
+# Absoluter Pfad zum bin-Ordner
+GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
 DEBUG_ENABLED = True
 DEBUG_LEVEL = 9
 #Wenn DEBUG_ENABLED, dann gib Debuggingmeldungen aus, je nach lvl mit angepasstem Detail
@@ -20,16 +23,15 @@ def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE
             output = "DEBUGGING: " + tabs + msg
 
             if(ObjectToPrint != NULL_TYPE): 
-                objectOutput = "\nEnthaltenes Objekt:\n" + ObjectToPrint
+                objectOutput = "\nEnthaltenes Objekt:\n" + str(ObjectToPrint)
                 output += objectOutput
             print(output)
 #Wenn DEBUG_ENABLED, gib diese Nachricht aus:
-DEBUG("********************Debugging Aktiv********************\nDebug-Level = " + DEBUG_LEVEL + "\n\n\n")
 
-# Absoluter Pfad zum bin-Ordner
-GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
+DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\n\n\n")
 
 
+ICON_PATH = os.path.join(GAME_DIR, "gfx", "icon", "castle.png")
 #Fenster-Auflösung
 SCREEN_SIZE = {
     #"X": 1280,
