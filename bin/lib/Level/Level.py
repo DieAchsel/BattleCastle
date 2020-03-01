@@ -1,5 +1,6 @@
 import pygame, os
 from bin.lib.Level import Tile
+from bin.config.generalCFG import NULL_TYPE
 from bin.config.levelCFG import *
 
 
@@ -10,6 +11,7 @@ class Level:
     self.gridSize = pygame.rect(0, 0, 0, 0) #zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
     self.currentTile = {"X": 0, "Y": 0} # gibt an, welche tilePosition grade betrachtet wird
     self.tilemap = []
+    self.textureObjects = [DEFAULT_TILE_CONF_PARAMETERS]
     self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
     self.loadedTileIDs = [
         {
@@ -32,6 +34,7 @@ class Level:
         self.difficulty = DEFAULT_LVL["difficulty"]
         self.name = DEFAULT_LVL["title"]
         self.tilemap = DEFAULT_LVL["grid"]
+
     def __init__(self, FilePath = ""):
         super().__init__()
         if(FilePath != ""):
@@ -83,13 +86,42 @@ class Level:
     def parseTextureSet(self, FilePath = ""):
 
         tileObject = DEFAULT_TILE_CONF_PARAMETERS.copy()
+
         #ausgelesene ID Objekt in tileObjet parsen und self.loadedTileIDs hinzufügen
         #
         pass
 
 #gibt die NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
-    def getNeighbors(self, position = {"X": 0, "Y": 0}):
-        return neigbhors
+    def get_neighbors(self, position = {"X": 0, "Y": 0}):
+        #ändere Position auf den oben linken nachbarn
+        position["X"] -= 1
+        position["Y"] -= 1
+        currentNeighbor = position.copy() #erstelle ein identisches dict zu position
+        neighbors = []
+        #gehe Alle 3 möglichen NachbarZeilen durch
+        for y in range(3):
+            #füge eine neue Y Liste hinzu
+            neighbors.add(list())
+            currentNeighbor["Y"] = position["Y"].copy()
+            currentNeighbor["Y"] += y
+            #wenn Nachbar nicht vorhanden (Rand)
+            #dann nehme entsrechenden randtile von der gegenüberliegenden Seite als nachbarn
+            #erstellt eine von den tiles her eine endlos-Arena
+            if(currentNeighbor["Y"] < 0):
+                currentNeighbor["Y"] = (len(self.tilemap) - 1)
+            elif(currentNeighbor["Y"] >= (len(self.tilemap))):
+                currentNeighbor["Y"] = 0
+            #wiederhole obiges für jedes Feld in aktueller Zeile
+            for x in range (3):
+                neighbors[-1].add(list())
+                currentNeighbor["X"] = position["X"].copy() #currentNeighbor wird nach durchlauf manipuliert sein, setze current Neighbor zurück auf position(erste NachbarPos ecke oben links)
+                currentNeighbor["X"] += x
+                if(currentNeighbor["X"] < 0):
+                    currentNeighbor["X"] = (len(self.tilemap[position["Y"]]) - 1)
+                elif(currentNeighbor["X"] == (len(self.tilemap))):
+                    currentNeighbor["X"] = 0
+                neighbors[y][x] = self.get_tile_type(currentNeighbor)
+        return neighbors
     
     #1. lade textureSetConf und beschreibe sämtliche geladenen Tiles mit den zu GroupID entsprechenden Eigenschaften
     #2. wähle im 2. Schritt die passende TileID(entsprechend der Neighbors) aus der geöffneten Gruppe aus
@@ -114,26 +146,35 @@ class Level:
                 field = field.get_type()
 
     def tile_exists(self, pos = {"X": 0, "Y": 0}):
-        return (0 <= pos["X"] < len(self.tilemap) & 0 <= pos["Y"] < len(self.tilemap[pos["X"]]))
+        return (0 <= pos["Y"] < len(self.tilemap) & 0 <= pos["X"] < len(self.tilemap[pos["Y"]]))
 
     def get_tile_type(self, pos = {"X": 0, "Y": 0}):
-
+        if(self.get_tile(pos).getType() == NULL_TYPE):
+            return NULL_TYPE
+        else:
+            self.get_tile(pos).getType()
 
     def get_ID(self):
         return self.id
 
     def get_tile(self, pos = {"X": 0, "Y": 0}):
-        if(field_exist(pos)):
-            return self.tilemap[pos.X[pos.Y]]
+        if(self.tile_exists(pos)):
+            return self.tilemap[pos.X][pos.Y]
+        else: 
+            return NULL_TYPE
+
 
     def set_tile(self, pos = {"X": 0, "Y": 0}, type = 1):
-        if(field_exist(pos)):
-            self.tilemap[pos["X"][pos["Y"]]] = type
+        if(tile_exists(pos)):
+            self.tilemap[pos["X"]][pos["Y"]] = type
+            return pos
+        else:
+            return NULL_TYPE
 
     def unset_tile(self, pos ={"X": 0, "Y": 0}):
-        if(field_exist(pos)):
-            self.tilemap[pos.X[pos.Y]] = 0
-    
+        if(tile_exists(pos)):
+            self.tilemap[pos["X"]][pos["Y"]] = 0
+            #entferne tile aus allen spritegroups und füge in emptyTIle spritegroup
     def get_used_tiles(self):
         used = []
         for x in self.tilemap:
