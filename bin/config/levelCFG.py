@@ -6,6 +6,7 @@ from pygame.rect import Rect
 from bin.config.generalCFG import SCREEN_SIZE, GAME_DIR
 
 
+DEFAULT_LVL_DIR = ""#os.path.join(GAME_DIR, "lvl")
 #-----------------------------Arena-Parameter-------------------------------
 #Standardschicht, auf die die Arena gezeichnet wird
 DEFAULT_LAYER_ID = 1 #(0 ist für den Hintergrund reserviert)
