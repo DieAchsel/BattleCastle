@@ -7,6 +7,8 @@ from bin.config.generalCFG import SCREEN_SIZE, GAME_DIR
 
 
 DEFAULT_LVL_DIR = ""#os.path.join(GAME_DIR, "lvl")
+LOADING_SPINNER = "CUBES"
+DEFAULT_LOADING_SPINNER_PATH = os.path.join(GAME_DIR, "gfx", "loadingSpinner", LOADING_SPINNER, "spinner.gif")
 #-----------------------------Arena-Parameter-------------------------------
 #Standardschicht, auf die die Arena gezeichnet wird
 DEFAULT_LAYER_ID = 1 #(0 ist für den Hintergrund reserviert)
