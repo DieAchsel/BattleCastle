@@ -9,6 +9,7 @@ class BattleCastle(pygame.sprite.Sprite):
     activeLevel = 0 #aktuelle Position in der levelListe
     loadedTiles = [Tile]#DEPRECATED #Liste aller geladenen TileObjekte (eigentlich unnötig da genau das die spritegroups machen)
     loadedLevel = pygame.sprite.Group
+    allSprites = pygame.sprite.Group
     harmfulTiles = pygame.sprite.Group #ggfs falsch geschrieben
     collidableTiles = pygame.sprite.Group
     animatedTiles = pygame.sprite.Group
@@ -19,44 +20,39 @@ class BattleCastle(pygame.sprite.Sprite):
         super().__init__()
         DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\n\n\n")
 
-        
-    
-    #Zeichne Alle spritegruppen mit group..draw auf die battleCastle Surface
-    def draw(self, screen):
-        pass
-
     def update(self):
-    # Be IDLE friendly. If you forget this line, the program will 'hang'
-    # on exit.
         pass
-    pygame.quit()
 
     def calcTileSize(self, PlayArea = {"X": DEFAULT_PLAYAREA_X, "Y": DEFAULT_PLAYAREA_Y}):
         pass
     
-    def build(self):
-        pass
+    def draw(self, surface):
+        self.allSprites.draw(surface)
+        return surface
+
+    def draw(self):
+        self.allSprites.draw(self.image)
+        self.rect = self.image.get_rect()  
+
+    #Zurückgestellt-----
     #hier wird ein neues LevelObjekt erwartet
-    def add(self, newLevel):
-        pass
+    #def add(self, newLevel):
+    #    pass
     #hier wird eine Liste aus levelObjekten erwartet
-    def add(self, newLevels = []):
-        pass
+    #def add(self, newLevels = []):
+    #    pass
     #hier wird ein directory mit .lvl Datei erwartet
-    def add(self, dir):
-        pass
+    #def add(self, dir):
+    #    pass
     #hier wird ein directory mit directories erwartet.
-    def add(self, dir):
-        pass
+    #def add(self, dir):
+    #    pass
+    #-----Zurückgestellt
     
-    def get_loading_spinner(self):
-        if(os.path.isfile(DEFAULT_LOADING_SPINNER_PATH)):
-            spinner = pygame.image.load(DEFAULT_LOADING_SPINNER_PATH)
-            return spinner
 
     #durchsucht das Level-Verzeichnis und erstellt für jeden gefundenen Ordner ein Level
     def load_levels(self):
-        set_loading_screen()    #Das Laden der Level könnte dauern
+        load_loading_spinner()    #Das Laden der Level könnte dauern
         lvlPaths = os.listdir(LEVEL_DIR)
         for singlePath in lvlPaths:
             #Wenn der betrachtete Ordner eine .lvl Datei enthält, dann erstelle ein neues Level
@@ -64,24 +60,43 @@ class BattleCastle(pygame.sprite.Sprite):
                 level = Level(singlePath)
 
     #erstellt einen Ladebildschirm und fügt in Mittig auf der PlayArea ein
-    def set_loading_screen(self, FilePath = DEFAULT_LOADING_SCREEN_PATH):
+    def set_loading_spinner(self, FilePath = DEFAULT_LOADING_SCREEN_PATH):
         self.isLoading = True
         pass
     #entfernt den LadeBildschirm, sofern aktiv
-    def unset_loading_screen(self):
+    #UNFERTIG
+    def unset_loading_spinner(self):
         self.isLoading = False
         pass
-    def save(self):
-        #In Zukunft sollen hier selbst erstellte Level gespeichert werden können
-        pass
 
-    def create(self):
-        #In Zukunft soll der Nutzer eigene Level erstellen können.
-        #Da dies ein "NiceToHave"-Feature ist wird dies zunächst nicht implementiert
-        pass
+    def load_loading_spinner(self, FilePath = ""):
+        if(os.path.exists(FilePath)):
+            #UNFERTIG
+            pass
+        else:
+            if(os.path.isfile(DEFAULT_LOADING_SPINNER_PATH)):
+                spinner = pygame.image.load(DEFAULT_LOADING_SPINNER_PATH)
+                return spinner
+    #Zurückgestellt-----
+    #def save(self):
+    #    #In Zukunft sollen hier selbst erstellte Level gespeichert werden können
+    #    pass
+
+    #def create(self):
+    #    #In Zukunft soll der Nutzer eigene Level erstellen können.
+    #    #Da dies ein "NiceToHave"-Feature ist wird dies zunächst nicht implementiert
+    #    pass
+    #-----Zurückgestellt
+
+    #WIRKLICH BENÖTIGT?:
     #gibt eine spriteGroup mit dem gesamten geladenen Level zurück
-    def getLoadedSprites(self):
-        return loadedLevel
+    def get_loaded_level(self):
+        return self.loadedLevel
+
+    def get_loaded_sprites(self):
+        return self.allSprites
 
     def isColliding(self, object = pygame.sprite.sprite):
-        return pygame.sprite.spritecollide(object, loadedLevel).len > 0
+        return pygame.sprite.spritecollide(object, loadedLevel)
+    def isColliding(self, object = pygame.sprite.group):
+        return pygame.sprite.groupcollide (object, loadedLevel)
