@@ -38,18 +38,18 @@ class BattleCastle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()  
 
     #Zurückgestellt-----
-    #hier wird ein neues LevelObjekt erwartet
-    #def add(self, newLevel):
-    #    pass
-    #hier wird eine Liste aus levelObjekten erwartet
-    #def add(self, newLevels = []):
-    #    pass
-    #hier wird ein directory mit .lvl Datei erwartet
-    #def add(self, dir):
-    #    pass
-    #hier wird ein directory mit directories erwartet.
-    #def add(self, dir):
-    #    pass
+        #hier wird ein neues LevelObjekt erwartet
+        #def add(self, newLevel):
+        #    pass
+        #hier wird eine Liste aus levelObjekten erwartet
+        #def add(self, newLevels = []):
+        #    pass
+        #hier wird ein directory mit .lvl Datei erwartet
+        #def add(self, dir):
+        #    pass
+        #hier wird ein directory mit directories erwartet.
+        #def add(self, dir):
+        #    pass
     #-----Zurückgestellt
     
 
@@ -81,14 +81,14 @@ class BattleCastle(pygame.sprite.Sprite):
                 spinner = pygame.image.load(DEFAULT_LOADING_SPINNER_PATH)
                 return spinner
     #Zurückgestellt-----
-    #def save(self):
-    #    #In Zukunft sollen hier selbst erstellte Level gespeichert werden können
-    #    pass
+        #def save(self):
+        #    #In Zukunft sollen hier selbst erstellte Level gespeichert werden können
+        #    pass
 
-    #def create(self):
-    #    #In Zukunft soll der Nutzer eigene Level erstellen können.
-    #    #Da dies ein "NiceToHave"-Feature ist wird dies zunächst nicht implementiert
-    #    pass
+        #def create(self):
+        #    #In Zukunft soll der Nutzer eigene Level erstellen können.
+        #    #Da dies ein "NiceToHave"-Feature ist wird dies zunächst nicht implementiert
+        #    pass
     #-----Zurückgestellt
 
     #WIRKLICH BENÖTIGT?:

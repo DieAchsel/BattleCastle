@@ -15,6 +15,6 @@ clock = pygame.time.Clock()
 clock.tick(60)
 bc = BattleCastle()
 
-pygame.display.flip()
+pygame.display.flip() #displayUpdate benutzen
 
 pygame.quit()
