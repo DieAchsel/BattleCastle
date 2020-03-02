@@ -1,4 +1,4 @@
-from bin.config.levelCFG import ARENA_AREA
+#from bin.config.levelCFG import ARENA_AREA
 from bin.config.playerCFG import *
 import glob
 
@@ -37,6 +37,8 @@ class Player(pygame.sprite.Sprite):
             self.right = False
             self.left = True
 
+        self.isAttack = None
+
         # todo load image
         self.image = startImage
         self.rect = self.image.get_rect()
@@ -67,19 +69,24 @@ class Player(pygame.sprite.Sprite):
         #if (len(list_hit_platform)) > 0 or self.rect.bottom >= SCREEN_SIZE["Y"]:
         self.speed_y = -JUMP_HEIGHT
 
+    def is_attack(self):
+        self.isAttack = True
+
+    def not_attack(self):
+        self.isAttack = False
+
     def gravity(self):
         """Effect of gravity"""
         if self.speed_y == 0:
             self.speed_y = 1
         else:
-            self.speed_y += 1.3
+            self.speed_y += 1.3 * FALLING_SPEED_MULTIPLIER
 
         if self.rect.y >= SCREEN_SIZE["Y"] - self.rect.height and self.speed_y >= 0:
             self.speed_y = 0
             self.rect.y = SCREEN_SIZE["Y"] - self.rect.height
 
     def update(self):
-        # todo gravity
         self.gravity()
         # Moving
         self.rect.x += self.speed_x
@@ -99,6 +106,7 @@ class Player(pygame.sprite.Sprite):
             self.frameInSequence = 0
 
         # Running to the left animation
+
         if self.left and self.speed_x != 0:
             self.set_animation_sequence(self.ltRun)
         # Running to the right animation
@@ -110,11 +118,13 @@ class Player(pygame.sprite.Sprite):
         # Jumping to the right animation
         elif self.right and self.speed_y != 0:
             self.set_animation_sequence(self.rtJump)
-        # TODO -> see comments below
-        # Attack to the left animation
 
         # Attack to the left animation
-
+        elif self.left and self.isAttack:
+            self.set_animation_sequence(self.ltAttack1Seq)
+        # Attack to the right animation
+        elif self.right and self.isAttack:
+            self.set_animation_sequence(self.rtAttack1Seq)
         # Hurt looking to the left
 
         # Hurt looking to the right
@@ -130,15 +140,13 @@ class Player(pygame.sprite.Sprite):
         elif self.right and self.speed_x == 0 and self.speed_y == 0:
             self.image = self.rtStand
 
-
-
     def init_sequences(self):
         """Initialize animation sequences"""
         # Attack animation sequence
-        for image in self.get_images_from_dir('Attack1', 'LT'):
+        for image in self.get_images_from_dir('Attack01', 'LT'):
             self.ltAttack1Seq.append(pygame.image.load(image))
 
-        for image in self.get_images_from_dir('Attack', 'RT'):
+        for image in self.get_images_from_dir('Attack01', 'RT'):
             self.rtAttack1Seq.append(pygame.image.load(image))
 
         # Death animation sequence
@@ -170,9 +178,9 @@ class Player(pygame.sprite.Sprite):
             self.rtRun.append(pygame.image.load(image))
 
         # Stand Image
-        self.ltStand = pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'StandLT.png'))
+        self.ltStand = pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png'))
 
-        self.rtStand = pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'StandRT.png'))
+        self.rtStand = pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png'))
 
     def get_images_from_dir(self, sequenceDir, sequenceDirection):
         """Returns the List of paths, of Images in an specific sequence directory (sequenceDir),

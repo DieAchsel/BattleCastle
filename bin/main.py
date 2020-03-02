@@ -23,7 +23,7 @@ icon = pygame.image.load(os.path.join(GAME_DIR, 'gfx', 'icon', 'castle.png'))
 pygame.display.set_icon(icon)
 
 # Create the player
-player = Player(1, False)
+player = Player(2, False)
 
 player.rect.x = 340
 player.rect.y = SCREEN_SIZE["Y"] - player.rect.height
@@ -55,12 +55,15 @@ while True:
                 player.go_right()
             if event.key == PLAYER_CONTROL[0]["LT"]:
                 player.go_left()
+            if event.key == PLAYER_CONTROL[0]["FIRE"]:
+                player.is_attack()
         if event.type == pygame.KEYUP:
             if event.key == PLAYER_CONTROL[0]["RT"]:
                 player.stop()
             if event.key == PLAYER_CONTROL[0]["LT"]:
                 player.stop()
-
+            if event.key == PLAYER_CONTROL[0]["FIRE"]:
+                player.not_attack()
 
     active_sprite_list.update()
 

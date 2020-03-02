@@ -27,7 +27,7 @@ PLAYER_CONTROL = [{
     "LT": K_a,
     "AIM_RT": K_e,
     "AIM_LT": K_q,
-    "FIRE": K_LALT
+    "FIRE": K_f
 }, {
     "UP": K_KP8,
     "DN": K_KP5,
