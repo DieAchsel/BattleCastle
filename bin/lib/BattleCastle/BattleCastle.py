@@ -7,10 +7,10 @@ from bin.config.generalCFG import *
 class BattleCastle(pygame.sprite.Sprite):
     Levels = [Level] 
     activeLevel = 0 #aktuelle Position in der levelListe
-    loadedTiles = [Tile]#DEPRECATED #Liste aller geladenen TileObjekte (eigentlich unnötig da genau das die spritegroups machen)
+    #loadedTiles = [Tile]#DEPRECATED #Liste aller geladenen TileObjekte (eigentlich unnötig da genau das die spritegroups machen)
     loadedLevel = pygame.sprite.Group
     allSprites = pygame.sprite.Group
-    harmfulTiles = pygame.sprite.Group #ggfs falsch geschrieben
+    harmfulTiles = pygame.sprite.Group
     collidableTiles = pygame.sprite.Group
     animatedTiles = pygame.sprite.Group
     players = pygame.sprite.Group
@@ -21,6 +21,9 @@ class BattleCastle(pygame.sprite.Sprite):
         DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\n\n\n")
 
     def update(self):
+        #animatedTiles gruppe updaten
+
+        #Playergruppe updaten
         pass
 
     def calcTileSize(self, PlayArea = {"X": DEFAULT_PLAYAREA_X, "Y": DEFAULT_PLAYAREA_Y}):
