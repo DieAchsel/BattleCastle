@@ -10,10 +10,7 @@ CHARACTERS = {
     3: os.path.join(PLAYER_IMAGES_DIR, '03_SteamMan')
 }
 
-PLAYER_SIZE_MULTIPLIER = {
-    "X": 1.5,
-    "Y": 1.5
-    }
+PLAYER_SIZE_MULTIPLIER = (SCREEN_SIZE["Y"] * 0.275) / 100.0
 #Anzahl der Spieler.
 #bei mehr als 2 Spieler müssen für jeden weiteren Spieler Tastenbelegungen festgelegt werden.
 #Bei seriellen InputDevices ist dies nicht notwendig. Es werden die serialPortIDs mitgenutzt um die InputDevices auf die spieler zu mappen
@@ -35,7 +32,7 @@ PLAYER_CONTROL = [{
     "LT": K_KP4,
     "AIM_RT": K_KP9,
     "AIM_LT": K_KP7,
-    "FIRE": K_KP0
+    "FIRE": K_KP_PERIOD
     }]
 
 #RegEx für serial-Input-Device
@@ -52,12 +49,12 @@ SERIAL_REGEX = {
 }
 
 # Laufgeschwindigkeit der Charaktere
-RUNNING_SPEED = 5
+RUNNING_SPEED = 6
 
 FALLING_SPEED_MULTIPLIER = 1.0
 
 # Skalierung der Map wird aufgerechnet
-JUMP_HEIGHT = 20
+JUMP_HEIGHT = 22
 
 # Sequence Frames
 FRAMES_PER_SEQUENCE = 54  # Best Frame rate for smooth animation

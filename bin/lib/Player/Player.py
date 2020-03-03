@@ -36,6 +36,7 @@ class Player(pygame.sprite.Sprite):
             startImage = self.ltStand
             self.right = False
             self.left = True
+
         # Trigger vor attack animation
         self.isAttack = False
         # Trigger vor hurt animation
@@ -148,47 +149,67 @@ class Player(pygame.sprite.Sprite):
         """Initialize animation sequences"""
         # Attack animation sequence
         for image in self.get_images_from_dir('Attack01', 'LT'):
-            self.ltAttack1Seq.append(pygame.image.load(image))
+            self.ltAttack1Seq.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         for image in self.get_images_from_dir('Attack01', 'RT'):
-            self.rtAttack1Seq.append(pygame.image.load(image))
+            self.rtAttack1Seq.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         # Death animation sequence
         for image in self.get_images_from_dir('Death', 'LT'):
-            self.ltDeath.append(pygame.image.load(image))
+            self.ltDeath.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         for image in self.get_images_from_dir('Death', 'RT'):
-            self.rtDeath.append(pygame.image.load(image))
+            self.rtDeath.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         # Hurt animation sequence
         for image in self.get_images_from_dir('Hurt', 'LT'):
-            self.ltHurt.append(pygame.image.load(image))
+            self.ltHurt.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         for image in self.get_images_from_dir('Hurt', 'RT'):
-            self.rtHurt.append(pygame.image.load(image))
+            self.rtHurt.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         # Jump animation sequence
         for image in self.get_images_from_dir('Jump', 'LT'):
-            self.ltJump.append(pygame.image.load(image))
+            self.ltJump.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         for image in self.get_images_from_dir('Jump', 'RT'):
-            self.rtJump.append(pygame.image.load(image))
+            self.rtJump.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         # Run sequence
         for image in self.get_images_from_dir('Run', 'LT'):
-            self.ltRun.append(pygame.image.load(image))
+            self.ltRun.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         for image in self.get_images_from_dir('Run', 'RT'):
-            self.rtRun.append(pygame.image.load(image))
+            self.rtRun.append(pygame.transform.scale(pygame.image.load(image),
+                                    (int(pygame.image.load(image).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                     int(pygame.image.load(image).get_height() * PLAYER_SIZE_MULTIPLIER))))
 
         # Stand Image
         self.ltStand = pygame.transform.scale(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')),
-                                             (int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')).get_width() * PLAYER_SIZE_MULTIPLIER["X"]),
-                                              int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')).get_height() * PLAYER_SIZE_MULTIPLIER["Y"])))
+                                             (int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                              int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')).get_height() * PLAYER_SIZE_MULTIPLIER)))
 
         self.rtStand = pygame.transform.scale(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')),
-                                             (int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')).get_width() * PLAYER_SIZE_MULTIPLIER["X"]),
-                                              int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')).get_height() * PLAYER_SIZE_MULTIPLIER["Y"])))
+                                             (int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')).get_width() * PLAYER_SIZE_MULTIPLIER),
+                                              int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')).get_height() * PLAYER_SIZE_MULTIPLIER)))
 
     def get_images_from_dir(self, sequenceDir, sequenceDirection):
         """Returns the List of paths, of Images in an specific sequence directory (sequenceDir),

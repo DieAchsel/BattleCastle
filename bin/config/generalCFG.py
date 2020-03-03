@@ -36,8 +36,8 @@ ICON_PATH = os.path.join(GAME_DIR, "gfx", "icon", "castle.png")
 SCREEN_SIZE = {
     #"X": 1280,
     #"Y": 720
-    "X" : 800,
-    "Y" : 500
+    "X": 900,
+    "Y": 500
 }
 
 FPS = 60
