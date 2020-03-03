@@ -10,9 +10,9 @@ CHARACTERS = {
     3: os.path.join(PLAYER_IMAGES_DIR, '03_SteamMan')
 }
 
-PLAYER_SIZE = {
-    "X": 7,
-    "Y": 14
+PLAYER_SIZE_MULTIPLIER = {
+    "X": 1.5,
+    "Y": 1.5
     }
 #Anzahl der Spieler.
 #bei mehr als 2 Spieler müssen für jeden weiteren Spieler Tastenbelegungen festgelegt werden.
@@ -27,7 +27,7 @@ PLAYER_CONTROL = [{
     "LT": K_a,
     "AIM_RT": K_e,
     "AIM_LT": K_q,
-    "FIRE": K_f
+    "FIRE": K_LALT
 }, {
     "UP": K_KP8,
     "DN": K_KP5,
@@ -35,7 +35,7 @@ PLAYER_CONTROL = [{
     "LT": K_KP4,
     "AIM_RT": K_KP9,
     "AIM_LT": K_KP7,
-    "FIRE": K_KP_PERIOD
+    "FIRE": K_KP0
     }]
 
 #RegEx für serial-Input-Device
@@ -60,6 +60,6 @@ FALLING_SPEED_MULTIPLIER = 1.0
 JUMP_HEIGHT = 20
 
 # Sequence Frames
+FRAMES_PER_SEQUENCE = 54  # Best Frame rate for smooth animation
 
 # Spezieldatentypen hier nachgucken: https://www.w3schools.com/python/python_dictionaries.asp
-FRAMES_PER_SEQUENCE = 36

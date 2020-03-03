@@ -36,10 +36,13 @@ class Player(pygame.sprite.Sprite):
             startImage = self.ltStand
             self.right = False
             self.left = True
+        # Trigger vor attack animation
+        self.isAttack = False
+        # Trigger vor hurt animation
+        self.isHurt = False
+        # Trigger vor death animation and vor end of the game
+        self.isDeath = False
 
-        self.isAttack = None
-
-        # todo load image
         self.image = startImage
         self.rect = self.image.get_rect()
 
@@ -99,6 +102,9 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.x > SCREEN_SIZE["X"]:
             self.rect.x = 0
             #self.rect.x = ARENA_AREA.y
+        if self.rect.y < 0:
+            self.rect.y = SCREEN_SIZE["Y"]
+            #self.rect.y = ARENA_AREA.y
 
 
         # Animation sequence
@@ -106,7 +112,6 @@ class Player(pygame.sprite.Sprite):
             self.frameInSequence = 0
 
         # Running to the left animation
-
         if self.left and self.speed_x != 0:
             self.set_animation_sequence(self.ltRun)
         # Running to the right animation
@@ -118,9 +123,8 @@ class Player(pygame.sprite.Sprite):
         # Jumping to the right animation
         elif self.right and self.speed_y != 0:
             self.set_animation_sequence(self.rtJump)
-
         # Attack to the left animation
-        elif self.left and self.isAttack:
+        if self.left and self.isAttack:
             self.set_animation_sequence(self.ltAttack1Seq)
         # Attack to the right animation
         elif self.right and self.isAttack:
@@ -134,10 +138,10 @@ class Player(pygame.sprite.Sprite):
         # Death looking to the right
 
         # Stand looking to the left
-        if self.left and self.speed_x == 0 and self.speed_y == 0:
+        if self.left and self.speed_x == 0 and self.speed_y == 0 and not self.isAttack:
             self.image = self.ltStand
         # Stand looking to the right
-        elif self.right and self.speed_x == 0 and self.speed_y == 0:
+        elif self.right and self.speed_x == 0 and self.speed_y == 0 and not self.isAttack:
             self.image = self.rtStand
 
     def init_sequences(self):
@@ -178,9 +182,13 @@ class Player(pygame.sprite.Sprite):
             self.rtRun.append(pygame.image.load(image))
 
         # Stand Image
-        self.ltStand = pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png'))
+        self.ltStand = pygame.transform.scale(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')),
+                                             (int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')).get_width() * PLAYER_SIZE_MULTIPLIER["X"]),
+                                              int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'LT.png')).get_height() * PLAYER_SIZE_MULTIPLIER["Y"])))
 
-        self.rtStand = pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png'))
+        self.rtStand = pygame.transform.scale(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')),
+                                             (int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')).get_width() * PLAYER_SIZE_MULTIPLIER["X"]),
+                                              int(pygame.image.load(os.path.join(self.characterImageDir, 'Stand', 'RT.png')).get_height() * PLAYER_SIZE_MULTIPLIER["Y"])))
 
     def get_images_from_dir(self, sequenceDir, sequenceDirection):
         """Returns the List of paths, of Images in an specific sequence directory (sequenceDir),
