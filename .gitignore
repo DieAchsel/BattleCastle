@@ -1,2 +1,4 @@
-Dokumentation/~$$Klassendiagramm_mit_dateibasierten_waffen.~vsdx
-__pycache__/BattleCastle.cpython-38.pyc
+*.~vsdx
+*.pyc
+__pycache__
+.vs

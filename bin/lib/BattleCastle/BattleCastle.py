@@ -7,10 +7,10 @@ from bin.config.generalCFG import *
 class BattleCastle(pygame.sprite.Sprite):
     Levels = [Level] 
     activeLevel = 0 #aktuelle Position in der levelListe
-    loadedTiles = [Tile]#DEPRECATED #Liste aller geladenen TileObjekte (eigentlich unnötig da genau das die spritegroups machen)
+    #loadedTiles = [Tile]#DEPRECATED #Liste aller geladenen TileObjekte (eigentlich unnötig da genau das die spritegroups machen)
     loadedLevel = pygame.sprite.Group
     allSprites = pygame.sprite.Group
-    harmfulTiles = pygame.sprite.Group #ggfs falsch geschrieben
+    harmfulTiles = pygame.sprite.Group
     collidableTiles = pygame.sprite.Group
     animatedTiles = pygame.sprite.Group
     players = pygame.sprite.Group
@@ -21,6 +21,9 @@ class BattleCastle(pygame.sprite.Sprite):
         DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\n\n\n")
 
     def update(self):
+        #animatedTiles gruppe updaten
+
+        #Playergruppe updaten
         pass
 
     def calcTileSize(self, PlayArea = {"X": DEFAULT_PLAYAREA_X, "Y": DEFAULT_PLAYAREA_Y}):
@@ -35,18 +38,18 @@ class BattleCastle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()  
 
     #Zurückgestellt-----
-    #hier wird ein neues LevelObjekt erwartet
-    #def add(self, newLevel):
-    #    pass
-    #hier wird eine Liste aus levelObjekten erwartet
-    #def add(self, newLevels = []):
-    #    pass
-    #hier wird ein directory mit .lvl Datei erwartet
-    #def add(self, dir):
-    #    pass
-    #hier wird ein directory mit directories erwartet.
-    #def add(self, dir):
-    #    pass
+        #hier wird ein neues LevelObjekt erwartet
+        #def add(self, newLevel):
+        #    pass
+        #hier wird eine Liste aus levelObjekten erwartet
+        #def add(self, newLevels = []):
+        #    pass
+        #hier wird ein directory mit .lvl Datei erwartet
+        #def add(self, dir):
+        #    pass
+        #hier wird ein directory mit directories erwartet.
+        #def add(self, dir):
+        #    pass
     #-----Zurückgestellt
     
 
@@ -78,14 +81,14 @@ class BattleCastle(pygame.sprite.Sprite):
                 spinner = pygame.image.load(DEFAULT_LOADING_SPINNER_PATH)
                 return spinner
     #Zurückgestellt-----
-    #def save(self):
-    #    #In Zukunft sollen hier selbst erstellte Level gespeichert werden können
-    #    pass
+        #def save(self):
+        #    #In Zukunft sollen hier selbst erstellte Level gespeichert werden können
+        #    pass
 
-    #def create(self):
-    #    #In Zukunft soll der Nutzer eigene Level erstellen können.
-    #    #Da dies ein "NiceToHave"-Feature ist wird dies zunächst nicht implementiert
-    #    pass
+        #def create(self):
+        #    #In Zukunft soll der Nutzer eigene Level erstellen können.
+        #    #Da dies ein "NiceToHave"-Feature ist wird dies zunächst nicht implementiert
+        #    pass
     #-----Zurückgestellt
 
     #WIRKLICH BENÖTIGT?:

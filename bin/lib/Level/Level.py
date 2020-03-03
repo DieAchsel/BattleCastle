@@ -176,8 +176,6 @@ class Level:
         self.gridSize = (0,0, (rawLvl["maxWidth"], len(self.tileIDMap)))
         DEBUG("Level.parse_lvl_file: nutze zum konfigurieren diese Werte: " , 0, rawLvl)
 
-
-
     #finde, lade und parse textureSetConf-File im übergebenen Verzeichnis in loadedTiles hinein
     def parse_texture_set(self):
         DEBUG("Level.parse_texture_set(levelPath)", 0)
@@ -188,7 +186,9 @@ class Level:
         if(os.path.isdir(textureSetPath) == False):
             DEBUG("Level.parse_texture_set(levelPath): TexturPfad nicht gefunden. falle auf DefaultTexturSet zurück...", 0, textureSetPath)
             textureSetPath = DEFAULT_TEXTURE_SET_PATH
-        foundConfFilePaths = glob.blod(os.path.join(textureSetPath, '') + '*.conf')
+
+
+        foundConfFilePaths = glob.glod(os.path.join(textureSetPath, '') + '*.conf')
         if(len(foundConfFilePaths) == 0):
             DEBUG("Level.parse_texture_set(levelPath): TexturPfad enthält keine Textur Datei/en(.conf). falle auf DefaultTexturSet zurück...", 0, textureSetPath)
             textureSetPath = DEFAULT_TEXTURE_SET_PATH
@@ -202,21 +202,29 @@ class Level:
             if(len(confFile) > 0): #inhalt nicht leer?
                 confData = confFile.replace(" ", "")
                 DEBUG("Level.parse_texture_set: Datei getrimmt:\n", 2, confData)
-                rawParameters = loadedTiles[0].copy()   
-                loadedTiles.clear() #loadedTiles vorbereiten für einzufügende TileIDs
+                rawParameters = tileObject #unnötig? 
+                #loadedTiles.clear() #loadedTiles vorbereiten für einzufügende TileIDs
+                #in der parseLvl func nachgucken, ob die liste immerwieder geleert wierd wie hier
 
+
+                #hier die gesamte Datei in einen String laden
                 for line in confData:
-                    DEBUG("Level.parse_texture_set: parse Zeile:\n", 2, line)
-                    condition = TILE_CONF_REGEX["ID"]
-                    DEBUG("Level.parse_texture_set: nutze Zur Suche von ID-Blöcken diesen RegEx-Ausdruck: ", 3, condition)
-                    #ich brauche einen anderen RegEx Ausdruck... (Idee ist es die gesamte Datei in einen String zusammenzufassen und de komplette Datei in einem zu scannen nach ID:\d+\{irgendwas*})
-                    results = re.search(condition, line)    #hier testen, ob auch lvlFile übergeben werden kann (denn dann ist zeile 32 unnötig)
-                    DEBUG("Level.parse_texture_set: " + str(len(results)) + "gefundene ID-Blöcke:\n", 4, results)
-                    if(results[-1] != 'none'): 
-                        for x in results:
- #<-----------------------       #hier mit regex die ID-Blöcke durchgehen 1 Block steht mit jedem Durchlauf in x         
-                            pass
-                    re.purge() #re-Chache leeren
+                    DEBUG("Level.parse_texture_set: Erzeuge String mit DateiInhalt:\n", 2, line)
+
+
+
+                condition = TILE_CONF_REGEX["ID"]
+                DEBUG("Level.parse_texture_set: nutze Zur Suche von ID-Blöcken diesen RegEx-Ausdruck: ", 3, condition)
+                #ich brauche einen anderen RegEx Ausdruck... (Idee ist es die gesamte Datei in einen String zusammenzufassen und de komplette Datei in einem zu scannen nach ID:\d+\{irgendwas*})
+                results = re.search(condition, line)    #hier testen, ob auch lvlFile übergeben werden kann (denn dann ist zeile 32 unnötig)
+                DEBUG("Level.parse_texture_set: " + str(len(results)) + "gefundene ID-Blöcke:\n", 4, results)
+                if(results[-1] != 'none'): 
+                    for x in results:
+#<-----------------------       #hier mit regex die ID-Blöcke durchgehen 1 Block steht mit jedem Durchlauf in x         
+                        pass
+                else:
+                    DEBUG("Error",1)
+                re.purge() #re-Chache leeren
             else: 
                 DEBUG("Level.parse_texture_set: kann .lvl-Datei nicht lesen. (leer?) falle zurück auf Default Level", 1)
 
@@ -232,7 +240,9 @@ class Level:
         DEBUG("Level.compile()", 0)
         DEBUG("Level.compile(): rufe parse_lvl_file() auf", 1)
         self.parse_lvl_file()
+        DEBUG("Level.compile(): rufe parse_texture_file() auf", 1)
         self.parse_texture_set()
+        DEBUG("Level.compile(): abgeschlossen", 2)
     #1. ließt alle tileIDs ein und lädt jewils die entsprechende textur
     #2. erstelle eine sprite.group mit sämtlichen tiles, passiven tiles, animierten tiles, 
     #wenn IS_BUILD_ON_UPDATE = True, dann wird mit jedem build aufruf nur ein tile erstellt und currentTile auf dieses gesetzt. 
@@ -240,15 +250,18 @@ class Level:
     def build(self):
         if(IS_BUILD_ON_UPDATE):
             loadedTiles.add(load())
-            if(self.currentTile["X"] < self.gridSize.w): #wenn XPos noch in der Arena
-            if(self.currentTile["Y"] < self.gridSize.h) 
+            if(self.tile_exists(self.currentTile)):
+
 #<-----------------
+                pass
         else:
 
     #lädt ein tile an angegebener Stelle aus dem Speicher und gibt ein imageObjekt zurück
+    #UNFERTIG
     def load(self, position = self.currentTile):
         pass
     #leert sämtliche Spritegruppen und zerstört dessen Tiles (Schafft platz im RAM)
+    #UNFERTIG
     def unload_all(self):
 
         pass
@@ -267,6 +280,8 @@ class Level:
     def unbuild(self):
         self.tileSurfaceMap.clear()
     #-----DEPRECATED
+
+    #gibt true zurück, wenn tile existiert
     def tile_exists(self, pos = {"X": 0, "Y": 0}):
         return (0 <= pos["Y"] < len(self.tileIDMap) & 0 <= pos["X"] < len(self.tileIDMap[pos["Y"]]))
 
