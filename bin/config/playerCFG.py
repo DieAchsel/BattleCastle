@@ -51,7 +51,7 @@ SERIAL_REGEX = {
 # Laufgeschwindigkeit der Charaktere
 RUNNING_SPEED = 6
 
-FALLING_SPEED_MULTIPLIER = 1.0
+GRAVITY_MULTIPLIER = 1.0
 
 # Skalierung der Map wird aufgerechnet
 JUMP_HEIGHT = 22

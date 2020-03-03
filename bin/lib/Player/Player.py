@@ -79,12 +79,21 @@ class Player(pygame.sprite.Sprite):
     def not_attack(self):
         self.isAttack = False
 
+    def is_hurt(self):
+        self.isHurt = True
+
+    def not_hurt(self):
+        self.isHurt = False
+
+    def is_death(self):
+        self.isDeath = True
+
     def gravity(self):
         """Effect of gravity"""
         if self.speed_y == 0:
             self.speed_y = 1
         else:
-            self.speed_y += 1.3 * FALLING_SPEED_MULTIPLIER
+            self.speed_y += 1.3 * GRAVITY_MULTIPLIER
 
         if self.rect.y >= SCREEN_SIZE["Y"] - self.rect.height and self.speed_y >= 0:
             self.speed_y = 0
@@ -92,6 +101,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.gravity()
+
         # Moving
         self.rect.x += self.speed_x
         # Jumping
@@ -102,11 +112,10 @@ class Player(pygame.sprite.Sprite):
             #self.rect.x = ARENA_AREA.x
         elif self.rect.x > SCREEN_SIZE["X"]:
             self.rect.x = 0
-            #self.rect.x = ARENA_AREA.y
+            #self.rect.x = ARENA_AREA.x
         if self.rect.y < 0:
             self.rect.y = SCREEN_SIZE["Y"]
             #self.rect.y = ARENA_AREA.y
-
 
         # Animation sequence
         if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
@@ -135,14 +144,16 @@ class Player(pygame.sprite.Sprite):
         # Hurt looking to the right
 
         # Death looking to the left
-
+        elif self.left and self.isDeath:
+            self.set_animation_sequence(self.ltDeath)
         # Death looking to the right
-
+        elif self.right and self.isDeath:
+            self.set_animation_sequence(self.rtDeath)
         # Stand looking to the left
-        if self.left and self.speed_x == 0 and self.speed_y == 0 and not self.isAttack:
+        if self.left and self.speed_x == 0 and self.speed_y == 0 and not self.isAttack and not self.isDeath and not self.isHurt:
             self.image = self.ltStand
         # Stand looking to the right
-        elif self.right and self.speed_x == 0 and self.speed_y == 0 and not self.isAttack:
+        elif self.right and self.speed_x == 0 and self.speed_y == 0 and not self.isAttack and not self.isDeath and not self.isHurt:
             self.image = self.rtStand
 
     def init_sequences(self):

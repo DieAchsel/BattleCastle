@@ -62,6 +62,10 @@ while True:
                 player.go_left()
             if event.key == PLAYER_CONTROL[0]["FIRE"]:
                 player.is_attack()
+            # todo delete two line below
+            if event.key == K_f:
+                player.is_death()
+                player2.rect.y = SCREEN_SIZE["Y"] - player.rect.height
 
             if event.key == PLAYER_CONTROL[1]["UP"]:
                 player2.jump()
