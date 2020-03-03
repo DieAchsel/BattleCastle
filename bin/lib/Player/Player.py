@@ -117,7 +117,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = SCREEN_SIZE["Y"]
             #self.rect.y = ARENA_AREA.y
 
-        # Animation sequence
+        # Animation sequences
         if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
             self.frameInSequence = 0
 
@@ -140,9 +140,11 @@ class Player(pygame.sprite.Sprite):
         elif self.right and self.isAttack:
             self.set_animation_sequence(self.rtAttack1Seq)
         # Hurt looking to the left
-
+        elif self.left and self.isHurt:
+            self.set_animation_sequence(self.ltHurt)
         # Hurt looking to the right
-
+        elif self.right and self.isHurt:
+            self.set_animation_sequence(self.rtHurt)
         # Death looking to the left
         elif self.left and self.isDeath:
             self.set_animation_sequence(self.ltDeath)
