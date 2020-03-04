@@ -12,13 +12,11 @@ class Level:
         self.parameters = {
             "title": "Level",
             "levelFilePath": "",  # UNUSED #Datei-Pfad zu Ordner, der
-            "difficulty": DEFAULT_DIFFICULTY,
+            "difficulty": DEFAULT_LVL_CONF_PARAMETERS["difficulty"],
             "playerStartPositions": DEFAULT_PLAYER_STARTPOS
         }
 
-        self.title = "Level"
-        self.levelDir = ""  # UNUSED #Datei-Pfad zu Ordner, der
-        self.difficulty = DEFAULT_DIFFICULTY
+        self.parameters["difficulty"] = DEFAULT_LVL_CONF_PARAMETERS["difficulty"]
         self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
         self.gridSize = pygame.rect(0, 0, 0,
                                     0)  # zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
@@ -101,6 +99,8 @@ class Level:
         return neighbors
     
     #Lese .lvl Datei (debugging implementiert)
+    #hier fehlt noch das abschneiden von dem string vor den Werten z.b. "grid="
+    #Es fehlt noch das Einlesen des Dateinamens als levelTitel
     def parse_lvl_file(self, filePath = ""):
         DEBUG("Level.parse_lvl_file(lvlDir)", 0)
         DEBUG("Level.parse_lvl_file: übergebener DateiPfad",1, filePath)
@@ -163,13 +163,15 @@ class Level:
             rawLvl = DEFAULT_LVL_CONF_PARAMETERS
             
             self.gridSize = (0, 0, (DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"])) #explizit festlegen, da normalerweise gridSize on the fly berechnet wird
-        self.difficulty = rawLvl["difficulty"]
-        self.title = rawLvl["title"]
+        self.parameters["difficulty"] = rawLvl["difficulty"]
+        self.parameters["title"] = rawLvl["title"]
         self.tileIDMap = rawLvl["grid"]
         self.gridSize = (0,0, (rawLvl["maxWidth"], len(self.tileIDMap)))
         DEBUG("Level.parse_lvl_file: nutze zum konfigurieren diese Werte: " , 0, rawLvl)
 
     #finde, lade und parse textureSetConf-File im übergebenen Verzeichnis in loadedTiles hinein
+
+    #
     def parse_texture_set(self):
         DEBUG("Level.parse_texture_set(levelPath)", 0)
 
@@ -276,8 +278,8 @@ class Level:
                 pass
 
     #lädt ein tile an angegebener Stelle aus dem Speicher und gibt ein imageObjekt zurück
-    #UNFERTIG
-    def load(self, position = self.currentTile):
+    #UNFERTIG (position = self.currentTile)
+    def load(self, position):
         pass
     #leert sämtliche Spritegruppen und zerstört dessen Tiles (Schafft platz im RAM)
     #UNFERTIG

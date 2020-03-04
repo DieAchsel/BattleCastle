@@ -89,17 +89,17 @@ class Player(pygame.sprite.Sprite):
 
     def gravity(self):
         """Effect of gravity"""
-        if self.isDeath:
-            pass
+        #if self.isDeath:
+        #    pass
+        #else:
+        if self.speed_y == 0:
+            self.speed_y = 1
         else:
-            if self.speed_y == 0:
-                self.speed_y = 1
-            else:
-                self.speed_y += 1.3 * GRAVITY_MULTIPLIER
+            self.speed_y += 1.3 * GRAVITY_MULTIPLIER
 
-            if self.rect.y >= SCREEN_SIZE["Y"] - self.rect.height and self.speed_y >= 0:
-                self.speed_y = 0
-                self.rect.y = SCREEN_SIZE["Y"] - self.rect.height
+        if self.rect.y >= SCREEN_SIZE["Y"] - self.rect.height and self.speed_y >= 0:
+            self.speed_y = 0
+            self.rect.y = SCREEN_SIZE["Y"] - self.rect.height
 
     def update(self):
         self.gravity()
@@ -189,8 +189,7 @@ class Player(pygame.sprite.Sprite):
                 self.isRestart = True
             self.set_animation_sequence(self.ltDeath)
 
-            self.rect.height = self.image.get_height()
-            #self.rect.y = SCREEN_SIZE["Y"] - self.rect.height
+
 
             if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
                 self.frameInSequence = FRAMES_PER_SEQUENCE - 1
@@ -199,10 +198,11 @@ class Player(pygame.sprite.Sprite):
             if self.frameInSequence != 0 and not self.isRestart:
                 self.frameInSequence = 0
                 self.isRestart = True
+            temp = self.rect.bottom
+
             self.set_animation_sequence(self.rtDeath)
 
-            self.rect.height = self.image.get_height()
-            #self.rect.y = SCREEN_SIZE["Y"] - self.rect.height
+
 
             if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
                 self.frameInSequence = FRAMES_PER_SEQUENCE - 1
