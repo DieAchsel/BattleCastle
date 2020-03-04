@@ -54,6 +54,7 @@ class Player(pygame.sprite.Sprite):
 
         self.level = None
 
+        self.layer = None
     def go_left(self):
         if not self.isDeath and not self.isHurt:
             self.speed_x = -RUNNING_SPEED
@@ -140,72 +141,22 @@ class Player(pygame.sprite.Sprite):
 
         # Attack to the left animation
         if self.left and self.isAttack:
-            if self.frameInSequence != 0 and not self.isRestart:
-                self.frameInSequence = 0
-                self.isRestart = True
-            self.set_animation_sequence(self.ltAttack1Seq)
-            self.frameInSequence += 2
-            if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
-                self.isAttack = False
-                self.isRestart = False
-                self.frameInSequence = 0
+            self.isAttack = self.animate(self.ltAttack1Seq, self.isAttack, False, True, 0)
         # Attack to the right animation
         elif self.right and self.isAttack:
-            if self.frameInSequence != 0 and not self.isRestart:
-                self.frameInSequence = 0
-                self.isRestart = True
-            self.set_animation_sequence(self.rtAttack1Seq)
-            self.frameInSequence += 2
-            if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
-                self.isAttack = False
-                self.isRestart = False
-                self.frameInSequence = 0
+            self.isAttack = self.animate(self.rtAttack1Seq, self.isAttack, False, True, 0)
         # Hurt looking to the left
         elif self.left and self.isHurt:
-            if self.frameInSequence != 0 and not self.isRestart:
-                self.frameInSequence = 0
-                self.isRestart = True
-            self.rect.x += 1
-            self.set_animation_sequence(self.ltHurt)
-            if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
-                self.isHurt = False
-                self.isRestart = False
-                self.frameInSequence = 0
+            self.isHurt = self.animate(self.ltHurt, self.isHurt, True, False, 0)
         # Hurt looking to the right
         elif self.right and self.isHurt:
-            if self.frameInSequence != 0 and not self.isRestart:
-                self.frameInSequence = 0
-                self.isRestart = True
-            self.set_animation_sequence(self.rtHurt)
-            self.rect.x -= 1
-            if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
-                self.isHurt = False
-                self.isRestart = False
-                self.frameInSequence = 0
+            self.isHurt = self.animate(self.rtHurt, self.isHurt, True, False, 0)
         # Death looking to the left
         elif self.left and self.isDeath:
-            if self.frameInSequence != 0 and not self.isRestart:
-                self.frameInSequence = 0
-                self.isRestart = True
-            self.set_animation_sequence(self.ltDeath)
-
-
-
-            if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
-                self.frameInSequence = FRAMES_PER_SEQUENCE - 1
+            self.animate(self.ltDeath, self.isDeath, False, False, FRAMES_PER_SEQUENCE - 1)
         # Death looking to the right
         elif self.right and self.isDeath:
-            if self.frameInSequence != 0 and not self.isRestart:
-                self.frameInSequence = 0
-                self.isRestart = True
-            temp = self.rect.bottom
-
-            self.set_animation_sequence(self.rtDeath)
-
-
-
-            if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
-                self.frameInSequence = FRAMES_PER_SEQUENCE - 1
+            self.animate(self.rtDeath, self.isDeath, False, False, FRAMES_PER_SEQUENCE - 1)
 
         # Stand looking to the left
         if self.left and self.speed_x == 0 and self.speed_y == 0 and not self.isAttack and not self.isDeath and not self.isHurt:
@@ -319,3 +270,18 @@ class Player(pygame.sprite.Sprite):
         # self.image.blit(listOfImages[self.frameInSequence // (FRAMES_PER_SEQUENCE // len(listOfImages))], (0,0))
         self.image = listOfImages[self.frameInSequence // (FRAMES_PER_SEQUENCE // len(listOfImages))]
         self.frameInSequence += 1
+
+    def animate(self, sequence, trigger, move, attack, frames_per_sequence):
+        if self.frameInSequence != 0 and not self.isRestart:
+            self.frameInSequence = 0
+            self.isRestart = True
+        if move:
+            self.rect.x += 1
+        if attack:
+            self.frameInSequence += 2
+        self.set_animation_sequence(sequence)
+        if self.frameInSequence + 1 >= FRAMES_PER_SEQUENCE:
+            trigger = False
+            self.isRestart = False
+            self.frameInSequence = frames_per_sequence
+        return trigger

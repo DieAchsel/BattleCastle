@@ -36,8 +36,6 @@ active_sprite_list = pygame.sprite.Group()
 active_sprite_list.add(player)
 active_sprite_list.add(player2)
 
-
-
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 
@@ -61,11 +59,6 @@ while True:
                 player.go_left()
             if event.key == PLAYER_CONTROL[0]["FIRE"]:
                 player.is_attack()
-            # todo delete two line below
-            if event.key == K_f:
-                player.is_hurt()
-            if event.key == K_r:
-                player.is_death()
 
             if event.key == PLAYER_CONTROL[1]["UP"]:
                 player2.jump()
