@@ -43,7 +43,6 @@ clock = pygame.time.Clock()
 
 #Main Game Loop
 while True:
-
     # Set Background
     screen.blit(background, (0, 0))
 
