@@ -16,16 +16,12 @@ class Level:
             "playerStartPositions": DEFAULT_PLAYER_STARTPOS
         }
 
-        self.parameters["difficulty"] = DEFAULT_LVL_CONF_PARAMETERS["difficulty"]
-        self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
         self.gridSize = pygame.rect(0, 0, 0,
                                     0)  # zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
-        self.currentTile = {"X": 0, "Y": 0}  # gibt an, welche tilePosition grade betrachtet wird
+        self.currentTile = {"X": 0, "Y": 0}  # gibt an, welche tilePosition grade betrachtet wird (dient dem durchitereieren) 
 
         # diese 2D Liste wird zur Datenhaltung beim parsen und kompilieren des LevelFiles genutzt
-        self.tileIDMap = [list()]
-        # diese (zukünftige) 2D Liste wird zu Datenhaltung beim build genutzt (ggfs später unnötig, da build() bereits die zur Spielzeit benötgten spritegruppen erstellt)
-        self.tileSurfaceMap = []  # DEPRECATED (beim buildVorgang erstellte Tiles werden direkt in die spriteListe eingefügt)
+        self.tileIDMap = []
         loadedTiles = pygame.sprite.Group
         # Zustands-Indikatoren für Level
         # Das level muss alle 3 Phasen nacheinander durchlaufen, um gefüllte SpriteGroups zu besitzen
@@ -35,14 +31,6 @@ class Level:
 
         # jede geladene tile aus dem TileSet wird hierein geparst und geladen
         self.loadedTiles = []
-
-        self.textureList = []  # DEPRECATED (to be removed)
-        self.texture = {  # DEPRECATED (to be removed)
-            "textureSeq": [pygame.image],
-            "id": 0,
-            "Neighbors": [[0, 0, 0],
-                          [0, 1, 0],
-                          [0, 0, 0]]}
 
         # ---------------------------------------Klassen-Methoden--------------------------------------------------
 
@@ -104,7 +92,7 @@ class Level:
     def parse_lvl_file(self, filePath = ""):
         DEBUG("Level.parse_lvl_file(lvlDir)", 0)
         DEBUG("Level.parse_lvl_file: übergebener DateiPfad",1, filePath)
-        self.playerStartPositions = DEFAULT_PLAYER_STARTPOS.copy()
+        self.parameters["playerStartPositions"] = DEFAULT_PLAYER_STARTPOS.copy()
             #optimierbar: erstellle für jede gefundene Datei ein unterlevel
         if(os.path.isFile(filePath)): #datei vorhanden?
                 lvlFile = open(filePath, "r")
@@ -143,14 +131,14 @@ class Level:
                                     
                                 elif conditionName == "playerStartPos":
                                     DEBUG("Level.parse_lvl_file: " + len(results) + " playerStartPos Paramter gefunden, wähle: " , 4, results[-1])
-                                    self.playerStartPositions.clear()
+                                    self.parameters["playerStartPositions"].clear()
                                     extractedplayerStartPositions = list(map(int, results.replace("playerStartPos=", "")))
                                     startPosList = extractedplayerStartPositions[-1].split(')(')
                                     for x in startPosList:
                                         DEBUG("Level.parse_lvl_file: füge (" + len(results) + " difficulty Paramter gefunden, wähle: " , 5, results[-1])
 
                                         #hier muss noch was gemacht werden! in der playerStartPos liste sind yPositionen nur an der ungeraden ID erkennbar
-                                        self.playerStartPositions = list(map(int, x.replace("(", "").replace(")", "").split(';') ))
+                                        self.parameters["playerStartPositions"] = list(map(int, x.replace("(", "").replace(")", "").split(';') ))
                             DEBUG("Level.parse_lvl_file: Zeile Abgeschlossen" , 3)
                             re.purge() #re-Chache leeren
                 else: 
@@ -291,21 +279,11 @@ class Level:
         self.unload()
         self.load()
 
-
-
-
-
-    #wenn das level wechselt, setze die tiles zurück auf
-    #das geladene Bild wird durch eine solide Farbe ersetzt, oder das imageObjekt wird sogar zerstört
-    #DEPRECATED----- (wird von unload() übernommen)
-    def unbuild(self):
-        self.tileSurfaceMap.clear()
-    #-----DEPRECATED
-
     #gibt true zurück, wenn tile existiert
     def tile_exists(self, pos = {"X": 0, "Y": 0}):
         return (0 <= pos["Y"] < len(self.tileIDMap) & 0 <= pos["X"] < len(self.tileIDMap[pos["Y"]]))
 
+    #gettileSurfaceMap anpassen
     def get_tile_ID(self, pos = {"X": 0, "Y": 0}):
         if(self.get_tile_surface(pos).getType() == NULL_TYPE):
             return NULL_TYPE
@@ -314,15 +292,6 @@ class Level:
     #gibt
     def get_ID(self):
         return self.id
-
-    #DEPRECATED-----
-    #gibt die Oberfläche an pos zurück
-    def get_tile_surface(self, pos = {"X": 0, "Y": 0}):
-        if(self.tile_exists(pos)):
-            return self.tileSurfaceMap[pos.X][pos.Y]
-        else: 
-            return NULL_TYPE
-    #DEPRECATED-----
 
     #ändert tile in tileIDMap auf übergebenen ID
     def set_tile(self, pos = {"X": 0, "Y": 0}, ID = 1):
