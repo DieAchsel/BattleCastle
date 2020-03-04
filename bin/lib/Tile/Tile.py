@@ -9,19 +9,6 @@ import pygame
 from bin.config.levelCFG import *
 from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SCALING, SMOOTH_SCALE, NULL_TYPE
 class Tile (pygame.sprite.Sprite):
-    self.layer = DEFAULT_LAYER_ID
-    self.ID = DEFAULT_TILE_ID
-    self.isclippable = False
-    self.groupID = DEFAULT_TILE_GROUP_ID
-    self.tileSize = {
-        "X": DEFAULT_TILE_SIZE,
-        "Y": DEFAULT_TILE_SIZE}
-    self.textureSequences = {
-        "passive": [],
-        "active": []
-    }
-
-
     #skaliert imageObjekt auf eigene Tile-Größe
     def scale_texture(self, texture = pygame.image):
         if(SMOOTH_SCALE):
@@ -42,7 +29,19 @@ class Tile (pygame.sprite.Sprite):
     def __init__(self, pos = {"X": 0, "Y": 0}, texturePath = "", parameters = DEFAULT_TILE_CONF_PARAMETERS, gridSize = {}):
         super().__init__()
 
-        calc_tileSize(gridSize)#berechne tileSize anhand der lvlgröße
+        self.layer = DEFAULT_LAYER_ID
+        self.ID = DEFAULT_TILE_ID
+        self.isclippable = False
+        self.groupID = DEFAULT_TILE_GROUP_ID
+        self.tileSize = {
+            "X": DEFAULT_TILE_SIZE,
+            "Y": DEFAULT_TILE_SIZE}
+        self.textureSequences = {
+            "passive": [],
+            "active": []
+        }
+
+        self.calc_tileSize(gridSize)#berechne tileSize anhand der lvlgröße
         self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
         self.rect = self.image.get_rect()
         self.image.fill(COLORKEY, self.image.get_rect())

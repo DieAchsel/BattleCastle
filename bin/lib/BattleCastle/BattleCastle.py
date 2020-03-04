@@ -36,7 +36,7 @@ class BattleCastle(pygame.sprite.Sprite):
     def draw(self):
         self.allSprites.draw(self.image)
         self.rect = self.image.get_rect()  
-
+RectType
     #Zurückgestellt-----
         #hier wird ein neues LevelObjekt erwartet
         #def add(self, newLevel):
@@ -55,11 +55,11 @@ class BattleCastle(pygame.sprite.Sprite):
 
     #durchsucht das Level-Verzeichnis und erstellt für jeden gefundenen Ordner ein Level
     def load_levels(self):
-        load_loading_spinner()    #Das Laden der Level könnte dauern
+        self.load_loading_spinner()    #Das Laden der Level könnte dauern
         lvlPaths = os.listdir(LEVEL_DIR)
         for singlePath in lvlPaths:
             #Wenn der betrachtete Ordner eine .lvl Datei enthält, dann erstelle ein neues Level
-            if(len(glob.blod(os.path.join(singlePath, '') + '*.lvl')) > 0): 
+            if(len(glob.glod(os.path.join(singlePath, '') + '*.lvl')) > 0):
                 level = Level(singlePath)
 
     #erstellt einen Ladebildschirm und fügt in Mittig auf der PlayArea ein
@@ -100,6 +100,6 @@ class BattleCastle(pygame.sprite.Sprite):
         return self.allSprites
 
     def isColliding(self, object = pygame.sprite.sprite):
-        return pygame.sprite.spritecollide(object, loadedLevel)
+        return pygame.sprite.spritecollide(object, self.loadedLevel)
     def isColliding(self, object = pygame.sprite.group):
-        return pygame.sprite.groupcollide (object, loadedLevel)
+        return pygame.sprite.groupcollide (object, self.loadedLevel)

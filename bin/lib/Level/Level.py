@@ -6,57 +6,55 @@ from bin.config.levelCFG import *
 
 #Lesen von Leveln muss noch implementiert werden
 class Level:
-
-#---------------------------------------Klassen-Variablen--------------------------------------------------
-    self.parameters = {
-        "title" : "Level",
-        "levelFilePath" : "", #UNUSED #Datei-Pfad zu Ordner, der 
-        "difficulty" : DEFAULT_DIFFICULTY,
-        "playerStartPositions" : DEFAULT_PLAYER_STARTPOS
-    }
-    
-    self.title = "Level"
-    self.levelDir = "" #UNUSED #Datei-Pfad zu Ordner, der 
-    self.difficulty = DEFAULT_DIFFICULTY
-    self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
-    self.gridSize = pygame.rect(0, 0, 0, 0) #zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
-    self.currentTile = {"X": 0, "Y": 0} # gibt an, welche tilePosition grade betrachtet wird
-    
-    #diese 2D Liste wird zur Datenhaltung beim parsen und kompilieren des LevelFiles genutzt
-    self.tileIDMap = [list()]
-    #diese (zukünftige) 2D Liste wird zu Datenhaltung beim build genutzt (ggfs später unnötig, da build() bereits die zur Spielzeit benötgten spritegruppen erstellt)
-    self.tileSurfaceMap = [] #DEPRECATED (beim buildVorgang erstellte Tiles werden direkt in die spriteListe eingefügt)
-    loadedTiles = pygame.sprite.Group
-    #Zustands-Indikatoren für Level
-    #Das level muss alle 3 Phasen nacheinander durchlaufen, um gefüllte SpriteGroups zu besitzen
-    self.isMapParsed = False
-    self.isMapCompiled = False
-    self.isMapBuild = False
-    
-    
-
-    #jede geladene tile aus dem TileSet wird hierein geparst und geladen
-    self.loadedTiles = [
-        {
-            "ID": 0, #TileID
-            "Parameters": DEFAULT_TILE_CONF_PARAMETERS, #zugehöriges ausgelesenes ParameterDict
-            "textureName": "000" # Dateipfad zu entsprechender Textur (die untertexturen 000[_; -; #]0, 000[_; -; #]1, etc. werden aus diesem Namen bestimmt und per regex gesucht)
-        }
-    ]
-
-    self.textureList = [] #DEPRECATED (to be removed)
-    self.texture = {    #DEPRECATED (to be removed)
-        "textureSeq": [pygame.image],
-        "id": 0,
-        "Neighbors": [[0,0,0],
-                      [0,1,0],
-                      [0,0,0]]}
-
-
-#---------------------------------------Klassen-Methoden--------------------------------------------------
-
     #konstruktor, ruft parse auf
     def __init__(self, levelFilePath = NULL_TYPE):
+        # ---------------------------------------Klassen-Variablen--------------------------------------------------
+        self.parameters = {
+            "title": "Level",
+            "levelFilePath": "",  # UNUSED #Datei-Pfad zu Ordner, der
+            "difficulty": DEFAULT_DIFFICULTY,
+            "playerStartPositions": DEFAULT_PLAYER_STARTPOS
+        }
+
+        self.title = "Level"
+        self.levelDir = ""  # UNUSED #Datei-Pfad zu Ordner, der
+        self.difficulty = DEFAULT_DIFFICULTY
+        self.playerStartPositions = DEFAULT_PLAYER_STARTPOS
+        self.gridSize = pygame.rect(0, 0, 0,
+                                    0)  # zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
+        self.currentTile = {"X": 0, "Y": 0}  # gibt an, welche tilePosition grade betrachtet wird
+
+        # diese 2D Liste wird zur Datenhaltung beim parsen und kompilieren des LevelFiles genutzt
+        self.tileIDMap = [list()]
+        # diese (zukünftige) 2D Liste wird zu Datenhaltung beim build genutzt (ggfs später unnötig, da build() bereits die zur Spielzeit benötgten spritegruppen erstellt)
+        self.tileSurfaceMap = []  # DEPRECATED (beim buildVorgang erstellte Tiles werden direkt in die spriteListe eingefügt)
+        loadedTiles = pygame.sprite.Group
+        # Zustands-Indikatoren für Level
+        # Das level muss alle 3 Phasen nacheinander durchlaufen, um gefüllte SpriteGroups zu besitzen
+        self.isMapParsed = False
+        self.isMapCompiled = False
+        self.isMapBuild = False
+
+        # jede geladene tile aus dem TileSet wird hierein geparst und geladen
+        self.loadedTiles = [
+            {
+                "ID": 0,  # TileID
+                "Parameters": DEFAULT_TILE_CONF_PARAMETERS,  # zugehöriges ausgelesenes ParameterDict
+                "textureName": "000"
+                # Dateipfad zu entsprechender Textur (die untertexturen 000[_; -; #]0, 000[_; -; #]1, etc. werden aus diesem Namen bestimmt und per regex gesucht)
+            }
+        ]
+
+        self.textureList = []  # DEPRECATED (to be removed)
+        self.texture = {  # DEPRECATED (to be removed)
+            "textureSeq": [pygame.image],
+            "id": 0,
+            "Neighbors": [[0, 0, 0],
+                          [0, 1, 0],
+                          [0, 0, 0]]}
+
+        # ---------------------------------------Klassen-Methoden--------------------------------------------------
+
         DEBUG("Level.__init__(lvlDir = NULL_TYPE)", 0)
         DEBUG("Level.__init__:übergebener filePath",1 , levelFilePath)
         super().__init__()
@@ -249,12 +247,13 @@ class Level:
     #(überprüfen lässt sich der aktuelle Build-Zustand mit bool self.isBuild())
     def build(self):
         if(IS_BUILD_ON_UPDATE):
-            loadedTiles.add(load())
+            self.loadedTiles.add(self.load())
             if(self.tile_exists(self.currentTile)):
 
 #<-----------------
                 pass
         else:
+            pass
 
     #lädt ein tile an angegebener Stelle aus dem Speicher und gibt ein imageObjekt zurück
     #UNFERTIG
@@ -305,20 +304,15 @@ class Level:
 
     #ändert tile in tileIDMap auf übergebenen ID
     def set_tile(self, pos = {"X": 0, "Y": 0}, ID = 1):
-        if(tile_exists(pos)):
+        if(self.tile_exists(pos)):
             self.tileIDMap[pos["X"]][pos["Y"]] = ID
             return pos
         else:
             return NULL_TYPE
 
-
-
-
-
-
     #muss noch lernen tile-Objekte zu verarbeiten
     def unset_tile(self, pos ={"X": 0, "Y": 0}):
-        if(tile_exists(pos)):
+        if(self.tile_exists(pos)):
             self.tileIDMap[pos["X"]][pos["Y"]] = 0
 
     #entferne tile aus allen spritegroups und füge in emptyTIle spritegroup

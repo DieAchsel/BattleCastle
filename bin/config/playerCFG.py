@@ -49,7 +49,7 @@ SERIAL_REGEX = {
 }
 
 # Laufgeschwindigkeit der Charaktere
-RUNNING_SPEED = 6
+RUNNING_SPEED = 5
 
 GRAVITY_MULTIPLIER = 1.0
 
