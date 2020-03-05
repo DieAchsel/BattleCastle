@@ -8,17 +8,14 @@ from bin.config.levelCFG import *
 class Level:
     #konstruktor, ruft parse auf
     def __init__(self, levelFilePath = NULL_TYPE):
-        # ---------------------------------------Klassen-Variablen--------------------------------------------------
         self.parameters = { 
             "title": "Level",
             "levelFilePath": "",  # UNUSED #Datei-Pfad zu Ordner, der
             "difficulty": DEFAULT_LVL_CONF_PARAMETERS["difficulty"],
             "playerStartPositions": DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"]
         }
-
-        self.gridSize = pygame.rect(0, 0, 0, 0)  # zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
+        self.gridSize = pygame.Rect(0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"])  # zu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
         self.currentTilePos = {"X": 0, "Y": 0}  # gibt an, welche tilePosition grade betrachtet wird (dient dem durchitereieren) 
-
         # diese 2D Liste wird zur Datenhaltung beim parsen und kompilieren des LevelFiles genutzt
         self.tileIDMap = []
         #tileGruppen:
@@ -35,9 +32,6 @@ class Level:
 
         # jede geladene tile aus dem TileSet wird hierein geparst und geladen
         self.parsedTileIDs = []
-
-        # ---------------------------------------Klassen-Methoden--------------------------------------------------
-
         DEBUG("Level.__init__(lvlDir = NULL_TYPE)", 0)
         DEBUG("Level.__init__:übergebener filePath",1 , levelFilePath)
         super().__init__()
@@ -47,8 +41,6 @@ class Level:
             DEBUG("Level.__init__(lvlDir = NULL_TYPE): Level-Directory nicht gefunden, überlasse das Problem den folgenden build-Prozess...", 0)
         self.compile(levelFilePath)
         DEBUG("Level.__init__(lvlDir = NULL_TYPE): Init abgeschlossen", 1)
-    
-
     #gibt die GruppenID NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
     def get_neighbors(self, position = {"X": 0, "Y": 0}):
         DEBUG("Level.get_neighbors(position{})", 1, position)
@@ -89,7 +81,6 @@ class Level:
                 neighbors[y][x] = self.get_tile_ID(currentNeighbor)
         DEBUG("Level.get_neighbors(position{}) abgeschlossen", 2, neighbors)
         return neighbors
-    
     #Lese .lvl Datei (debugging implementiert)
     #hier fehlt noch das abschneiden von dem string vor den Werten z.b. "grid="
     #Es fehlt noch das Einlesen des Dateinamens als levelTitel
@@ -164,7 +155,6 @@ class Level:
         self.tileIDMap = rawLvl["grid"]
         self.gridSize = (0,0, (rawLvl["maxWidth"], len(self.tileIDMap)))
         DEBUG("Level.parse_lvl_file: nutze zum konfigurieren diese Werte: " , 0, rawLvl)
-
     #finde, lade und parse textureSetConf-File im übergebenen Verzeichnis in allTiles hinein
     def parse_texture_set(self):
         self.isParsed = False
@@ -343,7 +333,6 @@ class Level:
     #2. erstelle eine sprite.group mit sämtlichen tiles, passiven tiles, animierten tiles, 
     #wenn IS_BUILD_ON_UPDATE = True, dann wird mit jedem build aufruf nur ein tile erstellt und currentTilePos auf dieses gesetzt. 
     #(überprüfen lässt sich der aktuelle Build-Zustand mit bool self.isBuild())
-    
     #gibt eine Liste mit übereinstimmungen 
     def match_neighbors(self, neighbors1 = [], neighbors2 = []):
         DEBUG("Level.match_neighbors(self, neighbors1 = [], neighbors2 = []):", 0)
@@ -368,12 +357,10 @@ class Level:
         else:
             DEBUG("Level.match_neighbors(): Listenlänge der neighbors stimmt nicht != 3", 0)
             return None
-    
+    #Berechne Größe eines einzelnen TIles und gebe ein entsprechendes Rect Objekt zurück (x und y = 0)
     def calc_tileSize(self):
-            tileSize = pygame.Rect(0 , 0, gridSize.x // ARENA_AREA.w, gridSize.y // ARENA_AREA.h)
-        else:
-            self.tileSize = DEFAULT_TILE_SIZE
-    
+        return pygame.Rect(0 , 0, ARENA_AREA.w // self.gridSize.x,ARENA_AREA.h // self.gridSize.y)
+    #baut die Spieloberfläche mit sämtlichentiles auf
     def build(self):
         if(self.isCompiled):
             DEBUG("Level.build():", 0)
@@ -416,71 +403,58 @@ class Level:
 
 
                         #Wir haben jetzt die exakte tileID n self.currentPosition {X,Y}
-                        #-ermittle die größe eines einzelnen tiles
-
-
-                        #folgendes soll in die tile_init rein. dort sollen alle zur ID gehörenden bilder eingelesen werden                        
-                        DEBUG("Level.build(): betrachte", 3, chosenID)
-                        regex = "[0]*" + str(chosenID) + "[_|-|#][0-9]+.png"
+                        #-ermittle die größe eines einzelnen tiles OK
+                        #-ermittle die Pixel-Position des ektuellen tiles mit 
+                            #currentPos[X] * tileSize.w
+                        tileRect = self.calc_tileSize()
+                        tileRect.x = self.currentTilePos["X"] * tileRect.w
+                        tileRect.x = self.currentTilePos["Y"] * tileRect.h
                         tileTexturePath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture", "tiles")
-                        DEBUG("Level.build(): betrachte Dateipfad", 4, tileTexturePath)
-                        DEBUG("Level.build(): suche in o.a. Dateipfad mit diesem Regex", 4, regex)
-                        foundFiles = glob.glod(tileTexturePath, regex)
-                        DEBUG("Level.build(): diese Dateien wurden gefunden:", 4, foundFiles)
-                        for x in foundFiles
-                        os.path.basename()
-                        #HIER WIRD MIT SORT ABGEKÜRZT (FEHLENDE FÜHRENDE 0EN WERDEN NICHT BEACHTET)
-                        #EINE IDEE WÄR ES DIE SEQUENZID ZUSÄTZLICH AUSZULESEN
-                            
-
-
-
-
-                        self.currentTilePos["X"] += 1 #wird benötigt um entsprechende Position des tiles zu bestimmen
-                        
+                        newTile = Tile(tileRect ,tileTexturePath, chosenID["tileIDConf"])
+                        if(newTile.has_animation()):
+                            self.animatedTiles.add(newTile)
+                        if(newTile.has_damage()):
+                            self.damagingTiles.add(newTile)
+                        if(newTile.has_collision()):
+                            self.collidableTiles.add(newTile)
+                        self.currentTilePos["X"] += 1 #wird benötigt um entsprechende Position des tiles zu bestimmen    
                     self.currentTilePos["Y"] += 1
+            self.allTiles.add(self.animatedTiles, self.damagingTiles, self.collidableTiles)
             self.isBuid = True       
-
+        else: DEBUG("Level.build() build wird nicht ausgeführt, level ist noch nicht compiliert...", 1)
+        return self.allTiles
     #leert sämtliche Spritegruppen und zerstört dessen Tiles (Schafft platz im RAM)
-    #UNFERTIG
     def unbuild(self):
-
+        for sprite in self.allTiles:
+            sprite.kill()
         self.isBuild = False
-        pass
     #führe ein unload() aus und lade erneut mit load()
-    def reload(self):
-        
+    def rebuild(self):
         self.unbuild()
         self.build()
-
-
     #gibt true zurück, wenn tile existiert
     def tile_exists(self, pos = {"X": 0, "Y": 0}):
         return (0 <= pos["Y"] < len(self.tileIDMap) & 0 <= pos["X"] < len(self.tileIDMap[pos["Y"]]))
-
     #gibt ID an entsprechender Position zurück (nach parsen, und vor build möglich (nach/während dem build zwar immernoch möglich, aber nichtmehr an die tiles gekoppelt))
     def get_tile_ID(self, pos = {"X": 0, "Y": 0}):
         if(self.tile_exists(pos)):
             return self.tileIDMap[pos["X"]][pos["Y"]]    
         else:
             return NULL_TYPE
-    #gibt
+    #gibt die tileID zurück
     def get_ID(self):
         return self.id
-
-    #ändert tile in tileIDMap auf übergebenen ID
-    def set_tile(self, pos = {"X": 0, "Y": 0}, ID = 1):
+    #ändert tile in tileIDMap auf übergebenen groupID
+    def set_tile(self, pos = {"X": 0, "Y": 0}, groupID = 0):
         if(self.tile_exists(pos)):
-            self.tileIDMap[pos["X"]][pos["Y"]] = ID
+            self.tileIDMap[pos["X"]][pos["Y"]] = groupID
             return pos
         else:
             return NULL_TYPE
-
     #muss noch lernen tile-Objekte zu verarbeiten
     def unset_tile(self, pos ={"X": 0, "Y": 0}):
         if(self.tile_exists(pos)):
             self.tileIDMap[pos["X"]][pos["Y"]] = 0
-
     #entferne tile aus allen spritegroups und füge in emptyTIle spritegroup
     def get_used_tiles(self):
         used = []
@@ -489,7 +463,6 @@ class Level:
                 if(y != 0):
                     used.add(y)
         return used
-
     #muss noch lernen tile-Objekte zu verarbeiten
     def get_unused_tiles(self):
         unused = []
@@ -498,7 +471,6 @@ class Level:
                 if(y == 0):
                     unused.add(y)
         return unused
-
     #gebe den aktuellen Build-Zustand zurück (bool)
     def is_build(self):
         return self.isBuild

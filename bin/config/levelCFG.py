@@ -61,6 +61,12 @@ DEFAULT_DMG_OVER_TIME = 4
 #DEFAULT_LVL_CONF_PARAMETERS_DIR = ""#os.path.join(GAME_DIR, "lvl")
 DEFAULT_TEXTURE_SET_PATH = os.path.join(GAME_DIR, "gfx", "tiles", "default")
 
+TEXTURE_DIVIDER_REGEX = {   "all": "[0]*{}[_|-|#][0-9]+.",
+                            "passive": "[0]*{}_[0-9]+.",
+                            "active": "[0]*{}-[0-9]+.",
+                            "dying": "[0]*{}#[0-9]+."
+                        }
+REGEX_PLACEHOLDER = "{}"
 DEFAULT_TILE_CONF_PARAMETERS ={
     "ID": 0, #TileID
     "textureName": "", # Dateipfad zu entsprechender Textur (die untertexturen 000[_; -; #]0, 000[_; -; #]1, etc. werden aus diesem Namen bestimmt und per regex gesucht)
@@ -120,7 +126,6 @@ DEFAULT_LVL_CONF_PARAMETERS = {
 DEFAULT_GRID_SIZE = {
     "X": DEFAULT_LVL_CONF_PARAMETERS["maxWidth"],
     "Y": len(DEFAULT_LVL_CONF_PARAMETERS["grid"])}
-
 DEFAULT_TILE_SIZE = { #statische TileSize berechnet von auf DEFAULT_LVL_CONF_PARAMETERS (nnur für Fallback auf DEFAULT)
     "X": ARENA_AREA.w // DEFAULT_GRID_SIZE["X"],
     "Y": ARENA_AREA.h // DEFAULT_GRID_SIZE["Y"]

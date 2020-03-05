@@ -5,6 +5,7 @@ import pygame
 
 VERSION = "0.1.1"
 NULL_TYPE = 0
+ANIMATION_INTERVAL = 30 #jedes 30te Update wird die bildsequenz iteriert
 if(pygame.image.get_extended()):
     AVAILABLE_IMG_FORMAT_REGEX = "[png|gif|jpg|bmp|pcx|tga|tif|lbm|pbm|pgm|ppm|xpm]"
 else:

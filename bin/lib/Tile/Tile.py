@@ -7,83 +7,125 @@ import pygame
 
 
 from bin.config.levelCFG import *
-from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SCALING, SMOOTH_SCALE, NULL_TYPE
+from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SCALING, SMOOTH_SCALE, NULL_TYPE, DEBUG, AVAILABLE_IMG_FORMAT_REGEX, ANIMATION_INTERVAL
 class Tile (pygame.sprite.Sprite):
     #skaliert imageObjekt auf eigene Tile-Größe
     def scale_texture(self, texture = pygame.image):
         if(SMOOTH_SCALE):
-            return pygame.transform.smoothscale(texture, self.tileSize["X"], self.tileSize["Y"])
+            return pygame.transform.smoothscale(texture, self.rect.w, self.rect.h)
         else:
-            return pygame.transform.scale(texture, self.tileSize["X"], self.tileSize["Y"])
-
-    #berechnet die tileSize anhand der größe der Arena und der übergenebenen Anzahl der tiles in X und Y richtung
-    
-
-    #erstellt ein tileObjekt. 
+            return pygame.transform.scale(texture, self.rect.w, self.rect.h)
     #wenn keine textur übergeben wird, wird das Objekt zunächst ohne textur erstellt
-    def __init__(self, texturePath = "", parameters = DEFAULT_TILE_CONF_PARAMETERS, rect = pygame.Rect):
+    def __init__(self, texturePath = "", newParameters = DEFAULT_TILE_CONF_PARAMETERS, newRect = pygame.Rect):
         super().__init__()
-        
-        self.layer = DEFAULT_LAYER_ID
-        self.ID = DEFAULT_TILE_ID
-        self.isclippable = False
-        self.groupID = DEFAULT_TILE_GROUP_ID
-        self.tileSize = {
-            "X": DEFAULT_TILE_SIZE,
-            "Y": DEFAULT_TILE_SIZE}
-        self.textureSequences = {
-            "passive": [],
-            "active": []
-        }
+        DEBUG("Tile.init(self, texturePath = "", newParameters = DEFAULT_TILE_CONF_PARAMETERS, newRect = pygame.Rect)", 2)
+        DEBUG("Tile.init(...): Lese parameter ein:", 2, newParameters)
+        self.parameters = newParameters
+        self.Name = newParameters["textureName"]
+        self.layer = newParameters["layerID"]
+        self.ID = newParameters["ID"]
+        self.isclippable = newParameters["isclippable"]
+        self.groupID = newParameters["groupID"]
+        #self.isAnimated = newParameters["isAnimated"] #nicht benötigt, da dies von der images liste abhängt
+        self.dmgNeededToDestroy = newParameters["dmgNeededToDestroy"]
+        self.damageOnCollision = newParameters["damageOnCollision"]
+        self.damageOverTime = newParameters["damageOverTime"]
+        self.playMvSlowDown = newParameters["playMvSlowDown"]
+        self.playerMvManipulation = newParameters["playerMvManipulation"]
+        DEBUG("Tile.init(...): Lese rect(x,y,w,h) ein:", 2, newRect)
+        self.rect = newRect
+        self.imagesIndex = 0
+        self.tick = 0
+        self.images = []
+        self.state = 0 #entspricht der Position im self.images dict (0 = passive, 1 = active, 2 = dying)
+        DEBUG("Tile.init(...): Lade Texturen...", 2, texturePath)
+        self.load_textures(texturePath)
 
-        
-        self.image = pygame.Surface([self.tileSize["X"],self.tileSize["Y"]])
-        self.rect = self.image.get_rect()
-        self.image.fill(COLORKEY, self.image.get_rect())
-        self.image.set_colorkey(COLORKEY)
-        self.add_texture(texturePath)
+    def load_textures(self, filePath = ""):
+        DEBUG("Tile.load_textures(filePath = )", 1)
+        tileTexturesPath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture", "tiles")
+        DEBUG("Tile.load_textures(...): betrachte Dateipfad", 2, tileTexturesPath)
+        if(os.path.exists(tileTexturesPath) == False):
+            DEBUG("Tile.load_textures(...): Dateipfad existiert nicht, versuche mit default TextureSet zu kombinieren", 1, DEFAULT_TEXTURE_SET_PATH)
+            tileTexturesPath = DEFAULT_TEXTURE_SET_PATH
+        if(os.path.exists(tileTexturesPath)):
+            DEBUG("Tile.load_textures(...): suche in o.a. Dateipfad mit diesem Regex", 4, regex)
+            foundFiles = glob.glob(tileTexturesPath, TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
+            DEBUG("Tile.load_textures(...): diese Dateien wurden gefunden:", 4, foundFiles) 
+            
+            regex = TEXTURE_DIVIDER_REGEX["passive"]
+            regex.replace(REGEX_PLACEHOLDER, str(self.ID))
+            foundFilePaths = glob.glob(tileTexturesPath, regex)
+            self.images.append(list())
+            for filePath in foundFilePaths:
+                self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
 
-    #fügt eine Textur hinzu, über die Flag isActive kann die übergebene Textur zusätzlich als aktive texture markiert werden
-    def add_texture(self, FilePath = "", isActiveTexture = False):
-        texture = pygame.image()
-        if(os.path.isfile(FilePath)):
-            texture = pygame.image.load(FilePath)
-            if(SCALING):
-                texture = self.scale_texture(texture) #passe Textur auf tilegröße an
-        else:
-            #Falle hier in Zukunft auf eine benachbarte Textur oder auf StandardTexturen zurück
-            texture = pygame.image.fill(MISSING_TEXTURE_COLOR, self.image.get_rect())
-        if(isActiveTexture):
-            self.textureSequences["active"].add(texture)
-        else:
-            self.textureSequences["passive"].add(texture)
-        #self.image.blit(texture.convert(), self.image.get_rect)
-        #self.activeTexture = self.image
-
+            regex = TEXTURE_DIVIDER_REGEX["active"]
+            regex.replace(REGEX_PLACEHOLDER, str(self.ID))
+            foundFilePaths = glob.glob(tileTexturesPath, regex)
+            self.images.append(list())
+            for filePath in foundFilePaths:
+                self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
+            
+            regex = TEXTURE_DIVIDER_REGEX["dying"]
+            regex.replace(REGEX_PLACEHOLDER, str(self.ID))
+            foundFilePaths = glob.glob(tileTexturesPath, regex)
+            self.images.append(list())
+            for filePath in foundFilePaths:
+                self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
+                #alternative, falls Transparenzwerte nicht übernommen werden:        
+                #im = pygame.Surface(self.rect.w, self.rect.h)
+                #im.fill(COLORKEY, im.get_rect())
+                #im.set_colorkey(COLORKEY)
+                #im = self.scale_texture(pygame.image.load(filePath)).convert_alpha()
+        else:#wenn kein Pfad (sowohl der lvlTexturpfad als auch der defaulttexturepfad) existiert
+            DEBUG("Tile.load_textures(...): Default-Dateipfad existiert auch nicht, nutze einfarbiges Tile ohne textur", 1, DEFAULT_TEXTURE_SET_PATH)
+            self.images.append(self.get_solid())
+    #gibt ein einfarbiges image-Objekt mit den klasseneigenen tile dimensionen zurück# dient als Fallback, falls keine passende Textur geladen werden kann   
+    def get_solid(self, rgb = MISSING_TEXTURE_COLOR):
+        solid = pygame.Surface([self.rect.w, self.rect.h])
+        solid.fill(rgb, solid.get_rect())
+        solid.set_colorkey(COLORKEY)
+        return solid
     #gibt true zurück, wenn mehr als 1 Bild geladen ist (wenn isActiveSequence = true, dann prüfe die ActiveSequence
     def has_animation(self, isActiveSequence = False):
         if(isActiveSequence):
             x = "active"
         else:
             x = "passive"
-        if(len(self.textureSequences[x]) > 1):
+        if(len(self.images[x]) > 1):
             return True
         else:
             return False
-
-    def has_action(self):
-        return self.hasAction
-
-    def getTexture(self):
-        return self.activeTexture
-
-    def getTextureSeq(self):
-        return self.passiveTextureSeq
+    
+    def has_collision(self):
+        return self.isClippable
+    
+    def has_damage(self):
+        return (self.damageOnCollision != 0 | self.damageOverTime != 0)
+    
     def get_ID(self):
         return self.ID
+    
     def get_group_ID(self):
         return self.groupID
+
+    def get_state(self):
+        return self.state
+
+    def set_state(self, newState = 0):
+        if(0 <= newState < len(self.images)):
+            if(self.state != newState):
+                self.state = newState
+                self.index = 0                  #setze den index zurück
+                self.tick = ANIMATION_INTERVAL #triggere einen bildWechsel
+    
     def update(self): #Muss noch implementiert werden
-        pass 
-
-
+        ANIMATION_INTERVAL
+        self.tick += 1
+        if(self.tick >= ANIMATION_INTERVAL):
+            self.tick = 0
+            self.index += 1
+            if(self.index > len(images[state])):
+                self.index = 0
+            self.image = self.images[self.state][self.index]
