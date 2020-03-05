@@ -5,7 +5,7 @@ import pygame
 
 VERSION = "0.1.1"
 NULL_TYPE = 0
-
+AVAILABLE_IMG_FORMAT_REGEX = "[png|gif|jpg|bmp|pcx|tga|tif|lbm|pbm|pgm|ppm|xpm]"
 # Absoluter Pfad zum bin-Ordner
 GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
 DEBUG_ENABLED = True
@@ -41,7 +41,6 @@ SCREEN_SIZE = {
 }
 
 FPS = 60
-
 
 #-------------------------------------Render-Optionen--------------------------------------------------
 
