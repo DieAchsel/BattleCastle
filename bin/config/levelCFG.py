@@ -81,6 +81,7 @@ DEFAULT_TILE_CONF_PARAMETERS ={
 DEFAULT_LVL_CONF_PARAMETERS = {
     "title" : "default Level",
     "difficulty" : 0,
+    "playerStartPositions": [],
     "grid": [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -124,7 +125,8 @@ DEFAULT_TILE_SIZE = { #statische TileSize berechnet von auf DEFAULT_LVL_CONF_PAR
     "X": ARENA_AREA.w // DEFAULT_GRID_SIZE["X"],
     "Y": ARENA_AREA.h // DEFAULT_GRID_SIZE["Y"]
 }
-DEFAULT_PLAYER_STARTPOS = [[1, (len(DEFAULT_LVL_CONF_PARAMETERS["grid"]) - 1)], [len(DEFAULT_LVL_CONF_PARAMETERS["maxWidth"]) - 1, DEFAULT_LVL_CONF_PARAMETERS["maxWidth"] - 2]] #NUR FÜR FALLBACK AUF DEFAULT
+DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"] = [[1, (len(DEFAULT_LVL_CONF_PARAMETERS["grid"]) - 1)], [len(DEFAULT_LVL_CONF_PARAMETERS["maxWidth"]) - 1, DEFAULT_LVL_CONF_PARAMETERS["maxWidth"] - 2]] #NUR FÜR FALLBACK AUF DEFAULT
+DEFAULT_PLAYER_STARTPOS = DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"]
 #--------------------------genutzte REGEX-Ausdrücke-------------------------
 DATA_CONDITIONS_LVL = {
 #    "gridSize": "^gridSize=[0-9]*;[0-9]*$", #DEPRECATED
