@@ -36,7 +36,7 @@ class BattleCastle(pygame.sprite.Sprite):
     def draw(self):
         self.allSprites.draw(self.image)
         self.rect = self.image.get_rect()  
-RectType
+
     #Zurückgestellt-----
         #hier wird ein neues LevelObjekt erwartet
         #def add(self, newLevel):
@@ -59,6 +59,7 @@ RectType
         lvlPaths = os.listdir(LEVEL_DIR)
         for singlePath in lvlPaths:
             #Wenn der betrachtete Ordner eine .lvl Datei enthält, dann erstelle ein neues Level
+            #ist das so richtig mit path..join??
             if(len(glob.glod(os.path.join(singlePath, '') + '*.lvl')) > 0):
                 level = Level(singlePath)
 
