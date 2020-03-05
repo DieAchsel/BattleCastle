@@ -49,7 +49,7 @@ SERIAL_REGEX = {
 }
 
 # Laufgeschwindigkeit der Charaktere
-RUNNING_SPEED = 5
+RUNNING_SPEED = 9
 
 GRAVITY_MULTIPLIER = 1.0
 
@@ -57,6 +57,6 @@ GRAVITY_MULTIPLIER = 1.0
 JUMP_HEIGHT = 22
 
 # Sequence Frames
-FRAMES_PER_SEQUENCE = 54  # Best Frame rate for smooth animation
+FRAMES_PER_SEQUENCE = 36  # Best Frame rate for smooth animation
 
 # Spezieldatentypen hier nachgucken: https://www.w3schools.com/python/python_dictionaries.asp
