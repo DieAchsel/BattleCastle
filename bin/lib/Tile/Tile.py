@@ -49,7 +49,7 @@ class Tile (pygame.sprite.Sprite):
             DEBUG("Tile.load_textures(...): Dateipfad existiert nicht, versuche mit default TextureSet zu kombinieren", 1, DEFAULT_TEXTURE_SET_PATH)
             tileTexturesPath = DEFAULT_TEXTURE_SET_PATH
         if(os.path.exists(tileTexturesPath)):
-            DEBUG("Tile.load_textures(...): suche in o.a. Dateipfad mit diesem Regex", 4, regex)
+            DEBUG("Tile.load_textures(...): suche in o.a. Dateipfad mit diesem Regex", 4, TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
             foundFiles = glob.glob(tileTexturesPath, TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
             DEBUG("Tile.load_textures(...): diese Dateien wurden gefunden:", 4, foundFiles) 
             
