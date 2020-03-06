@@ -1,0 +1,54 @@
+1. Problembeschreibung/Idee
+2. Lösungsansatz
+3. Klassendiagramm
+4. Ergebnisse
+5. Quellen
+
+1. Vorwort
+Bei diesem Projekt handelt es sich um eine Ausarbeitung für das Fach Skriptsprachen (WS2019/2020) für die Fachhochschule Südwestfalen.
+Die Aufgabe bestand darin in Teams zu zwei Personen ein Problem in der Skriptsprache Python zu lösen.
+Auf Nachfrage ob die Ausarbeitung auch ein selbst entwickeltes Spiel sein darf, wurde dies bestätigt.
+Deshalb wird in dieser Ausarbeitung verstärkt, wenn nicht sogar primär die Bibliothek Pygame verwendet.
+
+2. Vorstellung des Teams
+Das Team für diese Ausarbeitung besteht aus Alexander Schäfer               Nils Liefländer
+                                            Kontaktdaten Alex               Kontaktdaten Nils
+
+3. Problem-Beschreibung/Idee:
+    Da die Spiele-Entwicklung kein richtiges "Problem" ist, was sich lösen lassen kann, sondern eher eine "Anforderung", haben wir uns zunächst
+    darauf konzentriert das Sielprinzip und die Spielregenl auszudenken.
+    Wir haben uns als Anforderung ein JumpAndRun Spiel namens BattleCastle ausgedacht.
+    Ein besonderer Fokus lag in dem dynamischen Aufbau der Spieloberfläche und der Erweiterbarkeit um weitere Funktionen
+    
+    In diesem Spiel soll es möglich sein in einem Level, welches Labyrinth-ähnlich aufgebaut ist, mit 2 Spielfiguren gegeneinander zu kämpfen.
+    Das Level wird aus selbst erstellten .lvl und .conf Dateien erstellt und entsprechende Tiles automatisch ausgewählt. Es wird später näher darauf eingegangen HIER SCHREIBEN WO IN DOKU
+    
+    Die Spielfiguren die von den Spielern gesteuert werden, werden durch eine .conf Datei configuriert und in der "Player" Klasse ist das Verhalten der Spielfiguren beschrieben.
+    Allgemeingesehen ist eine Spielfigur eine Ansamlung von Bildern, die zum bestimmten Zeitpunkt oder nach einem bestimmten Event dargestellt werden.
+    Das Spiel lässt sich mit weiteren Spielfiguren leicht erweitern.
+    Leider konnten nicht alle Machaniken der Spielfiguren zum Zeitpunkt der Abgabe realisiert werden, weshalb zum Abgabezeitpunkt lediglich der Nahkampf mit der Standardwaffe implementiert ist
+    
+    Bereits bei der Ideenfindung haben wir beschlossen die Ausarbeitung in 2 Unterbereiche, Labyrinth und Spieler, aufzuteilen.
+    Jeder konnte sich hierdurch seinem eigenen Bereich und störte nicht die Implementierung des Anderen.
+
+
+
+4. Ansatz
+    Angefangen haben wir mit einer gründliche Planungsphase in der wir die Ideen gesamelt haben. In der Zeite habe wir versucht die Fragen, was soll das für ein Spiel werden,
+    wie soll es aussehen, was ist das Ziel und welche Spielmechaniken wie Waffen, Power-Ups und des gleichen sollen umgesetzt werden und for allen dingen was läst sich 
+    von allen Ideen, die wir hatten, in der Zeit die wir hatten, realisieren. In der Zeit ist ein Klassendiagramm, was unten dargestellt ist, ein Zeitplan nach dem wir vorgegangen sind 
+    und das wichtigste der Name des Spiels entstanden. Es wurde beschlossen die Entwiklung wie folg aufzuteilen: Nils Liefländer Beschäftigte sich mit dem Labyrint also 
+    dem Level und Alexander Schäfer mit den Spielfiguren. 
+
+    Der Entwik
+
+
+5. Ergebniss
+    Als Ergebniss der Ausarbeitung entstand eine solide Basis für die einfache Entwiklung und Erweiterung des Spiels mit weiteren Level, Spielfiguren nud Spielmechanicken.
+
+
+
+
+
+
+https://www.studieren-im-netz.org/im-studium/studieren/seminararbeit

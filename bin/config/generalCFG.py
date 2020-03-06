@@ -4,7 +4,7 @@ import pygame
 
 
 VERSION = "0.1.1"
-NULL_TYPE = 0
+NULL_TYPE = None
 ANIMATION_INTERVAL = 30 #jedes 30te Update wird die bildsequenz iteriert
 if(pygame.image.get_extended()):
     AVAILABLE_IMG_FORMAT_REGEX = "[png|gif|jpg|bmp|pcx|tga|tif|lbm|pbm|pgm|ppm|xpm]"
@@ -13,7 +13,7 @@ else:
 # Absoluter Pfad zum bin-Ordner
 GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
 DEBUG_ENABLED = True
-DEBUG_LEVEL = 9
+DEBUG_LEVEL = 7
 #Wenn DEBUG_ENABLED, dann gib Debuggingmeldungen aus, je nach lvl mit angepasstem Detail
 #wie detailliert sollen die Meldungen sein. bei DEBUG_LEVEL >= 9 wird nach möglichkeit jede Daten-Transaktion in der Konsole ausgegeben
 #Debugging-Funktion:
@@ -25,11 +25,10 @@ def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE
                 #Rücke Meldungen in tieferem Layer ein
                 tabs += "    "
             output = "DEBUGGING: " + tabs + msg
-
-            if(ObjectToPrint != NULL_TYPE): 
-                objectOutput = "\nEnthaltenes Objekt:\n" + str(ObjectToPrint)
-                output += objectOutput
             print(output)
+            if(ObjectToPrint != NULL_TYPE): 
+                output = "DEBUGGING:     " + tabs + str(ObjectToPrint)
+                print(output)
 #Wenn DEBUG_ENABLED, gib diese Nachricht aus:
 
 

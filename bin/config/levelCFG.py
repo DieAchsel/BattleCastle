@@ -39,7 +39,7 @@ ARENA_POSITION = (ARENA_AREA.x,ARENA_AREA.y)
 #Ersetzt beim Levelwechsel die surfaceObjekte im Raster durch ihre TypeID.
 #spart RAM, jedoch muss das Level beim erneuten Laden neu gebaut (build()) werden
 IS_UNBUILDING_ON_UNLOAD = True
-IS_BUILD_ON_UPDATE = True #mit jedem UpdateProzess wird ein Tile gebaut.
+IS_BUILD_ON_UPDATE = False #mit jedem UpdateProzess wird ein Tile gebaut.
 
 #------------------------------Datei-Handling-------------------------------
 
@@ -136,25 +136,25 @@ DEFAULT_PLAYER_STARTPOS = DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"]
 DATA_CONDITIONS_LVL = {
 #    "gridSize": "^gridSize=[0-9]*;[0-9]*$", #DEPRECATED
     "difficulty": "^difficulty=[0-9]$",
-    "playerStartPos": "^playerStartPos=(\(\d+;\d+\))+$",
-    "grid": "^GRID=(\d\;)+\d$" #hier stimmt was nicht mehr, ich hab nur ein semikolon entfernt. zudem hat die regEx negative werte glaub ich übersprungen
+    "playerStartPos": "^playerStartPos=[\(\d+;\d+\)]+$",
+    "grid": "^GRID=[\d\;]+\d$" #hier stimmt was nicht mehr, ich hab nur ein semikolon entfernt. zudem hat die regEx negative werte glaub ich übersprungen
 }
 
 VALUE_EXTRACTION_REGEX = "" #alles was buchstaben sind mit (: oder =) angehängt
-TEXTURE_ID_BLOCK_REGEX = "ID:\d+\{*\}"
+TEXTURE_ID_BLOCK_REGEX = "ID:\d+\{[^/{]*\}"
 
 DATA_CONDITIONS_TILE ={
     "ID": "ID:\d+\{",
     "groupID": "groupID=\d+", # Tilegruppe (Tiles die für verchiedene Nachbar-Konstellationen eigene tiles haben werden zu einer Gruppe zusammengefasst, wenn nicht genutzt, leerlassen oder weglassen)
-    "isclippable": "isclippable=[True | False]",
-    "isAnimated": "isAnimated=[True | False]", #wenn flag = false, dann werden weitere Texturen _1, _2 usw genutzt um aus diesen eine zufällige zu wählen
-    "dmgNeededToDestroy": "dmgNeededToDestroy=[ -1 | \d+]", #Schaden der benötigt wird um tile zu zerstören (in 000 umwandeln) -1 = unendlich
+    "isClippable": "isClippable=[0|1]",
+    "isAnimated": "isAnimated=[0|1]", #wenn flag = false, dann werden weitere Texturen _1, _2 usw genutzt um aus diesen eine zufällige zu wählen
+    "dmgNeededToDestroy": "dmgNeededToDestroy=(-1|\d+)", #Schaden der benötigt wird um tile zu zerstören (in 000 umwandeln) -1 = unendlich
     "damageOnCollision": "damageOnCollision=\d+",
     "damageOverTime": "damageOverTime=\d+",
     "layerID": "layerID=\d+", # Layer ID (0 liegt hinter dem Spieler, 1 auf Höhe des Spielers, 2 vor dem Spieler, usw.)
     "playMvSlowDown": "playMvSlowDown=\d+", # reduzierung der Geschwindigkeit des betr. spielers bei collision um angegebenen Faktor
     "playerMvManipulation": "playerMvManipulation=\[\d+,\d+\]", #on collision wird die bewegungsgeschwindigkeit und richtung des betr. Spielers entsprechend der X und Y werte geändert (wird weggeschubst)
-    "preferredNeighborIDs": "preferredNeighborIDs=\[(\[((\d+),?){3}\]){3}\]"
+    "preferredNeighborIDs": "preferredNeighborIDs=\[\[\d+,\d+,\d+\]\[\d+,\d+,\d+\]\[\d+,\d+,\d+\]\]"
     }
 
 

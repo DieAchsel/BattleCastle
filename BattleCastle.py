@@ -6,6 +6,9 @@ from bin.config.playerCFG import PLAYER_CONTROL
 from bin.lib.BattleCastle import BattleCastle
 
 pygame.init()
+#Stellt SmoothScale Filter für Skalierungen ein
+if SMOOTH_SCALE and SMOOTH_SCALE_ACCELERATION != 'AUTO':
+    pygame.transform.set_smoothscale_backend(SMOOTH_SCALE_ACCELERATION)
 
 bc = BattleCastle.BattleCastle()
 
@@ -19,7 +22,6 @@ clock = pygame.time.Clock()
 #Main Game Loop
 while True:
     # Handle Events
-    print("TEST")
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -55,15 +57,13 @@ while True:
         if event.key == PLAYER_CONTROL[1]["LT"]:
             bc.player2.stop()
 
-    bc.update()
+bc.update()
 
     # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
-    bc.draw(screen)
+bc.draw(screen)
 
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
-    clock.tick(FPS)
+clock.tick(FPS)
 
-    pygame.display.flip()
-
-    pygame.quit()
+pygame.display.flip()
