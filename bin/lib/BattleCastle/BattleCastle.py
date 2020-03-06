@@ -27,8 +27,10 @@ class BattleCastle(pygame.sprite.Sprite):
         self.allSprites.add(players)
         self.isLoading = False
         self.load_levels()
-        self.loadedLevel.add(self.levels[self.activeLevel].build())
-        self.allSprites.add(self.loadedLevel)
+        if(len(self.levels) > 0 ):
+            self.activeLevel = len(self.levels) -1
+            self.levels[-1].build()
+            self.allSprites.add(self.loadedLevel)
     # durchsucht das Level-Verzeichnis und erstellt für jeden gefundenen Ordner ein Level
     def load_levels(self):
         self.load_loading_spinner()  # Das Laden der Level könnte dauern
@@ -50,7 +52,8 @@ class BattleCastle(pygame.sprite.Sprite):
         if(len(levels) == 0):
             DEBUG("KEINE LEVEL GEFUNDEN, TEMINIERE BATTLECASTLE", 0, LEVEL_DIR)
             self.error = True
-#ToDo:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!HIER IS WAS FALSCH
+
+
     # erstellt einen Ladebildschirm und fügt in Mittig auf der PlayArea ein
     def set_loading_spinner(self, FilePath=DEFAULT_LOADING_SCREEN_PATH):
         self.isLoading = True

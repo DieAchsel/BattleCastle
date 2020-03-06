@@ -1,6 +1,6 @@
-import pygame, os
+import pygame, os, random
 from bin.lib.Tile import Tile
-from bin.config.generalCFG import NULL_TYPE, DEBUG
+from bin.config.generalCFG import NULL_TYPE, DEBUG, AVAILABLE_IMG_FORMAT_REGEX, SMOOTH_SCALE
 from bin.config.levelCFG import *
 
 
@@ -160,13 +160,13 @@ class Level:
         self.isParsed = False
         DEBUG("Level.parse_texture_set(levelPath)", 0)
 
-        textureSetPath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture")
+        textureSetPath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture", "tiles")
         DEBUG("Level.parse_texture_set(levelPath): öffne Textur Ordner an Pfad", 1, textureSetPath)
         if(os.path.isdir(textureSetPath) == False): #wenn texturOrdner nicht exisitiert -> DEFAULT-Textur-Ordner
             DEBUG("Level.parse_texture_set(levelPath): TexturPfad nicht gefunden. falle auf DefaultTexturSet zurück...", 1, textureSetPath)
             textureSetPath = DEFAULT_TEXTURE_SET_PATH
             DEBUG("Level.parse_texture_set(levelPath): Falle auf DefaultTexturSet zurück...", 1, textureSetPath)
-        foundConfFilePaths = glob.glod(os.path.join(textureSetPath, '') + '*.conf')
+        foundConfFilePaths = glob.glob(os.path.join(textureSetPath, '') + '*.conf')
         if(foundConfFilePaths[-1] == "none" ): #wenn keine .conf-Datei gefunden -> DEFAULT-Textur-Ordner
             DEBUG("Level.parse_texture_set(levelPath): TexturPfad enthält keine Textur Datei/en(.conf).", 0, textureSetPath)
             textureSetPath = DEFAULT_TEXTURE_SET_PATH
@@ -474,3 +474,20 @@ class Level:
     #gebe den aktuellen Build-Zustand zurück (bool)
     def is_build(self):
         return self.isBuild
+
+    def load_background(self):
+        bg_dir = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture", "bg")
+        results = glob.glob(bg_dir + "+." + AVAILABLE_IMG_FORMAT_REGEX)
+        
+        if(len(results) > 0):
+            bg_path = results[random.randint(0, len(results) - 1)]
+            if(os.path.isfile(bg_path)):
+                bg_surface = pygame.Surface(ARENA_AREA.w, ARENA_AREA.h)
+                bg_surface.fill((0,0,0), bg_surface.get_rect())
+                bg = pygame.image.load(bg_path).convert()
+                if(SMOOTH_SCALE):
+                    pygame.transform.smoothscale(bg, (ARENA_AREA.w, ARENA_AREA.h))
+                else:
+                    pygame.transform.scale(bg, (ARENA_AREA.w, ARENA_AREA.h))
+                
+            

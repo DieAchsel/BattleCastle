@@ -50,26 +50,26 @@ class Tile (pygame.sprite.Sprite):
             tileTexturesPath = DEFAULT_TEXTURE_SET_PATH
         if(os.path.exists(tileTexturesPath)):
             DEBUG("Tile.load_textures(...): suche in o.a. Dateipfad mit diesem Regex", 4, TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
-            foundFiles = glob.glob(tileTexturesPath, TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
+            foundFiles = glob.glob(tileTexturesPath + TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
             DEBUG("Tile.load_textures(...): diese Dateien wurden gefunden:", 4, foundFiles) 
             
             regex = TEXTURE_DIVIDER_REGEX["passive"]
             regex.replace(REGEX_PLACEHOLDER, str(self.ID))
-            foundFilePaths = glob.glob(tileTexturesPath, regex)
+            foundFilePaths = glob.glob(tileTexturesPath + regex)
             self.images.append(list())
             for filePath in foundFilePaths:
                 self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
 
             regex = TEXTURE_DIVIDER_REGEX["active"]
             regex.replace(REGEX_PLACEHOLDER, str(self.ID))
-            foundFilePaths = glob.glob(tileTexturesPath, regex)
+            foundFilePaths = glob.glob(tileTexturesPath+ regex)
             self.images.append(list())
             for filePath in foundFilePaths:
                 self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
             
             regex = TEXTURE_DIVIDER_REGEX["dying"]
             regex.replace(REGEX_PLACEHOLDER, str(self.ID))
-            foundFilePaths = glob.glob(tileTexturesPath, regex)
+            foundFilePaths = glob.glob(tileTexturesPath+ regex)
             self.images.append(list())
             for filePath in foundFilePaths:
                 self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
