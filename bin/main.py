@@ -97,4 +97,4 @@ while True:
     # Limit to 60 frames per second
     clock.tick(FPS)
     # update Screen
-    pygame.display.update()
+    pygame.display.flip()
