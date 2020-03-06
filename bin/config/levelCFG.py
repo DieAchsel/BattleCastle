@@ -24,7 +24,7 @@ ARENA_WIDTH_PERCENT = 100 #Bei Größen unter 100% wird Arena auf der Display-Su
 ARENA_X_POS = round(((SCREEN_SIZE["X"]/100) * (100 - ARENA_WIDTH_PERCENT)),0)
 ARENA_Y_POS = 0
 #Rect mit sämtlichen Informationen (in Pixel übersetzt) für Programm-Zugriff
-ARENA_AREA = Rect(ARENA_X_POS, ARENA_Y_POS, (round((SCREEN_SIZE["X"] * (ARENA_WIDTH_PERCENT / 100)),0), round((SCREEN_SIZE["Y"] * (ARENA_HEIGHT_PERCENT / 100)),0)))
+ARENA_AREA = Rect(ARENA_X_POS, ARENA_Y_POS, round((SCREEN_SIZE["X"] * (ARENA_WIDTH_PERCENT / 100)),0), round((SCREEN_SIZE["Y"] * (ARENA_HEIGHT_PERCENT / 100)),0))
 
 #DEPRECATED-- (teilweise jedoch noch genutzt, muss unbedingt entfernt werden)
 ARENA_SIZE = {
@@ -130,7 +130,7 @@ DEFAULT_TILE_SIZE = { #statische TileSize berechnet von auf DEFAULT_LVL_CONF_PAR
     "X": ARENA_AREA.w // DEFAULT_GRID_SIZE["X"],
     "Y": ARENA_AREA.h // DEFAULT_GRID_SIZE["Y"]
 }
-DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"] = [[1, (len(DEFAULT_LVL_CONF_PARAMETERS["grid"]) - 1)], [len(DEFAULT_LVL_CONF_PARAMETERS["maxWidth"]) - 1, DEFAULT_LVL_CONF_PARAMETERS["maxWidth"] - 2]] #NUR FÜR FALLBACK AUF DEFAULT
+DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"] = [[1, (len(DEFAULT_LVL_CONF_PARAMETERS["grid"]) - 1)], [DEFAULT_LVL_CONF_PARAMETERS["maxWidth"] - 1, DEFAULT_LVL_CONF_PARAMETERS["maxWidth"] - 2]] #NUR FÜR FALLBACK AUF DEFAULT
 DEFAULT_PLAYER_STARTPOS = DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"]
 #--------------------------genutzte REGEX-Ausdrücke-------------------------
 DATA_CONDITIONS_LVL = {

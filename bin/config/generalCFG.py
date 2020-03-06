@@ -19,7 +19,7 @@ DEBUG_LEVEL = 9
 #Debugging-Funktion:
 def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE):
     if(DEBUG_ENABLED):
-        if(debugLevel >= DEBUG_LEVEL):
+        if(debugLevel <= DEBUG_LEVEL):
             tabs = ""
             for x in range(debugLevel):
                 #Rücke Meldungen in tieferem Layer ein
@@ -31,8 +31,6 @@ def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE
                 output += objectOutput
             print(output)
 #Wenn DEBUG_ENABLED, gib diese Nachricht aus:
-
-DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\n\n\n")
 
 
 ICON_PATH = os.path.join(GAME_DIR, "gfx", "icon", "castle.png")
