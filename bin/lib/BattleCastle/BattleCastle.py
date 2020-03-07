@@ -37,36 +37,36 @@ class BattleCastle(pygame.sprite.Sprite):
     # durchsucht das Level-Verzeichnis und erstellt für jeden gefundenen Ordner ein Level
     def load_levels(self):
         DEBUG("load_levels(self)", 0)
-        DEBUG("load_levels(self): lade Ladeanimation", 1)
+        DEBUG("lade Ladeanimation", 1)
         self.load_loading_spinner()  # Das Laden der Level könnte dauern
-        DEBUG("load_levels(self): suche nach Ordnern an Pfad", 1, LEVEL_DIR)
+        DEBUG("suche nach Ordnern an Pfad", 2, LEVEL_DIR)
         lvlPaths = os.listdir(LEVEL_DIR)
         for path in lvlPaths:
             x = os.path.join(LEVEL_DIR, path)
-            DEBUG("load_levels(self): prüfe, ob angegebenes Dir lvl is", 4, x)
+            DEBUG("prüfe, ob angegebener Pfad ein Ordner ist", 3, x)
             if (not os.path.isdir(x)):
-                DEBUG("load_levels(self): angegebenes dir ist kein level, entferne aus Liste", 4, x)
+                DEBUG("angegebener Pfad ist kein Verzeichnis. Entferne Verzeichnis aus Liste", 3, x)
                 lvlPaths.remove(path)
         if(len(lvlPaths) > 0):
-            DEBUG("load_levels(self): folgende Pfade gefunden", 2, lvlPaths)
+            DEBUG("folgende Ordner wurden gefunden", 2, lvlPaths)
             for singlePath in lvlPaths:
-                DEBUG("load_levels(self): betrachte ", 3, singlePath)
+                DEBUG("betrachte Ordner", 3, singlePath)
                 #Wenn der betrachtete Ordner eine .lvl Datei enthält, dann erstelle ein neues Level
                 #ist das so richtig mit path..join??
 
                 lvlFileRegex = os.path.join(LEVEL_DIR, singlePath, '') + '*.lvl'
-                DEBUG("load_levels(self): suche nach .lvl Dateien mit: ", 3, lvlFileRegex)
+                DEBUG("suche nach .lvl Dateien mit: ", 4, lvlFileRegex)
                 foundLvlFiles = glob.glob(lvlFileRegex)
                 if(len(foundLvlFiles) > 0):
-                    DEBUG("load_levels(self): gefundene Datei-Pfade ", 3, foundLvlFiles)
+                    DEBUG("gefundene Lvl-Files ", 4, foundLvlFiles)
                     for lvlFile in foundLvlFiles:
-                        DEBUG("load_levels(self): erstelle Lvl und übergebe diesen Pfad Datei-Pfade ", 4, lvlFile)
+                        DEBUG("erstelle Lvl und übergebe diesen Pfad Datei-Pfade ", 5, lvlFile)
                         self.levels.append(Level.Level(lvlFile))
                     self.activeLevel = 0
                 else:
-                    DEBUG("ES wurden keine LvlFiles gefunden", 2)
+                    DEBUG("ES wurden keine LvlFiles gefunden", 4)
         else:
-            DEBUG("ES wurden keine LvlOrdner gefunden", 1)
+            DEBUG("ES wurden keine LvlOrdner gefunden", 2)
             self.error = True
             #hier wär es möglich das DEFAULT-Level aus der levelCFG zu laden (nur müsste dazu die level.init zuerst überladen werden um ParameterObjekte anzunehmen)
         if(len(self.levels) == 0):
