@@ -23,7 +23,7 @@ Das Team für diese Ausarbeitung besteht aus Alexander Schäfer               Ni
     In diesem Spiel soll es möglich sein in einem Level, welches Labyrinth-ähnlich aufgebaut ist, mit 2 Spielfiguren gegeneinander zu kämpfen.
     Das Level wird aus selbst erstellten .lvl und .conf Dateien erstellt und entsprechende Tiles automatisch ausgewählt. Es wird später näher darauf eingegangen HIER SCHREIBEN WO IN DOKU
     
-    Die Spielfiguren die von den Spielern gesteuert werden, werden durch eine .conf Datei configuriert und in der "Player" Klasse ist das Verhalten der Spielfiguren beschrieben.
+    Die Spielfiguren die von den Spielern gesteuert werden, werden durch die "playerCFG.py" Datei configuriert und in der "Player" Klasse ist das Verhalten der Spielfiguren beschrieben.
     Allgemeingesehen ist eine Spielfigur eine Ansamlung von Bildern, die zum bestimmten Zeitpunkt oder nach einem bestimmten Event dargestellt werden.
     Das Spiel lässt sich mit weiteren Spielfiguren leicht erweitern.
     Leider konnten nicht alle Machaniken der Spielfiguren zum Zeitpunkt der Abgabe realisiert werden, weshalb zum Abgabezeitpunkt lediglich der Nahkampf mit der Standardwaffe implementiert ist
@@ -33,19 +33,152 @@ Das Team für diese Ausarbeitung besteht aus Alexander Schäfer               Ni
 
 
 
-4. Ansatz
+4. Beschreibung des Lösungs-Ansatz
+    
+    
+
+    Wie schon oben Beschrieben ist eine Spielbarefigur in groben eine Ansamlung an Bilder die nach dem auslösen eines Events dargestellt werden.
+    Also war es hier wichtig die Logik der Event zu beachte, damit bei unterschiedlichen Event underschiedliche Bilderabfolgen, also Animationen dargestellt wurden.
+    Um eine einfache Erweiterbarkeit um neue Spielfiguren und die Erweiterung von alten zu ermöglichen werden die Funktion "glob" verwendet um ein einfaches Laden
+    mithilfe eines reguleren Ausdruks zu ermöglichen. Dadurch wurden es möglich neue Spielfigueren zu laden indem man einfach einen neuen Ordener mit einer
+    Definierten Ordnerstruktur in das "char" Ordner einfügt und den dem Programm in der "playerCFG.py" bekannt macht. Das Programm überneimmt den rest.
+    Genauer wird Player im Aufbau beschrieben.
+
+5. Aufbau
+    Das Spiel ist in 4 Klassen implementiert.
+    
+    
+    Aufbau von Player (von Alexander Schäfer): Für die einfache Implimentierung des Players, erbt die Player Klasse von der pygame.sprite.Sprite. Diese Klasse 
+    beinhaltet alles was man zum Implementieren einem Dargestellten Objektes in Pygame braucht. Als erstes wurden die wichtigen Variablen für die Logick des Spielers 
+    Implementiert. Das ist ein vertikales 2D Spiel also hat der Player als erstes eine self.left und self.right Variable gekriegt damit es klar ist in welche richtung es sich grade bewegt und
+    mit welcher geschwindigkeit auf welcher achse, also sind Variablen self.speed_x und self.speed_y auch dazu gekommen.
+    Beim initialisieren des Player wirden, dem Construktor übergebene Parameter, verwendet um die richtige Spielfigur zu laden. Alle Bilder die diese für die Animationen
+    benötigt werden in Listen als Surface-Objeckte gespeichert mit den einsprechenden Bildern drauf. Diese Aufgabe übernimmt die Funktion init_sequences().
+    Die pygame.sprite.Sprite Klasse von der wir erben beinhalte eine Funktion zum updaten, diese
+    wird überschrieben mit der Logick für das Verhalten bei Events. Wenn ein Event ausgelöst wird, zum Beispiel die Spielfigur bewergt sich nach link, wird
+    die Liste mit den Bildern für diese Animation wird durchgegangen und ein Counter hochgezählt. Welches Bild aus der Animationsrehe dargestellt wird,
+    wird bestimmt durch eine Ganzzahlige division( conter // (Anzahl der Frames die eine Animation zur ferühgung hat // Anzahl an bilder in der liste mit der Animation )).
+    Das Ergebniss dieser Berechnung ist dan die Stelle in der Liste von der wir das Bild laden. Das selbe Vorgang bestimmt die Bilder vür alle Animationsabfolgen.
+    Das Reagieren auf Events ist einfach gemacht, wenn eine bestimmte Taste gedrückt wird, wird eine boolean Variable in der Player Klasse auf "True" gesetzt. Es wird also eine
+    Flag gesetzt diese wird in einer gestappelten "if" Abfrage abgefangen und dadurch werden die Richtigen Animationsabfolgen abgespielt. Manche von den Flags
+    haben eine größere Prorität, das wird daduch gekennzeichnet, dass diese andere auser Kraft setzen. Zum Beispiel wenn der Flag "Death" gesetzt ist, wird die
+    komplete steuerung für die tote Spielfigur deakteviert bis die Animation ein mal durchgespielt wird. Am Ende wird nur das letzte Bild aus der Animationsfolge angezeigt
+    und das Spiel wird beendet mit einer Gratulation für den gewonnenen Spieler.
+
+    Level
+        Die Level-Klasse haben wir mit Blick auf eine dynamische Erweiterbarkeit Datei-fokussiert aufgebaut.
+        Die Level-Klasse wurde von Nils Lieflaender implementiert um ein Level, basierend auf einer übergebenen Level-Datei (.lvl) einzulesen, für die Nutzung vorzuhalten, und bei Bedarf aufzubauen.
+        Um einen möglichst reibungslosen und geordneten Ablauf bei der Implementierung des Levels zu ermöglichen haben wir den gesamten Vorgang in 2 einzelne Unterbereiche aufgeteilt, dem Parsing- und dem Build-Bereich.
+        Diese beiden Phasen muss das Level durchlaufen, um vollständig spielbereit zu sein.
+        Im Parsing-Bereich, wie der Name schon vermuten lässt, lesen wir die beiden Dateien in dem eigenen Level-Ordner ein. Dieser wird bei der Initialisierung der Level-Klasse als Argument übergeben.
+            Parsing-Bereich:
+                Wir haben uns hier zunächst überlegt, wie man in Zukunft eigene Level erstellen könnte.
+                Folgende Punkte haben wir hierbei als wichtig erachtet:
+                    -Es soll so einfach wie möglich sein ein neues Level zu erstellen oder ein bestehendes Level zu verändern.
+                    -Es soll so einfach wie möglich sein die Texturen eines bestehenden Levels durch eine andere Texturen zu ersetzen
+                    -Es sollen so viele Fehler wie möglich in diesen Leveln kompensiert werden
+                    
+                Unsere Entscheidung fiel auf einen Datei-basierten Daten-Speicher.
+                Für das Finden der richtigen Daten und das Auslassen falscher Daten haben wir uns für die Verwendung von relulären Ausdücken entschieden.
+                Da das Ermitteln der richtigen Ausdrücke nicht immer leicht ist, haben wir hierfür häufig das Online-Regex-Analysetool https://regex101.com/ verwendet.
+                Basierend auf der Entscheidung einen Datei-basierten Daten-Speicher zu verwenden haben wir für die Parameter der Level und dessen entsprechenden Texturen einen eigenen Ordner erstellt (/bin/lvl/)
+                Die Implementierung des Parsing-Bereichs haben wir nocheinmal in zwei Unter-Funktionen aufgeteilt, parseLvlFile und parseTextureSet.
+                Diese Funktionen lesen die Daten der .lvl Dateien und der .conf Datei im "textur/tiles/"-Ordner  im Levelverzeichnis aus.
+                    
+                    .lvl-Datei:
+                    Hier wird das zum Level gehörende Grid* aufgebaut und zusätzliche Informationen wie Spieler-Start-Positionen* und
+                    Schwierigkeitsgrad gespeichert
+                    Der Datei-Name(ohne ".lvl") wird zudem als Level-Titel übernommen
+                    
+                    .conf-Datei:
+                    In der .conf Datei werden für jede verfügbare Textur die Parameter gespeichert.
+                    jeder dort gespeicherte ParameterBlock* ist eindeutig mit einer ID durchnummeriert, der TileID.
+                    Die TileID, wenn mit einem SequenzSuffix* und möglicher Bild-Endung angehängt, bildet den Dateinamen der zu tileID gehörenden Textur.
+                    Die Parameterblöcke dürfen auf mehreren ".conf"-Dateien aufgeteilt sein, der Dateiname ist dabei egal.
+
+                Die beiden Funktionen "parse_lvl_file(filePath)" und "parse_texture_set()" dienen dem sicheren Auslesen und Speichern der in diesen Dateien enthaltenen Parameter.
+
+
+            Build-Bereich:
+                Wir haben bereits in der Planungs-Phase entschieden, dass das Laden des Levels in zwei Schritten stattfinden muss, um die Belastung der RAM-Ressourcen gering zu halten.
+                Im ersten Schritt, dem Parsing, (oben angegeben) wird das Level zunächst lediglich "vor-geladen" werden, ohne tatsächlich eine textur zu zeichnen.
+                Hierdurch ist es in Zukunft möglich aus einem Menü eines der vor-geladenen Level auszuwählen.
+                Zudem ist ein Wechsel des Levels einfacher, da das "alte" Level in den vor-geladenen Zustand zurückfallen kann und das "neue" Level nurnoch die Texturen laden muss 
+                Dieses Laden bzw. Entladen der Textur wird in der "build()" bzw. "unbuild()" Funktion realisiert.
+                In der "build()" Funktion wird das gesamte Grid, welches wir zuvor mit "parse_lvl_file(filePath)" eingelesen haben durchlaufen.
+                An jeder Position im Grid wird die dort gespeicherte TileGroupID* ausgelesen.
+                Mit dieser TileGroupID* wird eine Unter-Gruppe aus den in "parse_texture_set()" gefundenen Parameterblöcken gebildet
+                Mit dieser Untergruppe werden Tiles definiert, die zueinander "ähnlich" sind, jedoch eine andere Kombinationen an "freien Nachbarn"*. zum Beispiel sind die texturen 001-036 teil der Gruppe 1 (sozusagen Gruppe "Fels")
+                Aus dieser Untergruppe muss nun zunächst das m besten passende Tile ermittelt werden.
+                Hierzu haben wir die Funktionen "get_neighbors(position={"X": 0, "Y": 0})" und "match_neighbors(neighbors1=[], neighbors2=[])" implementiert
+                
+                Zum Hintergrund: jeder ParameterBlock*, einer TexturID* beinhaltet einen Parameter genannt "preferred_neighbors", der eine 3x3-Liste aller Nachbarn und dem eigenen tile enthält.
+
+                Mit get_neighbors(position) werden zunächst die Nachbarn des betrachteten Tiles betrachtet. Für den Fall, dass die hier betrachteten Tiles Rand-Tiles sind, haben wir uns hier dazu enschieden, eine Art "Endlos-Effekt*" einzubauen.
+                Die zurückgegebene 3x3-Liste wird mithilfe von match_neighbors(neighbors1, neighbors2) mit allen Elementen der im Grid jeweils betrachteten TileGruppe verglichen.
+                Der ParameterBlock mit dem besten Ergebnis wird wird genutzt um ein Objekt der Klasse tile zu erstellen.
+                Abschließend wird dieses frisch erstellte Tile den entsprechenden Spritegruppen* animatedTiles, damagingTiles, collidableTiles und allTiles hinzugefügt.
+                
+                
+                unbuild() ruft alle enthaltenen pygame.Sprites aus der Spritegruppe* allTiles ab und ruft dessen kill()-Funktion auf, welche die betroffenen sprites aus sämtlichen Gruppen entfernt             
+                Danach wird das entsprechende Sprite "vergessen" bzw. überschrieben.
+
+        Eine verstärkte Nutzung von regulären Ausdrücken in Verbindung mit der Funktion re.findall(pattern, string) aus der Python-Bibliothek re erleichterte uns beim Einlesen der Daten die Arbeit sehr.
+        Da weiterhin die Möglichkeit besteht, das einzelne Ausdrücke oder sogar ganze Dateien nicht gefunden werden, haben wir in ausgegliederten Python-skripts (/bin/config/) Default-Daten und Parameter definiert
+        Durch diese von Uns genannten "*CFG.py"-Dateien ist im Falle eines Fehlers beim Einlesen der externen Dateien ein Rückfall auf Standard-Parameter möglich.
+        Neben den Standard-Parametern werden hier auch für den jeweiligen ProgrammAbschnitt andere Parameter und Voreinstellungen aufgeführt.
+
+    Tile 
+        Die Klasse Tile beschreibt ein "Tile*" im Grid*. Es handelt sich hierbei um ein pygame.sprite Objekt. Es besitzt keine sonderliche zusätzliche Funktion.
+        Ein Tile-Objekt lädt bei intitialisierung die zur TileID zugeordneten Bilder in mehreren Animations-Sequenzen*.
+        Es gibt drei Animations-Sequenzen*: passive, active und dying innerhalb der Dateien werden diese Sequenzen mit den suffixes "_", "-" und "#" auseinandergehalten.
+        eine zusätzlich angehängte ID gibt die Position in der Animations-Sequenz* an.
+        Die Bilder in den Animations-Sequenzen, werden mit tile.update() in einem in "generalCFG.py" definierten Zeitinterval rotiert.
+
+    BattleCastle
+        In dieser Klasse werden alle anderen Klassen eingebunden und das Spielfeld wird Aufgebaut, inklusive das aktuelle Level, mit den Dazugehöhrigen Tiles und 
+        die Spielfiguren. Hier wird die Oberfläche aufgebaut die Spritgruppen aktuilisiert und das Fenster gezeichnet. Leider Aufgrund von mangelhaftem Zeitmanagment
+        konnten wir diese Klasse nicht soweit ausbauen es ursprünlich geplant war.
+
+
+6. Durchführung
     Angefangen haben wir mit einer gründliche Planungsphase in der wir die Ideen gesamelt haben. In der Zeite habe wir versucht die Fragen, was soll das für ein Spiel werden,
     wie soll es aussehen, was ist das Ziel und welche Spielmechaniken wie Waffen, Power-Ups und des gleichen sollen umgesetzt werden und for allen dingen was läst sich 
     von allen Ideen, die wir hatten, in der Zeit die wir hatten, realisieren. In der Zeit ist ein Klassendiagramm, was unten dargestellt ist, ein Zeitplan nach dem wir vorgegangen sind 
-    und das wichtigste der Name des Spiels entstanden. Es wurde beschlossen die Entwiklung wie folg aufzuteilen: Nils Liefländer Beschäftigte sich mit dem Labyrint also 
+    und das wichtigste der Name des Spiels entstanden. Es wurde beschlossen die Entwicklung wie folgt aufzuteilen: Nils Liefländer Beschäftigte sich mit dem Labyrinth also 
     dem Level und Alexander Schäfer mit den Spielfiguren. 
+    Aufgrund der Komplexität der Level-Klasse mussten Wir eine mehrtägige Debugging-Phase ansetzen, welche bis auf das Vrbleiben weniger, jedoch substantieller Probleme abgeschlossen werden konnte.
+        -während build() iteriert der self.currentPos Zeiger im negativen Zahlenbereich
+        -preferredNeighbors wird in parse_texture_set nicht korrekt ausgelesen und kann deshalb nicht verglichen werden
+        -beim Auslesen der .lvl Datei werden bei den Grid-Zeilen unterschiedliche Längen erlaubt, kürzere Grid-Zeilen werden jedoch nicht mit leeren Tiles aufgefüllt.
+        -DesWeiteren ist die .config Datei -für die Texturen noch unvollständig.
+    Diese Probleme verhindern leider die Lauffähigkeit des Spiels. In der zukünfig folgenden Version 0.1.2 (Ausserhalb der Bewertung) werden diese Fehler noch behoben.
 
-    Der Entwik
 
 
-5. Ergebniss
-    Als Ergebniss der Ausarbeitung entstand eine solide Basis für die einfache Entwiklung und Erweiterung des Spiels mit weiteren Level, Spielfiguren nud Spielmechanicken.
 
+    
+6. Ergebniss
+    Als Ergebnis der Ausarbeitung ist eine solide Basis, für die einfache Entwiklung und Erweiterung des Spiels mit weiteren Levels, Spielfiguren und Spielmechanicken, entstanden.
+    
+
+Glossar:
+    Grid - Ist ein Kacheförmiger Aufbau der Spieloberfläche. Jede Kachel enthält einen ganzzahligen Wert der, einer TileGroupID etspricht.
+    TileGroupID - Einen zusammensetzung von Tielen die das selbe Verhalten und ein änliche Textur haben z.B.: haben alle Fels-Teile TileGroupID = 1
+    TileID - Ist ein Eindeutiger Identivezierer eines Teils innerhalb einer Gruppe, die Teile unterscheiden sich in ihrer Formnden
+    Tile - Eine quadratische Textur mit unterschiedlichen offenen Enden aus denen das Level gebaut wird
+    Spieler-Start-Position - Ein X und Y Koordinate für die Position an der, eine Spielfigur zu anfang des Spiels gezeichnet wird
+    Sequece_Sufix - Ist in dem Namen jeden Teils enthalten und gestimmt dessen Animation("_" => passive Animation "-" =>aktive Animation "#" => Zerstörungsanimation)
+    Parameter Block = Ist ein Block der von  "{ }" umgeben ist und die Parameter einer TielID beschreiben. Beinhaltetauch die GruppenID zu der das Tile
+    freie Nachbarn - Nachbafelber mit GroupID = 0 -> Nachbarn wo keine Tiles Exestieren
+    endloss effect - wenn man aus dem Level auf einer Seite rausgeht kommt man auf der gegenüberligenden Seite wieder raus
+    Spitegruppen - Von pygame verwendete pygame.sprite.Group zum grupieren von pygame.sprite.Sprite Objekten (sieh: pygame.sprite.Group Doku)
+    leere Tiles - Tiles ohne Texture
+    Animations Sequencen - eine Reihe an geladenen Bildobjekten in einer Liste
+    
+    
+    
+    
 
 
 
