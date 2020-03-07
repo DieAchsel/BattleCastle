@@ -9,20 +9,19 @@ class Level:
     # konstruktor, ruft parse auf
     def __init__(self, levelFilePath=""):
         super().__init__()
-        DEBUG("Level.init(levelFilePath)", 0, levelFilePath)
+        DEBUG("Level.init(levelFilePath)", 1, levelFilePath)
         self.parameters = {
             "title": "Level",
             "levelFilePath": levelFilePath,  # hier kann später noch ein default-levelPath definiert werden
             "difficulty": DEFAULT_LVL_CONF_PARAMETERS["difficulty"],
             "playerStartPositions": DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"]
         }
-        DEBUG("Level.init() StandardParameter", 4, self.parameters)
+        DEBUG("Standard Parameter voreingestellt", 2, self.parameters)
         self.gridSize = pygame.Rect(0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE[
             "Y"])  # Vorsicht!! statt pixelWerte wird hier die Anzahl an Tiles genutztzu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
-        DEBUG("Level.init() Standard gridSize rect:", 4, self.gridSize)
+        DEBUG("Standard GridSize rect voreingestellt:", 3, self.gridSize)
         self.currentTilePos = {"X": 0,
                                "Y": 0}  # gibt an, welche tilePosition grade betrachtet wird (dient dem durchitereieren)
-        DEBUG("Level.init() Standard gridSize rect:", 4, self.currentTilePos)
         # diese 2D Liste wird zur Datenhaltung beim parsen und kompilieren des LevelFiles genutzt
         self.tileIDMap = []
         # tileGruppen:
@@ -40,14 +39,14 @@ class Level:
         # jede geladene tile aus dem TileSet wird hierein geparst und geladen
         self.parsedTileIDs = []
 
-        DEBUG("Level.__init__(lvlDir = NULL_TYPE): rufe Level.compile(filePath) auf", 1)
+        DEBUG("rufe Level.compile(filePath) auf", 2)
         if (os.path.isfile(levelFilePath) == False):
             # hier gäb es die Möglichkeit eine Suche ausgehend von übergebenem Pfad anstoßen und nach einem Ordner im übergelegenen Verzeichnis suchen
             DEBUG(
-                "Level.__init__(lvlDir = NULL_TYPE): Level-Directory nicht gefunden, überlasse das Problem den folgenden build-Prozess...",
-                0)
+                "Level-Directory nicht gefunden, überlasse das Problem den folgenden build-Prozess...",
+                1)
         self.compile()
-        DEBUG("Level.__init__(lvlDir = NULL_TYPE): Init abgeschlossen", 1)
+        DEBUG("Init abgeschlossen", 1)
 
     # gibt die GruppenID NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
 
@@ -371,14 +370,14 @@ class Level:
     def compile(self):
         if (not self.isParsed):
 
-            DEBUG("Level.compile()", 0)
-            DEBUG("Level.compile(): rufe parse_lvl_file() auf", 1)
+            DEBUG("Level.compile()", 1)
+            DEBUG("rufe parse_lvl_file() auf", 2)
             self.parse_lvl_file()
-            DEBUG("Level.compile(): rufe parse_texture_file() auf", 1)
+            DEBUG("rufe parse_texture_file() auf", 2)
             self.parse_texture_set()
-            DEBUG("Level.compile(): abgeschlossen", 2)
+            DEBUG("Kompilierung abgeschlossen", 1)
         else:
-            DEBUG("Level.compile(): Level ist bereits geparst", 1)
+            DEBUG("Level ist bereits geparst und kompiliert", 1)
         self.isCompiled = True
 
     # 1. ließt alle tileIDs ein und lädt jewils die entsprechende textur
