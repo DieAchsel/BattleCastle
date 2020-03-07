@@ -1,0 +1,7 @@
+*.~vsdx
+*.pyc
+__pycache__
+.vs
+*.json
+.vscode
+~$kumentation.docx

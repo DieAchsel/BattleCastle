@@ -1,0 +1,17 @@
+https://www.instructables.com/id/Interface-Python-and-Arduino-with-pySerial/ #serielle Kommunikation mit Arduino
+https://www.pygame.org/docs/genindex.html #Befehls-Referenz von pygame
+https://craftpix.net/ #kostenfreie Texturen
+https://loading.io/ #kostenfreie LadeAnimation
+https://regex101.com/ #Regex testen
+https://www.studieren-im-netz.org/im-studium/studieren/seminararbeit #Ausarbeitung verfassen
+Programm-Beispiele-Verzeichnis:
+http://programarcadegames.com/python_examples
+ProgrammBeispiel Kollision und Gravitation
+http://programarcadegames.com/python_examples/show_file.php?file=platform_jumper.py
+
+ProgrammBeispiel Projektile und Schießen
+#Zum Abgabezeitpunkt gibt es keine Fernkampfwaffen. (und nur eine Nahkampfwaffe)
+ProgrammBeispiel Animationen
+https://techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/pygame-animation/
+Music:
+https://www.bensound.com/royalty-free-music/rock Zugrifsdatum:04.03.2020
