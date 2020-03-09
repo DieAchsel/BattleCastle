@@ -17,8 +17,7 @@ class Level:
             "playerStartPositions": DEFAULT_LVL_CONF_PARAMETERS["playerStartPositions"]
         }
         DEBUG("Standard Parameter voreingestellt", 2, self.parameters)
-        self.gridSize = pygame.Rect(0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE[
-            "Y"])  # Vorsicht!! statt pixelWerte wird hier die Anzahl an Tiles genutztzu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
+        self.gridSize = pygame.Rect(0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"])  # Vorsicht!! statt pixelWerte wird hier die Anzahl an Tiles genutztzu kompatiblität ein rect. X und Y werden nicht mit einbezogen (vllt später als Position in der Arena?)
         DEBUG("Standard GridSize rect voreingestellt:", 3, self.gridSize)
         self.currentTilePos = {"X": 0,
                                "Y": 0}  # gibt an, welche tilePosition grade betrachtet wird (dient dem durchitereieren)
@@ -48,21 +47,29 @@ class Level:
         self.compile()
         DEBUG("Init abgeschlossen", 1)
 
-    # gibt die GruppenID NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
+    def iter_currentPos(self):
+        if(self.currentTilePos["X"] < len(self.tileIDMap[self.currentTilePos["Y"]])):
+            self.currentTilePos["X"] += 1
+        else:
+            self.currentTilePos["X"] = 0
+            if(self.currentTilePos["Y"] < len(self.tileIDMap)):
+                self.currentTilePos["Y"] += 1
+            else:
+                self.currentTilePos["Y"] = 0
 
+# gibt die GruppenID NachbarTiles der übergebenen Position zurück, wenn es ein äußeres Tile ist, dann nutze die RandTiles von der gegenüberliegende Seite mit, sodass ein endlosbildschirm entsteht
     def get_neighbors(self, position={"X": 0, "Y": 0}):
+        if(position=={"X": 0, "Y": 0}):
+            position = self.currentTilePos
         DEBUG("Level.get_neighbors(position{})", 1, position)
         # ändere Position auf den oben linken nachbarn
-        position["X"] -= 1
-        position["Y"] -= 1
         currentNeighbor = position.copy()  # erstelle ein identisches dict zu position
         neighbors = []
         # gehe Alle 3 möglichen NachbarZeilen durch
-        for y in range(3):
+        for y in range(-1, 1):
             # füge eine neue Y Liste hinzu
             neighbors.append(list())
-            currentNeighbor["Y"] = position["Y"]
-            currentNeighbor["Y"] += y
+            currentNeighbor["Y"] = position["Y"] + y
             DEBUG("Level.get_neighbors(position{}) wähle Y Position: " + str(currentNeighbor["Y"]), 3)
             # wenn Nachbar nicht vorhanden (Rand)
             # dann nehme entsrechenden randtile von der gegenüberliegenden Seite als nachbarn
@@ -74,10 +81,9 @@ class Level:
                 currentNeighbor["Y"] = 0
                 DEBUG("Level.get_neighbors(position{}) Rand erkannt, wähle" + str(currentNeighbor["Y"]) + "als Nachbarn", 4)
             # wiederhole obiges für jedes Feld in aktueller Zeile
-            for x in range(3):
+            for x in range(-1, 1):
                 neighbors[-1].append(list())
-                currentNeighbor["X"] = position["X"]  # currentNeighbor wird nach durchlauf manipuliert sein, setze current Neighbor zurück auf position(erste NachbarPos ecke oben links)
-                currentNeighbor["X"] += x
+                currentNeighbor["X"] = position["X"] + x 
                 DEBUG("Level.get_neighbors(position{}) wähle X Position: " + str(currentNeighbor["X"]), 3)
                 if (currentNeighbor["X"] < 0):
                     currentNeighbor["X"] = (len(self.tileIDMap[position["Y"]]) - 1)
@@ -135,23 +141,40 @@ class Level:
                         if (len(results) > 0):
                             DEBUG("gefundene Zeile(n):", 5, results)
                             if conditionName == "grid":
-                                temp = []
-                                tileGroupID_X = []
+                                newGridLine = []
                                 for x in results:
-                                    DEBUG("vor replace " + str(x), 6)
+                                    DEBUG("ausgelesene Grid-Zeile: " + str(x), 6)
                                     x = x.replace("GRID=", "")
-                                    DEBUG("nach replace " + str(x), 6)
-                                    temp = x.split(';')
-                                    DEBUG("gesplittet",9, temp)
-                                    for value in temp:
-                                        DEBUG("speichere " + str(value), 8)
-                                        tileGroupID_X.append(int(value))
-                                        DEBUG("Füge diese Zeile dem Grid hinzu", 11, tileGroupID_X)
-                                    if (len(tileGroupID_X) > rawLvl["maxWidth"]):
-                                        rawLvl["maxWidth"] = len(tileGroupID_X)
-                                        DEBUG("bisher längste Spalte gefunden, Tilemap hat jetzt " + str(rawLvl["maxWidth"]) + " Spalten", 7)
-                                    rawLvl["grid"].append(tileGroupID_X)
-                                    DEBUG(str(len(tileGroupID_X)) + " grid Spalten gefunden", 7)
+                                    DEBUG("nach replace " + str(x), 7)
+                                    x = x.split(';')
+                                    DEBUG("gesplittet (beinhaltet noch String Werte)" + str(x) ,7)
+                                    for value in x:
+                                        DEBUG("speichere " + str(value) + " als Integer", 10)
+                                        newGridLine.append(int(value))
+                                    DEBUG(str(len(newGridLine)) + " Elemente in Grid-Zeile", 7)
+                                    DEBUG("Inhalt der neuen Zeile nach der Umwandlung:", 9, newGridLine)
+                                    if(len(rawLvl["grid"]) > 0):
+                                        if (len(newGridLine) > len(rawLvl["grid"][0])):
+                                            DEBUG("bisher längste Zeile gefunden, Tilemap wird auf " + str(len(newGridLine)) + " Spalten erweitert", 8)
+                                            for tileLineID in range(len(rawLvl["grid"])):
+                                                tilesToAdd = len(newGridLine) - rawLvl["grid"]
+                                                DEBUG("erweitere Zeile" + str(tileLineID) + "/" + str(len(rawLvl["grid"]) - 2), 9)
+                                                DEBUG("alte Zeilen-Länge:" + str(len(self.rawLvl["grid"][tileLineID])), 10)
+                                                DEBUG("gebe Inhalt von Zeile " + str(tileLineID) + "(unbearbeitet) aus:", 11, rawLvl["grid"][tileLineID])
+                                                if(tilesToAdd > 0):
+                                                    DEBUG("füge " + str(tilesToAdd) + "Spalten hinzu", 10)
+                                                    for col in range(tilesToAdd):
+                                                        DEBUG("erweitere Grid-Zeile " + str(tileLineID) + " um " + str(DEFAULT_UNKNOWN_TILE_ID), 12)
+                                                        rawLvl["grid"][tileLineID].append(DEFAULT_UNKNOWN_TILE_ID)
+                                                    DEBUG("gebe Zeile " + str(tileLineID) + "(bearbeitet) aus:", 11, rawLvl["grid"][tileLineID])
+                                                    DEBUG("neue Zeilen-Länge " + str(len(rawLvl["grid"][tileLineID])), 10)
+                                                else:
+                                                    DEBUG("tilesToAdd ist <= 0", 10 ,tilesToAdd)
+                                        else:
+                                            DEBUG("Zeile ist gleichlang", 9)
+
+                                    rawLvl["grid"].append(newGridLine)
+                                    
                                 DEBUG("grid hat jetzt " + str(len(rawLvl["grid"])) + " Zeilen", 7)
                             elif conditionName == "difficulty":
                                 DEBUG("difficulty Paramter gefunden, wähle: ", 4, results[-1])
@@ -183,18 +206,16 @@ class Level:
             else:
                 DEBUG("Level.parse_lvl_file: kann .lvl-Datei nicht lesen. (leer?) falle zurück auf Default Level", 1)
                 rawLvl = DEFAULT_LVL_CONF_PARAMETERS
-                self.gridSize = (0, 0, (DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"]))  # explizit festlegen, da normalerweise gridSize on the fly berechnet wird
+                self.gridSize = pygame.Rect(0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"])  # explizit festlegen, da normalerweise gridSize on the fly berechnet wird
 
         else:
             DEBUG("Level.parse_lvl_file: kann .lvl-Datei nicht lesen. (existiert?, ist es eine Datei?", 1)
             rawLvl = DEFAULT_LVL_CONF_PARAMETERS
-
-            self.gridSize = (0, 0, (DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE[
-                "Y"]))  # explizit festlegen, da normalerweise gridSize on the fly berechnet wird
+            self.gridSize = pygame.Rect(0, 0, DEFAULT_GRID_SIZE["X"], DEFAULT_GRID_SIZE["Y"])  # explizit festlegen, da normalerweise gridSize on the fly berechnet wird
         self.parameters["difficulty"] = rawLvl["difficulty"]
         self.parameters["title"] = rawLvl["title"]
         self.tileIDMap = rawLvl["grid"]
-        self.gridSize = (0, 0, (rawLvl["maxWidth"], len(self.tileIDMap)))
+        self.gridSize = pygame.Rect(0, 0, len(rawLvl["grid"][0]), len(rawLvl["grid"]))
         DEBUG("nutze zum konfigurieren diese Werte: ", 11, rawLvl)
         DEBUG("---Level erstellt---", 0)
         DEBUG(".lvl-Parsing abgeschlossen", 1)
@@ -257,7 +278,7 @@ class Level:
                                 DEBUG(str(len(resultsInBlock)) + " gefundene Elemente", 6, resultsInBlock)
                                 if (len(resultsInBlock) > 0):
                                     if (conditionName == "ID"):
-                                        x = resultsInBlock[-1]
+                                        x = resultsInBlock[0]
                                         x = x.replace("ID:", "")
                                         x = x.replace("{", "")
                                         DEBUG("ID-Wert ausgeschnitten", 6, x)
@@ -275,13 +296,13 @@ class Level:
                                     elif (conditionName == "isClippable"):
                                         x = resultsInBlock[-1].replace("isClippable=", "")
                                         DEBUG("isClippable-Wert ausgeschnitten", 4, x)
-                                        DEBUG("nach umwandlung", 5, bool(int(x)))
+                                        DEBUG("nach umwandlung (bool)", 5, bool(int(x)))
                                         rawParameters["isClippable"] = bool(int(x))
 
                                     elif (conditionName == "isAnimated"):
                                         x = resultsInBlock[-1].replace("isAnimated=", "")
                                         DEBUG("isAnimated-Wert ausgeschnitten", 4, x)
-                                        DEBUG("nach umwandlung", 5, bool(int(x)))
+                                        DEBUG("nach umwandlung (bool)", 5, bool(int(x)))
                                         rawParameters["isAnimated"] = bool(int(x))
 
                                     elif (conditionName == "dmgNeededToDestroy"):
@@ -303,6 +324,7 @@ class Level:
                                         
                                         DEBUG("nach umwandlung", 5, int(x))
                                         rawParameters["damageOverTime"] = int(x)
+                                    
                                     elif (conditionName == "layerID"):
                                         x = resultsInBlock[-1].replace("layerID=", "")
                                         DEBUG("layerID-Wert ausgeschnitten", 4, x)
@@ -313,7 +335,6 @@ class Level:
                                     elif (conditionName == "playMvSlowDown"):
                                         x = resultsInBlock[-1].replace("playMvSlowDown=", "")
                                         DEBUG("playMvSlowDown-Wert ausgeschnitten", 4, x)
-                                        
                                         DEBUG("nach umwandlung", 5, int(x))
                                         rawParameters["playMvSlowDown"] = int(x)
 
@@ -329,7 +350,8 @@ class Level:
                                             temp = DEFAULT_TILE_CONF_PARAMETERS["playerMvManipulation"]
                                         DEBUG("nach umwandlung", 5, temp)
                                         rawParameters["playerMvManipulation"].append(int(temp[0])) 
-                                        rawParameters["playerMvManipulation"].append(int(temp[0])) # wandle die ersten beiden elemente von temp in ints um
+                                        rawParameters["playerMvManipulation"].append(int(temp[1])) # wandle die ersten beiden elemente von temp in ints um
+                                    
                                     elif (conditionName == "preferredNeighborIDs"):
                                         x = resultsInBlock[-1].replace("preferredNeighborIDs=", "")
                                         DEBUG("preferredNeighborIDs-Wert ausgeschnitten", 4, x)
@@ -346,12 +368,8 @@ class Level:
                                                     neighbors.append(int(x))
                                         DEBUG("nach trimming und splitting", 5, neighbors)
                                         DEBUG("nach umwandlung str->int", 5, temp)
-                                        rawParameters["preferredNeighborIDs"] = neighbors
-                                    self.parsedTileIDs.append(rawParameters)
-                                else:
-                                    rawParameters["ID"] = 0  # wenn ein Regex nicht gefunden wird, soll mit ID = 0 das eingelesene Paket ungültig gemacht werden
+                                        rawParameters["preferredNeighborIDs"] = neighbors    
                                 re.purge()
-                        if (rawParameters["ID"] != 0):  # wenn paket gültig
                             self.parsedTileIDs.append(rawParameters)
                     else:
                         DEBUG("keine ID Blöcke gefunden, überspringe Datei", 2)
@@ -366,7 +384,8 @@ class Level:
     # 2. wähle im 2. Schritt die passende TileID(entsprechend der Neighbors) aus der geöffneten Gruppe aus
     # 3. erstelle ein tile und übergebe den texturepfad des entsprechenden tiles
     # das bild wird erst mit build() geladen um zu verhindern dass alle lvl parallel offen sind
-
+#Es sollte am besten in compile die am besten passende ID ermittelt werden
+#die könnte in dem Grid gespeichert werden als dict{groupID, tileID}
     def compile(self):
         if (not self.isParsed):
 
@@ -380,13 +399,18 @@ class Level:
             DEBUG("Level ist bereits geparst und kompiliert", 1)
         self.isCompiled = True
 
+    def uncompile(self):
+        #wandelt die dict-Objekte zurück in groupIDs
+        #setze isCompiled = False
+        pass
+
     # 1. ließt alle tileIDs ein und lädt jewils die entsprechende textur
     # 2. erstelle eine sprite.group mit sämtlichen tiles, passiven tiles, animierten tiles,
     # wenn IS_BUILD_ON_UPDATE = True, dann wird mit jedem build aufruf nur ein tile erstellt und currentTilePos auf dieses gesetzt.
     # (überprüfen lässt sich der aktuelle Build-Zustand mit bool self.isBuild())
     # gibt eine Liste mit übereinstimmungen
     def match_neighbors(self, neighbors1=[], neighbors2=[]):
-        DEBUG("Level.match_neighbors(self, neighbors1 = [], neighbors2 = []):", 0)
+        DEBUG("Level.match_neighbors(self, neighbors1 = [], neighbors2 = []):", 5)
         matches = []
         position = {"X": 0, "Y": 0}
         match = {"position": {}, "groupID": 0}
@@ -394,81 +418,103 @@ class Level:
             for list in neighbors1:
                 if (len(list) == 3 & len(neighbors2[position["Y"]]) == 3):
                     for element in list:
-                        DEBUG("Level.match_neighbors(): vergleiche Element an Position", 2, position)
-                        if (element == neighbors2[position["X"]][position["Y"]]):
-                            DEBUG("Level.match_neighbors(): match gefunden an", 3, position)
+                        DEBUG("vergleiche Element an Position", 7, position)
+                        if (element == neighbors2[position["Y"]][position["X"]]):
+                            DEBUG("Match gefunden an", 8, position)
                             matches.append({"position": position, "groupID": element})
                         position["X"] += 1
                     position["Y"] += 1
                 else:
-                    DEBUG("Level.match_neighbors(): Listenlänge der neighborsListe[" + str(position["Y"]) + "] != 3", 0)
+                    DEBUG("Eine der Listen in einer der übergebenen Listen hat eine unerwartete Länge", 5)
                     return None
-            DEBUG("Level.match_neighbors(): gefundene Matches:", 2, matches)
+            DEBUG( str(len(matches)) + " gefundene Matches:", 6)
+            DEBUG( str(len(matches)) + " ListenInhalt:", 9, matches)
             return matches
         else:
-            DEBUG("Level.match_neighbors(): Listenlänge der neighbors stimmt nicht != 3", 0)
+            DEBUG("Eine der übergebenen Listen hat eine unerwartete Länge", 5)
             return None
 
     # Berechne Größe eines einzelnen TIles und gebe ein entsprechendes Rect Objekt zurück (x und y = 0)
     def calc_tileSize(self):
-        return pygame.Rect(0, 0, ARENA_AREA.w // self.gridSize.x, ARENA_AREA.h // self.gridSize.y)
+        return pygame.Rect(0, 0, ARENA_AREA.width // self.gridSize.w, ARENA_AREA.h // self.gridSize.h)
 
     # baut die Spieloberfläche mit sämtlichentiles auf
     def build(self):
         if (self.isCompiled):
             DEBUG("Level.build():", 0)
             if (IS_BUILD_ON_UPDATE):
-                DEBUG("Level.build(): IS_BUILD_ON_UPDATE ist aktiv", 1, IS_BUILD_ON_UPDATE)
+                DEBUG("IS_BUILD_ON_UPDATE ist aktiv", 1, IS_BUILD_ON_UPDATE)
                 if (self.tile_exists(self.currentTilePos)):
                     pass
             else:
-                DEBUG("Level.build(): IS_BUILD_ON_UPDATE ist inaktiv", 1, IS_BUILD_ON_UPDATE)
+                DEBUG("IS_BUILD_ON_UPDATE ist inaktiv", 1, IS_BUILD_ON_UPDATE)
                 self.currentTilePos["X"] = 0
                 self.currentTilePos["Y"] = 0
-                DEBUG("Level.build(): betrachtete TileMap", 4, self.tileIDMap)
+                DEBUG("betrachte TileMap:", 12, self.tileIDMap)
                 temp = 0
                 for y in self.tileIDMap:
+                    DEBUG("betrachte Zeile: " + str(self.currentTilePos["Y"]), 2)
                     for x in y:
+                        DEBUG("betrachte Spalte: " + str(self.currentTilePos["Y"]), 3)
                         # suche hier nach den nachbarn und der aktuellen position
+                        DEBUG("erstelle Liste mit direkten Nachbarn", 4)
                         neighbors = self.get_neighbors(self.currentTilePos)
-                        matchingTileIDConfs = []
-                        for tileIDConf in self.parsedTileIDs:
-                            if (tileIDConf["groupID"] == x):
-                                matchingTileIDConfs.append(tileIDConf)
-
-                        tilesAndMatches = []
-                        for tileIDConf in matchingTileIDConfs:
-                            # rufe matchNeighbors auf und übergebe tileIDConf[neighbors] und self.getNeighbors(x)
-                            matches = self.match_neighbors(tileIDConf["preferredNeighborIDs"],
-                                                           self.get_neighbors(self.currentTilePos))
+                        matchingTileConfs = []
+                        DEBUG("durchsuche TileConfs nach Tiles mit groupID == " + str(x), 4)
+                        for TileConf in self.parsedTileIDs:
+                            if (TileConf["groupID"] == x):
+                                matchingTileConfs.append(TileConf)
+                        DEBUG( str(len(matchingTileConfs)) + " übereinstimmende TileConfs gefunden", 5)
+                        DEBUG("vergleiche Nachbarn in allen gefundenen TileConfs mit zuvor erstellter Nachbar-Liste...", 4)
+                        debugCounter = 0
+                        foundMatches = []
+                        for TileConf in matchingTileConfs:
+                            debugCounter += 1
+                            DEBUG("vergleiche " +  str(debugCounter) + "/" + str(len(matchingTileConfs)), 5)
+                            # rufe matchNeighbors auf und übergebe TileConf[neighbors] und self.getNeighbors(x)
+                            matches = self.match_neighbors(TileConf["preferredNeighborIDs"], self.get_neighbors(self.currentTilePos))
                             if (matches != None):
+                                DEBUG("Match mit " + str(len(matches)) + " Übereinstimmungen gefunden", 6)
+                                DEBUG("Es handelt sich um TileID " + str(TileConf["ID"]), 7)
                                 # if(len(tileAndMatch["matches"]) < len(matches)):
-
-                                tilesAndMatches.append({"tileIDConf": tileIDConf, "matches": matches})
+                                foundMatches.append({"TileConf": TileConf, "matches": len(matches)})
                             else:
-                                DEBUG("Level.build(): Fehler bei match_neighbors, überspringe dieses Tile", 0)
-
+                                DEBUG("keine Übereinstimmungen gefunden", 6)
                             # sortiere Liste nach enthaltenen 'matchesAttributen'
-                            DEBUG("Level.build(): gefundene Matches mit ihren Tiles:", 2, tilesAndMatches)
-                            tilesAndMatches = sorted(tilesAndMatches, key=lambda k: k['matches'])
-                            DEBUG("Level.build(): gefundene Matches mit ihren Tiles nach Sortierung:", 3,
-                                  tilesAndMatches)
-                            if(len(tilesAndMatches) > 0):
-                                chosenID = tilesAndMatches[-1]
-                                DEBUG("bestes match =", 3, chosenID)
+                        
+                        if(len(foundMatches) > 0):
+                            sortedMatchingTileConfs = sorted(foundMatches, key = lambda i: i['matches'],reverse=True) 
+                            DEBUG("Match-Liste nach Sortierung:", 5, sortedMatchingTileConfs)
+                            bestMatch = sortedMatchingTileConfs.pop(0)["TileConf"]
+                            DEBUG("Als bestes Match wurde TileID " + str(bestMatch["TileConf"]["ID"]) + " gewählt", 4)
+                        else:
+                            DEBUG("matchesListe ist leer, versuche erstbeste ID aus GroupID " + str(TileConf["groupID"]) + " zu nutzen", 4)
+                            if(len(matchingTileConfs) > 0):
+                                bestMatch = matchingTileConfs[0]
                             else:
-                                chosenID = 1
-                                DEBUG("matchesListe ist leer, versuche ID = 1 als bestes Match", 3, tilesAndMatches)
+                                DEBUG("es gibt überhaupt keine Tiles mit übereinstimmender groupID = " + str(TileConf["groupID"]), 5)
+                                DEBUG("wähle erstBestes Tile aus der TileConfs-Liste", 5)
+                                if(len(self.parsedTileIDs) > 0):
+                                    bestMatch = self.parsedTileIDs[0]
+                                else:
+                                    DEBUG("Es scheinen überhaupt keine TileConfs vorhanden zu sein, wähle stattdessen DEFAULT-Conf", 6)
+                                    bestMatch = DEFAULT_TILE_CONF_PARAMETERS
                         # Wir haben jetzt die exakte tileID n self.currentPosition {X,Y}
                         # -ermittle die größe eines einzelnen tiles OK
                         # -ermittle die Pixel-Position des ektuellen tiles mit
                         # currentPos[X] * tileSize.w
+                        DEBUG("Berechne Daten für neues Tile-Element:", 3)
                         tileRect = self.calc_tileSize()
                         tileRect.x = self.currentTilePos["X"] * tileRect.w
-                        tileRect.x = self.currentTilePos["Y"] * tileRect.h
-                        tileTexturePath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture",
-                                                       "tiles")
-                        newTile = Tile(tileRect, tileTexturePath, chosenID["tileIDConf"])
+                        tileRect.y = self.currentTilePos["Y"] * tileRect.h
+                        DEBUG("X-Position   = " + (str(tileRect.x)), 4)
+                        DEBUG("Y-Position   = " + (str(tileRect.y)), 4)
+                        DEBUG("Breite       = " + (str(tileRect.w)), 4)
+                        DEBUG("Höhe         = " + (str(tileRect.h)), 4)
+                        tileTexturePath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture", "tiles")
+                        DEBUG("Textur-Pfad  = " + tileTexturePath, 4)
+                        DEBUG("Parameter:", 5, bestMatch)
+                        newTile = Tile.Tile(tileRect, tileTexturePath, bestMatch)
                         if (newTile.has_animation()):
                             self.animatedTiles.add(newTile)
                         if (newTile.has_damage()):
@@ -477,10 +523,10 @@ class Level:
                             self.collidableTiles.add(newTile)
                         self.currentTilePos["X"] += 1  # wird benötigt um entsprechende Position des tiles zu bestimmen
                     self.currentTilePos["Y"] += 1
+
             self.allTiles.add(self.animatedTiles)
             self.allTiles.add(self.damagingTiles)
             self.allTiles.add(self.collidableTiles)
-            
             self.isBuid = True
         else:
             DEBUG("Level.build() build wird nicht ausgeführt, level ist noch nicht compiliert...", 1)

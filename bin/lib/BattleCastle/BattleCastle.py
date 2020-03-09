@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 import pygame, glob, os, re
 from bin.lib.Level import Level
 from bin.lib.Tile import Tile
@@ -45,7 +46,7 @@ class BattleCastle(pygame.sprite.Sprite):
             x = os.path.join(LEVEL_DIR, path)
             DEBUG("prüfe, ob angegebener Pfad ein Ordner ist", 3, x)
             if (not os.path.isdir(x)):
-                DEBUG("angegebener Pfad ist kein Verzeichnis. Entferne Verzeichnis aus Liste", 3, x)
+                DEBUG("angegebener Pfad ist kein Verzeichnis. Entferne Verzeichnis aus Liste", 3)
                 lvlPaths.remove(path)
         if(len(lvlPaths) > 0):
             DEBUG("folgende Ordner wurden gefunden", 2, lvlPaths)

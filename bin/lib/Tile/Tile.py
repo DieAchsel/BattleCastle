@@ -16,7 +16,7 @@ class Tile (pygame.sprite.Sprite):
         else:
             return pygame.transform.scale(texture, self.rect.w, self.rect.h)
     #wenn keine textur übergeben wird, wird das Objekt zunächst ohne textur erstellt
-    def __init__(self, texturePath = "", newParameters = DEFAULT_TILE_CONF_PARAMETERS, newRect = pygame.Rect):
+    def __init__(self,newRect = pygame.Rect,  texturePath = "", newParameters = DEFAULT_TILE_CONF_PARAMETERS, ):
         super().__init__()
         DEBUG("Tile.init(self, texturePath = "", newParameters = DEFAULT_TILE_CONF_PARAMETERS, newRect = pygame.Rect)", 2)
         DEBUG("Tile.init(...): Lese parameter ein:", 2, newParameters)
@@ -24,7 +24,7 @@ class Tile (pygame.sprite.Sprite):
         self.Name = newParameters["textureName"]
         self.layer = newParameters["layerID"]
         self.ID = newParameters["ID"]
-        self.isclippable = newParameters["isclippable"]
+        self.isClippable = newParameters["isClippable"]
         self.groupID = newParameters["groupID"]
         #self.isAnimated = newParameters["isAnimated"] #nicht benötigt, da dies von der images liste abhängt
         self.dmgNeededToDestroy = newParameters["dmgNeededToDestroy"]
@@ -43,33 +43,32 @@ class Tile (pygame.sprite.Sprite):
 
     def load_textures(self, filePath = ""):
         DEBUG("Tile.load_textures(filePath = )", 1)
-        tileTexturesPath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture", "tiles")
-        DEBUG("Tile.load_textures(...): betrachte Dateipfad", 2, tileTexturesPath)
-        if(os.path.exists(tileTexturesPath) == False):
+        DEBUG("betrachte Dateipfad", 2, filePath)
+        if(os.path.exists(filePath) == False):
             DEBUG("Tile.load_textures(...): Dateipfad existiert nicht, versuche mit default TextureSet zu kombinieren", 1, DEFAULT_TEXTURE_SET_PATH)
-            tileTexturesPath = DEFAULT_TEXTURE_SET_PATH
-        if(os.path.exists(tileTexturesPath)):
+            filePath = DEFAULT_TEXTURE_SET_PATH
+        if(os.path.exists(filePath)):
             DEBUG("Tile.load_textures(...): suche in o.a. Dateipfad mit diesem Regex", 4, TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
-            foundFiles = glob.glob(tileTexturesPath + TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
+            foundFiles = glob.glob(filePath + TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
             DEBUG("Tile.load_textures(...): diese Dateien wurden gefunden:", 4, foundFiles) 
             
             regex = TEXTURE_DIVIDER_REGEX["passive"]
             regex.replace(REGEX_PLACEHOLDER, str(self.ID))
-            foundFilePaths = glob.glob(tileTexturesPath + regex)
+            foundFilePaths = glob.glob(filePath + regex)
             self.images.append(list())
             for filePath in foundFilePaths:
                 self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
 
             regex = TEXTURE_DIVIDER_REGEX["active"]
             regex.replace(REGEX_PLACEHOLDER, str(self.ID))
-            foundFilePaths = glob.glob(tileTexturesPath+ regex)
+            foundFilePaths = glob.glob(filePath + regex)
             self.images.append(list())
             for filePath in foundFilePaths:
                 self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
             
             regex = TEXTURE_DIVIDER_REGEX["dying"]
             regex.replace(REGEX_PLACEHOLDER, str(self.ID))
-            foundFilePaths = glob.glob(tileTexturesPath+ regex)
+            foundFilePaths = glob.glob(filePath + regex)
             self.images.append(list())
             for filePath in foundFilePaths:
                 self.images[-1].append(self.scale_texture(pygame.image.load(filePath)).convert_alpha())
@@ -90,9 +89,9 @@ class Tile (pygame.sprite.Sprite):
     #gibt true zurück, wenn mehr als 1 Bild geladen ist (wenn isActiveSequence = true, dann prüfe die ActiveSequence
     def has_animation(self, isActiveSequence = False):
         if(isActiveSequence):
-            x = "active"
+            x = 1
         else:
-            x = "passive"
+            x = 0
         if(len(self.images[x]) > 1):
             return True
         else:

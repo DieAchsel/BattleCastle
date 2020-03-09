@@ -54,6 +54,7 @@ LEVEL_DIR = os.path.join(GAME_DIR, 'lvl', '')
 DEFAULT_LOADING_SPINNER_PATH = os.path.join(GAME_DIR, "gfx", "loadingSpinner", LOADING_SPINNER, "spinner.gif")
 #Standard-Texture-Set für Tile
 DEFAULT_TILE_ID = 0   #0 = unsichtbar(wird beim level.build() in die spritegroup unusedTiles verschoben)
+DEFAULT_UNKNOWN_TILE_ID = 0
 DEFAULT_TILE_GROUP_ID = 0
 #Harming-Tiles:
 DEFAULT_DMG_ON_COLLISION = 10
