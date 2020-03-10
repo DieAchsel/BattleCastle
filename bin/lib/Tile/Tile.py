@@ -41,15 +41,16 @@ class Tile (pygame.sprite.Sprite):
         DEBUG("Tile.init(...): Lade Texturen...", 2, texturePath)
         self.load_textures(texturePath)
 
-    def load_textures(self, filePath = ""):
-        DEBUG("Tile.load_textures(filePath = )", 1)
-        DEBUG("betrachte Dateipfad", 2, filePath)
+    def load_textures(self, filePath):
+        DEBUG("Tile.load_textures(filePath)", 3)
+        DEBUG("betrachte Dateipfad", 4, filePath)
         if(os.path.exists(filePath) == False):
-            DEBUG("Tile.load_textures(...): Dateipfad existiert nicht, versuche mit default TextureSet zu kombinieren", 1, DEFAULT_TEXTURE_SET_PATH)
+            DEBUG("Dateipfad existiert nicht, versuche mit default TextureSet zu kombinieren", 5, DEFAULT_TEXTURE_SET_PATH)
             filePath = DEFAULT_TEXTURE_SET_PATH
         if(os.path.exists(filePath)):
-            DEBUG("Tile.load_textures(...): suche in o.a. Dateipfad mit diesem Regex", 4, TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
-            foundFiles = glob.glob(filePath + TEXTURE_DIVIDER_REGEX["all"] + AVAILABLE_IMG_FORMAT_REGEX)
+            search_regex = os.path.join(filePath, (TEXTURE_DIVIDER_REGEX["all"].replace("{}", str(self.ID)) + AVAILABLE_IMG_FORMAT_REGEX))
+            DEBUG("Tile.load_textures(...): suche in o.a. Dateipfad mit diesem Regex", 5, search_regex)
+            foundFiles = glob.glob(search_regex)
             DEBUG("Tile.load_textures(...): diese Dateien wurden gefunden:", 4, foundFiles) 
             
             regex = TEXTURE_DIVIDER_REGEX["passive"]

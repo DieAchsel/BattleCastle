@@ -11,8 +11,6 @@ from bin.config.generalCFG import *
 class BattleCastle(pygame.sprite.Sprite):
     def __init__(self, rect=pygame.Rect(0,0,SCREEN_SIZE["X"],SCREEN_SIZE["Y"])):
         super().__init__()
-        DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(
-            VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\n\n\n")
         self.levels = []
         self.error = False
         self.activeLevel = 0  # aktuelle Position in der levelListe
@@ -30,7 +28,7 @@ class BattleCastle(pygame.sprite.Sprite):
         self.load_levels()
         if(len(self.levels) > 0):
             self.activeLevel = len(self.levels) - 1
-            self.levels[-1].build()
+            self.levels[0].build()
             self.allSprites.add(self.loadedLevel)
 
 

@@ -62,10 +62,10 @@ DEFAULT_DMG_OVER_TIME = 4
 #DEFAULT_LVL_CONF_PARAMETERS_DIR = ""#os.path.join(GAME_DIR, "lvl")
 DEFAULT_TEXTURE_SET_PATH = os.path.join(GAME_DIR, "gfx", "tiles", "default")
 
-TEXTURE_DIVIDER_REGEX = {   "all": "[0]*{}[_|-|#][0-9]+.",
-                            "passive": "[0]*{}_[0-9]+.",
-                            "active": "[0]*{}-[0-9]+.",
-                            "dying": "[0]*{}#[0-9]+."
+TEXTURE_DIVIDER_REGEX = {   "all": "[0]*{}(_|-|#)[0-9]+\.",
+                            "passive": "[0]*{}_[0-9]+\.",
+                            "active": "[0]*{}-[0-9]+\.",
+                            "dying": "[0]*{}#[0-9]+\."
                         }
 REGEX_PLACEHOLDER = "{}"
 DEFAULT_TILE_CONF_PARAMETERS ={
