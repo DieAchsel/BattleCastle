@@ -8,14 +8,15 @@ import time
 VERSION = "0.1.2"
 NULL_TYPE = None
 ANIMATION_INTERVAL = 30 #jedes 30te Update wird die bildsequenz iteriert
+
 if(pygame.image.get_extended()):
     AVAILABLE_IMG_FORMAT_REGEX = "(png|gif|jpg|bmp|pcx|tga|tif|lbm|pbm|pgm|ppm|xpm)"
 else:
     AVAILABLE_IMG_FORMAT_REGEX = "[BMP]"
 # Absoluter Pfad zum bin-Ordner
 GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
-DEBUG_ENABLED = True
-DEBUG_LEVEL = 20
+DEBUG_ENABLED = False
+DEBUG_LEVEL = 3
 DELAY_ON_DEBUG = 0 #gibt ein Delay in s (darf float sein) an, wie lang nach jeder DEBUGGING-Nachricht gewartet werden soll.
 ON_DEBUG_USER_CONTINUES = False #wenn ein kontinueKey (pygame.event) angegeben ist, wird bis zur Eingabe von Enter gewartet.
 
@@ -24,11 +25,11 @@ LOG_FILE = False
 #wie detailliert sollen die Meldungen sein. bei DEBUG_LEVEL >= 12 wird je nach integrierung jede Daten-Transaktion in der Konsole ausgegeben
 #Debugging-Funktion:
 logOpened = bool
-if(LOG_FILE):
+if(LOG_FILE & DEBUG_ENABLED):
     logFile = open(os.path.join(GAME_DIR, "DEBUG.log"), 'a')
 else:
     logFile = None
-def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE):
+def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE, LogInFile = True):
     from bin.config.generalCFG import logOpened, logFile
     if(DEBUG_ENABLED):  
         spacing = ""  
@@ -49,7 +50,7 @@ def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE
                 output.append(output_prefix + spacing + tabs + "Nutzer-Eingabe: '" + input() + "'")
             for x in output:
                 print(x)
-                if(LOG_FILE):
+                if(LOG_FILE & LogInFile):
                     logFile.write((x + "\n"))
                     logFile.flush()
 DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(

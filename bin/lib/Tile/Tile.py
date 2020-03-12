@@ -5,7 +5,6 @@
 #Tiles können auch gut von StatusArea mitbenutzt werden
 import pygame
 
-
 from bin.config.levelCFG import *
 from bin.config.generalCFG import COLORKEY, MISSING_TEXTURE_COLOR, SCALING, SMOOTH_SCALE, NULL_TYPE, DEBUG, AVAILABLE_IMG_FORMAT_REGEX, ANIMATION_INTERVAL
 class Tile (pygame.sprite.Sprite):
