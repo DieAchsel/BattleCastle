@@ -3,6 +3,7 @@ import os
 import pygame
 import time
 
+from bin.lib.tools.tools import listPrinter as printList
 
 
 VERSION = "0.1.2"
@@ -15,12 +16,12 @@ else:
     AVAILABLE_IMG_FORMAT_REGEX = "[BMP]"
 # Absoluter Pfad zum bin-Ordner
 GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
-DEBUG_ENABLED = False
-DEBUG_LEVEL = 3
+DEBUG_ENABLED = True
+DEBUG_LEVEL = 20
 DELAY_ON_DEBUG = 0 #gibt ein Delay in s (darf float sein) an, wie lang nach jeder DEBUGGING-Nachricht gewartet werden soll.
 ON_DEBUG_USER_CONTINUES = False #wenn ein kontinueKey (pygame.event) angegeben ist, wird bis zur Eingabe von Enter gewartet.
 
-LOG_FILE = False
+LOG_FILE = True
 #Wenn DEBUG_ENABLED, dann gib Debuggingmeldungen aus, je nach lvl mit angepasstem Detail
 #wie detailliert sollen die Meldungen sein. bei DEBUG_LEVEL >= 12 wird je nach integrierung jede Daten-Transaktion in der Konsole ausgegeben
 #Debugging-Funktion:
@@ -40,9 +41,12 @@ def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE
             spacing += tabs
         output.append(output_prefix + spacing + msg)
         if(ObjectToPrint != NULL_TYPE): 
-            output.append(output_prefix + spacing + tabs + str(ObjectToPrint))
-        if(DELAY_ON_DEBUG > 0):
-            output.append(output_prefix + spacing + tabs + "Warte auf Bestätigung")
+            if type(ObjectToPrint) is list:
+                converted = printList(ObjectToPrint)
+                for x in converted:
+                    output.append(output_prefix + spacing + tabs + x)
+            else:
+                output.append(output_prefix + spacing + tabs + str(ObjectToPrint))
         if(debugLevel <= DEBUG_LEVEL):     
             if(DELAY_ON_DEBUG > 0):
                 time.sleep(DELAY_ON_DEBUG)
