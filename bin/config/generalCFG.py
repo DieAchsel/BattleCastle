@@ -57,8 +57,8 @@ def DEBUG(msg = "Meldung ohne Inhalt", debugLevel = 0, ObjectToPrint = NULL_TYPE
                 if(LOG_FILE & LogInFile):
                     logFile.write((x + "\n"))
                     logFile.flush()
-DEBUG("********************Debugging Aktiv********************\nSpiel-Version = " + str(
-            VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\n\n\n")     
+DEBUG("****************************************Debugging Aktiv****************************************\nSpiel-Version = " + str(
+            VERSION) + "\nSpielverzeichnis = " + GAME_DIR + "\nDebug-Level = " + str(DEBUG_LEVEL) + "\nLogging = " + str(LOG_FILE) +"\n")     
 
 ICON_PATH = os.path.join(GAME_DIR, "gfx", "icon", "castle.png")
 #Fenster-Auflösung
