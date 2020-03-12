@@ -38,13 +38,12 @@ class Level:
         # jede geladene tile aus dem TileSet wird hierein geparst und geladen
         self.parsedTileIDs = []
 
-        DEBUG("rufe Level.compile(filePath) auf", 2)
+        
         if (os.path.isfile(levelFilePath) == False):
             # hier gäb es die Möglichkeit eine Suche ausgehend von übergebenem Pfad anstoßen und nach einem Ordner im übergelegenen Verzeichnis suchen
-            DEBUG(
-                "Level-Directory nicht gefunden, überlasse das Problem den folgenden build-Prozess...",
-                1)
-        self.compile()
+            DEBUG("Der übergebene Pfad enthält keine Datei. Versuche mit Default-Parametern fortzusetzen...",1)
+        DEBUG("rufe Level.parse() auf", 2)
+        self.parse()
         DEBUG("Init abgeschlossen", 1)
 
     def iter_currentPos(self):
@@ -369,12 +368,12 @@ class Level:
                                                 neighbors[-1] = secondSplit
                                                 for i in range(0, len(neighbors[-1])):
                                                     neighbors[-1][i] = int(neighbors[-1][i])
-                                                    DEBUG("wert eingelesen(int)", 7, neighbors[-1][i])
+                                                    DEBUG("wert eingelesen(int)", 10, neighbors[-1][i])
                                         if (len(secondSplit) == 3):
                                             rawParameters["preferredNeighborIDs"] = neighbors 
                                             DEBUG("PreferredNeighbors eingelesen", 4, rawParameters["preferredNeighborIDs"])
                                         else:
-                                            DEBUG("preferredNeighbor konnte nicht eingelesen werden, nutze default-Werte", 4)
+                                            DEBUG("preferredNeighbor konnte nicht eingelesen werden (längen korrekt?), nutze default-Werte", 4)
                                 else:
                                     if(conditionName == "groupID"):
                                         DEBUG("Es wurde keine GroupID gefunden", 6)
@@ -399,22 +398,87 @@ class Level:
     # das bild wird erst mit build() geladen um zu verhindern dass alle lvl parallel offen sind
 #Es sollte am besten in compile die am besten passende ID ermittelt werden
 #die könnte in dem Grid gespeichert werden als dict{groupID, tileID}
-    def compile(self):
+    def parse(self):
         if (not self.isParsed):
 
-            DEBUG("Level.compile()", 1)
+            DEBUG("Level.parse()", 1)
             DEBUG("rufe parse_lvl_file() auf", 2)
             self.parse_lvl_file()
             DEBUG("rufe parse_texture_file() auf", 2)
             self.parse_texture_set()
-            DEBUG("Kompilierung abgeschlossen", 1)
+            DEBUG("Parsing abgeschlossen", 1)
+            self.isParsed = True
+
+            #to be removed (when compile is finished)
+            self.isCompiled = True
         else:
-            DEBUG("Level ist bereits geparst und kompiliert", 1)
-        self.isCompiled = True
+            DEBUG("Level ist bereits geparst", 1)
+    
+    def compile(self):
+        DEBUG("level.compile():", 1)
+        if(not self.isCompiled):
+            if (not self.isParsed):
+                DEBUG("Level ist noch nicht geparst. rufe LevelParsing auf...", 2)
+                self.parse()
+            else:
+              self.currentTilePos["X"] = 0
+            self.currentTilePos["Y"] = 0
+            DEBUG("betrachte TileMap:", 12, self.tileIDMap)
+            temp = 0
+            for y in self.tileIDMap:
+                DEBUG("betrachte Zeile: " + str(self.currentTilePos["Y"]), 2)
+                for x in y:
+                    DEBUG("betrachte Spalte: " + str(self.currentTilePos["Y"]), 3)
+                    # suche hier nach den nachbarn und der aktuellen position
+                    DEBUG("erstelle Liste mit direkten Nachbarn", 4)
+                    neighbors = self.get_neighbors(self.currentTilePos)
+                    matchingTileConfs = []
+                    DEBUG("durchsuche TileConfs nach Tiles mit groupID == " + str(x), 4)
+                    for TileConf in self.parsedTileIDs:
+                        if (TileConf["groupID"] == x):
+                            matchingTileConfs.append(TileConf)
+                    DEBUG( str(len(matchingTileConfs)) + " übereinstimmende TileConfs gefunden", 5)
+                    DEBUG("vergleiche Nachbarn in allen gefundenen TileConfs mit zuvor erstellter Nachbar-Liste...", 4)
+                    debugCounter = 0
+                    foundMatches = []
+                    for TileConf in matchingTileConfs:
+                        debugCounter += 1
+                        DEBUG("vergleiche " +  str(debugCounter) + "/" + str(len(matchingTileConfs)), 5)
+                        # rufe matchNeighbors auf und übergebe TileConf[neighbors] und self.getNeighbors(x)
+                        matches = self.match_neighbors(TileConf["preferredNeighborIDs"], self.get_neighbors(self.currentTilePos))
+                        if (matches != None):
+                            DEBUG("Match mit " + str(len(matches)) + " Übereinstimmungen gefunden", 6)
+                            DEBUG("Es handelt sich um TileID " + str(TileConf["ID"]), 7)
+                            # if(len(tileAndMatch["matches"]) < len(matches)):
+                            foundMatches.append({"TileConf": TileConf, "matches": len(matches)})
+                        else:
+                            DEBUG("keine Übereinstimmungen gefunden", 6)
+                        # sortiere Liste nach enthaltenen 'matchesAttributen'
+                    
+                    if(len(foundMatches) > 0):
+                        sortedMatchingTileConfs = sorted(foundMatches, key = lambda i: i['matches'],reverse=True) 
+                        DEBUG("Match-Liste nach Sortierung:", 12, sortedMatchingTileConfs)
+                        bestMatch = sortedMatchingTileConfs.pop(0)["TileConf"]
+                        DEBUG("Als bestes Match wurde TileID " + str(bestMatch["ID"]) + " gewählt", 4)
+                    else:
+                        DEBUG("matchesListe ist leer, nutze stattdessen eine beliebige ID aus aus der Gruppe " + str(TileConf["groupID"]) + " zu nutzen", 4)
+                        if(len(matchingTileConfs) > 0):
+                            bestMatch = matchingTileConfs[0]
+                        else:
+                            DEBUG("es gibt überhaupt keine Tiles mit übereinstimmender groupID = " + str(TileConf["groupID"]), 5)
+                            DEBUG("wähle beliebiges Tile aus der TileConfs-Liste", 5)
+                            if(len(self.parsedTileIDs) > 0):
+                                bestMatch = self.parsedTileIDs[0]
+                            else:
+                                DEBUG("Es scheinen überhaupt keine TileConfs vorhanden zu sein, wähle stattdessen DEFAULT-Conf", 6)
+                                bestMatch = DEFAULT_TILE_CONF_PARAMETERS
+        #speichere bestMatch in temporärer tileIDMap und überschreib diese bei abschluss des compileVorgangs.
+        #verwerfe Liste bei schweren Fehlern
+        
 
     def uncompile(self):
         #wandelt die dict-Objekte zurück in groupIDs
-        #setze isCompiled = False
+        #setze zurück auf isCompiled = False
         pass
 
     # 1. ließt alle tileIDs ein und lädt jewils die entsprechende textur
@@ -462,6 +526,14 @@ class Level:
                     pass
             else:
                 DEBUG("IS_BUILD_ON_UPDATE ist inaktiv", 1, IS_BUILD_ON_UPDATE)
+                
+                
+                
+                
+                
+                
+                
+                #wird in compile ausgelagert!-------------------------------------------------------------------------------
                 self.currentTilePos["X"] = 0
                 self.currentTilePos["Y"] = 0
                 DEBUG("betrachte TileMap:", 12, self.tileIDMap)
@@ -513,6 +585,12 @@ class Level:
                                 else:
                                     DEBUG("Es scheinen überhaupt keine TileConfs vorhanden zu sein, wähle stattdessen DEFAULT-Conf", 6)
                                     bestMatch = DEFAULT_TILE_CONF_PARAMETERS
+                        #-------------------------------------------------------------------------------wird in compile ausgelagert!
+                        
+                        
+                        
+                        
+                        
                         # Wir haben jetzt die exakte tileID n self.currentPosition {X,Y}
                         # -ermittle die größe eines einzelnen tiles OK
                         # -ermittle die Pixel-Position des ektuellen tiles mit
