@@ -1,8 +1,8 @@
 import pygame, os, random
 from bin.lib.Tile import Tile
-from bin.config.generalCFG import NULL_TYPE, DEBUG, AVAILABLE_IMG_FORMAT_REGEX, SMOOTH_SCALE
+from bin.config.generalCFG import NULL_TYPE, AVAILABLE_IMG_FORMAT_REGEX, SMOOTH_SCALE, DEBUG
 from bin.config.levelCFG import *
-
+#from bin.lib.tools.tools import debug_logger as DEBUG
 
 # Lesen von Leveln muss noch implementiert werden
 class Level:
@@ -117,7 +117,7 @@ class Level:
             for line in lvlFileObj:
                 lvlFile.append(line)
             lvlFileObj.close()
-            DEBUG("Datei in Stringliste umgewandelt:", 3, lvlFile)
+            DEBUG("Datei in Stringliste umgewandelt:", 4, lvlFile)
             if (len(lvlFile) > 0):  # inhalt nicht leer?
                 lvlData = []
                 for x in lvlFile:
@@ -128,14 +128,14 @@ class Level:
                 rawLvl["grid"].clear()
                 for line in lvlData:
                     DEBUG("", 2)
-                    DEBUG("Parse nächste Zeile:", 2, line.replace("\n", ""))
+                    DEBUG("Parse Zeile:", 2, line.replace("\n", ""))
                     #DEBUG("nutze konditionen in angegebener Reihenfolge", 4, DATA_CONDITIONS_LVL)
                     for conditionName in DATA_CONDITIONS_LVL:
                         condition = DATA_CONDITIONS_LVL[conditionName]
-                        DEBUG("nutze Zur Suche von " + conditionName + " diesen RegEx-Ausdruck: ", 4, condition)
+                        DEBUG("Nutze zur Suche von " + conditionName + " den Ausdruck " + str(condition), 3)
                         results = re.findall(condition, line)  # hier testen, ob auch lvlFile übergeben werden kann (denn dann ist zeile 32 unnötig)
                         if (len(results) > 0):
-                            DEBUG("gefundene Zeile(n):", 5, results)
+                            DEBUG("gefundene Zeile(n):", 4, results)
                             if conditionName == "grid":
                                 newGridLine = []
                                 for x in results:
@@ -145,10 +145,10 @@ class Level:
                                     x = x.split(';')
                                     DEBUG("gesplittet (beinhaltet noch String Werte)" + str(x) ,7)
                                     for value in x:
-                                        DEBUG("speichere " + str(value) + " als Integer", 10)
+                                        DEBUG("speichere " + str(value) + " als Integer", 8)
                                         newGridLine.append(int(value))
-                                    DEBUG(str(len(newGridLine)) + " Elemente in Grid-Zeile", 7)
-                                    DEBUG("Inhalt der neuen Zeile nach der Umwandlung:", 9, newGridLine)
+                                    DEBUG(str(len(newGridLine)) + " Elemente in Grid-Zeile", 6)
+                                    DEBUG("Inhalt der neuen Zeile nach der Umwandlung:", 6, newGridLine)
                                     if(len(rawLvl["grid"]) > 0):
                                         if (len(newGridLine) > len(rawLvl["grid"][0])):
                                             DEBUG("bisher längste Zeile gefunden, Tilemap wird auf " + str(len(newGridLine)) + " Spalten erweitert", 8)
@@ -168,24 +168,23 @@ class Level:
                                                     DEBUG("tilesToAdd ist <= 0", 10 ,tilesToAdd)
                                         else:
                                             DEBUG("Zeile ist gleichlang", 9)
-
+                                            #hier könnte noch ein fehler sein!!! wenn eine Zeile kürzer als andere ist wird diese glaub ich nicht aufgefüllt
                                     rawLvl["grid"].append(newGridLine)
-                                    
-                                DEBUG("grid hat jetzt " + str(len(rawLvl["grid"])) + " Zeilen", 7)
+                                DEBUG("Grid-Zeile eingefügt. Grid hat jetzt " + str(len(rawLvl["grid"])) + " Zeilen", 3)
                             elif conditionName == "difficulty":
-                                DEBUG("difficulty Paramter gefunden, wähle: ", 4, results[-1])
+                                DEBUG("difficulty Paramter gefunden, wähle: ", 6, results[-1])
 
                                 extractedDifficulty = int(results[-1].replace("difficulty=", ""))  # gruselige Zeile =)
                                 rawLvl["difficulty"] = extractedDifficulty
-                                DEBUG("extrahierter difficulty wert: ", 4, extractedDifficulty)
+                                DEBUG("Difficulty-Wert " + str(rawLvl["difficulty"]) + " eingelesen", 3)
 
                             elif conditionName == "playerStartPos":
-                                DEBUG("playerStartPos Paramter gefunden, wähle: ", 4, results[-1])
-                                self.parameters["playerStartPositions"].clear()
+                                DEBUG("playerStartPos Paramter gefunden, wähle: ", 6, results[-1])
+                                rawLvl["playerStartPositions"].clear()
                                 extractedplayerStartPositions = results[-1].replace("playerStartPos=", "")
-                                DEBUG("extrahierte StartPositionen ", 5, extractedplayerStartPositions)
+                                DEBUG("extrahierte StartPositionen ", 7, extractedplayerStartPositions)
                                 startPosList = extractedplayerStartPositions.split(')(')
-                                DEBUG("ausgelesene Startpositions-Pärchen:", 6, startPosList)
+                                DEBUG("ausgelesene Startpositions-Pärchen:", 7, startPosList)
                                 for x in startPosList:
                                     x = x.replace("(", "")
                                     x = x.replace(")", "")
@@ -194,9 +193,9 @@ class Level:
                                     if(len(x) == 2):
                                         for value in x:
                                             temp.append(int(value))
-                                        self.parameters["playerStartPositions"].append(temp)
-                                    DEBUG("ermittelte StartPositionen", 4 ,self.parameters["playerStartPositions"])
-                        DEBUG("wechsle auf nächsten Regex-Ausdruck", 4)
+                                        rawLvl["playerStartPositions"].append(temp)
+                                    DEBUG("Player-Startpositionen " + str(rawLvl["difficulty"]) + " eingelesen", 3)
+                        DEBUG("Ausdruck abgeschlossen", 3)
                         re.purge()  # re-Chache leeren
                         results.clear()
             else:
@@ -212,8 +211,7 @@ class Level:
         self.parameters["title"] = rawLvl["title"]
         self.tileIDMap = rawLvl["grid"]
         self.gridSize = pygame.Rect(0, 0, len(rawLvl["grid"][0]), len(rawLvl["grid"]))
-        DEBUG("nutze zum konfigurieren diese Werte: ", 11, rawLvl)
-        DEBUG("---Level erstellt---", 0)
+        DEBUG("Nutze zum Konfigurieren diese Werte: ", 11, rawLvl)
         DEBUG(".lvl-Parsing abgeschlossen", 1)
     # finde, lade und parse textureSetConf-File im übergebenen Verzeichnis in allTiles hinein
 
@@ -224,8 +222,7 @@ class Level:
         textureSetPath = os.path.join(os.path.dirname(self.parameters["levelFilePath"]), "texture", "tiles")
         DEBUG("öffne Textur Ordner an Pfad", 1, textureSetPath)
         if (os.path.isdir(textureSetPath) == False):  # wenn texturOrdner nicht exisitiert -> DEFAULT-Textur-Ordner
-            DEBUG("TexturPfad nicht gefunden. falle auf DefaultTexturSet zurück...",
-                  1, textureSetPath)
+            DEBUG("TexturPfad nicht gefunden. falle auf DefaultTexturSet zurück...", 1, textureSetPath)
             textureSetPath = DEFAULT_TEXTURE_SET_PATH
             DEBUG("Falle auf DefaultTexturSet zurück...", 1, textureSetPath)
         textureSetConfRegex = os.path.join(textureSetPath, '') + '*.conf'
@@ -234,8 +231,7 @@ class Level:
         DEBUG("diese Files wurden gefunden", 10, foundConfFilePaths)
         if(len(foundConfFilePaths) > 0):
             if (foundConfFilePaths[-1] == "none"):  # wenn keine .conf-Datei gefunden -> DEFAULT-Textur-Ordner
-                DEBUG("TexturPfad enthält keine Textur Datei/en(.conf).", 0,
-                      textureSetPath)
+                DEBUG("TexturPfad enthält keine Textur Datei/en(.conf).", 0, textureSetPath)
                 textureSetPath = DEFAULT_TEXTURE_SET_PATH
                 DEBUG("Falle auf DefaultTexturSet zurück...", 1, textureSetPath)
             else:
@@ -256,129 +252,127 @@ class Level:
                 confData = confData.replace("\n", "")
                 confData = confData.replace(" ", "")
                 if (len(confData) > 0):  # inhalt nicht leer?
-                    DEBUG("Datei getrimmt zu", 6, confData)
+                    DEBUG("Datei getrimmt zu", 9, confData)
                     condition = TEXTURE_ID_BLOCK_REGEX
                     DEBUG("nutze zur Suche von ID-Blöcken folgenden RegEx-Ausdruck", 3, condition)
                     results = re.findall(condition, confData)
                     DEBUG(str(len(results)) + " gefundene ID-Blöcke:", 2)
-                    DEBUG("gefundene ID Blöcke:", 6, results)
+                    DEBUG("gefundene ID Blöcke:", 8, results)
                     re.purge()
                     if (len(results) > 0):  # durchsuche jeden gefundenen ID Block
                         for idBlock in results:
-
                             rawParameters = DEFAULT_TILE_CONF_PARAMETERS.copy()
-                            DEBUG("aktuell durchsuchter ID-Block", 7, idBlock)
+                            DEBUG("aktuell durchsuchter ID-Block", 2, idBlock)
                             for conditionName in DATA_CONDITIONS_TILE:
                                 condition = DATA_CONDITIONS_TILE[conditionName]
-                                DEBUG("nutze zur Suche von " + str(conditionName) + " den Ausdruck " + str(condition), 5)
+                                DEBUG("Suche " + str(conditionName), 3)
+                                DEBUG("Nutze den Regex Ausdruck '" + str(condition) + "'", 4)
                                 resultsInBlock = re.findall(condition, idBlock)
-                                DEBUG(str(len(resultsInBlock)) + " gefundene Elemente", 6, resultsInBlock)
+                                DEBUG(str(len(resultsInBlock)) + " gefundene Elemente", 4)
+                                DEBUG("Elemente:", 6, resultsInBlock)
                                 if (len(resultsInBlock) > 0):
                                     if (conditionName == "ID"):
                                         x = resultsInBlock[0]
                                         x = x.replace("ID:", "")
                                         x = x.replace("{", "")
                                         DEBUG("ID-Wert ausgeschnitten", 6, x)
-                                        
-                                        DEBUG("nach umwandlung", 7, int(x))
                                         rawParameters["ID"] = int(x)
-
+                                        DEBUG("ID Wert " + str(rawParameters["groupID"]) + " eingefügt", 3)
                                     elif (conditionName == "groupID"):
                                         x = resultsInBlock[-1].replace("groupID=", "")
                                         DEBUG("groupID-Wert ausgeschnitten", 6, x)
-                                        
                                         DEBUG("nach umwandlung", 7, int(x))
                                         rawParameters["groupID"] = int(x)
-
+                                        DEBUG("groupID Wert " + str(rawParameters["groupID"]) + " eingefügt", 3)
                                     elif (conditionName == "isClippable"):
                                         x = resultsInBlock[-1].replace("isClippable=", "")
-                                        DEBUG("isClippable-Wert ausgeschnitten", 4, x)
-                                        DEBUG("nach umwandlung (bool)", 5, bool(int(x)))
+                                        DEBUG("isClippable-Wert ausgeschnitten", 6, x)
+                                        DEBUG("nach umwandlung (bool)", 7, bool(int(x)))
                                         rawParameters["isClippable"] = bool(int(x))
-
+                                        DEBUG("isClippable Wert " + str(rawParameters["isClippable"]) + " eingefügt", 3)
                                     elif (conditionName == "isAnimated"):
                                         x = resultsInBlock[-1].replace("isAnimated=", "")
-                                        DEBUG("isAnimated-Wert ausgeschnitten", 4, x)
-                                        DEBUG("nach umwandlung (bool)", 5, bool(int(x)))
+                                        DEBUG("isAnimated-Wert ausgeschnitten", 6, x)
+                                        DEBUG("nach umwandlung (bool)", 7, bool(int(x)))
                                         rawParameters["isAnimated"] = bool(int(x))
-
+                                        DEBUG("isAnimated Wert " + str(rawParameters["isAnimated"]) + " eingefügt", 3)
                                     elif (conditionName == "dmgNeededToDestroy"):
                                         x = resultsInBlock[-1].replace("dmgNeededToDestroy=", "")
-                                        DEBUG("dmgNeededToDestroy-Wert ausgeschnitten", 4, x)
-                                        DEBUG("nach umwandlung", 5, int(x))
+                                        DEBUG("dmgNeededToDestroy-Wert ausgeschnitten", 6, x)
+                                        DEBUG("nach umwandlung", 7, int(x))
                                         rawParameters["dmgNeededToDestroy"] = int(x)
-
+                                        DEBUG("dmgNeededToDestroy Wert " + str(rawParameters["dmgNeededToDestroy"]) + " eingefügt", 3)
                                     elif (conditionName == "damageOnCollision"):
                                         x = resultsInBlock[-1].replace("damageOnCollision=", "")
-                                        DEBUG("damageOnCollision-Wert ausgeschnitten", 4, x)
+                                        DEBUG("damageOnCollision-Wert ausgeschnitten", 6, x)
                                         
-                                        DEBUG("nach umwandlung", 5, int(x))
+                                        DEBUG("nach umwandlung", 7, int(x))
                                         rawParameters["damageOnCollision"] = int(x)
-
+                                        DEBUG("damageOnCollision Wert " + str(rawParameters["damageOnCollision"]) + " eingefügt", 3)
                                     elif (conditionName == "damageOverTime"):
                                         x = resultsInBlock[-1].replace("damageOverTime=", "")
-                                        DEBUG("damageOverTime-Wert ausgeschnitten", 4, x)
+                                        DEBUG("damageOverTime-Wert ausgeschnitten", 6, x)
                                         
-                                        DEBUG("nach umwandlung", 5, int(x))
+                                        DEBUG("nach umwandlung", 7, int(x))
                                         rawParameters["damageOverTime"] = int(x)
-                                    
+                                        DEBUG("damageOverTime Wert " + str(rawParameters["damageOverTime"]) + " eingefügt", 3)
                                     elif (conditionName == "layerID"):
                                         x = resultsInBlock[-1].replace("layerID=", "")
-                                        DEBUG("layerID-Wert ausgeschnitten", 4, x)
+                                        DEBUG("layerID-Wert ausgeschnitten", 6, x)
                                         rawParameters["layerID"] = int(x)
-                                        DEBUG("nach umwandlung", 5, int(x))
+                                        DEBUG("nach umwandlung", 7, int(x))
                                         rawParameters["layerID"] = int(x)
-
+                                        DEBUG("layerID Wert " + str(rawParameters["layerID"]) + " eingefügt", 3)
                                     elif (conditionName == "playMvSlowDown"):
                                         x = resultsInBlock[-1].replace("playMvSlowDown=", "")
-                                        DEBUG("playMvSlowDown-Wert ausgeschnitten", 4, x)
-                                        DEBUG("nach umwandlung", 5, int(x))
+                                        DEBUG("playMvSlowDown-Wert ausgeschnitten", 6, x)
+                                        DEBUG("nach umwandlung", 7, int(x))
                                         rawParameters["playMvSlowDown"] = int(x)
-
+                                        DEBUG("playMvSlowDown Wert " + str(rawParameters["playMvSlowDown"]) + " eingefügt", 3)
                                     elif (conditionName == "playerMvManipulation"):
                                         x = resultsInBlock[-1].replace("playerMvManipulation=", "")
-                                        DEBUG("playerMvManipulation-Wert ausgeschnitten", 4, x)
+                                        DEBUG("playerMvManipulation-Wert ausgeschnitten", 6, x)
                                         temp = x.split(",")
                                         if (len(temp) >= 2):
                                             temp[0] = int(temp[0].replace("[", ""))
                                             temp[1] = int(temp[1].replace("]", ""))
                                         else:
-                                            DEBUG("ausgelesene Liste hat zu wenig elemente, fallback auf default",1, temp)
+                                            DEBUG("ausgelesene Liste hat zu wenig elemente, fallback auf default",6, temp)
                                             temp = DEFAULT_TILE_CONF_PARAMETERS["playerMvManipulation"]
-                                        DEBUG("nach umwandlung", 5, temp)
+                                        DEBUG("nach umwandlung", 7, temp)
                                         rawParameters["playerMvManipulation"].clear()
                                         rawParameters["playerMvManipulation"].append(temp[0]) 
                                         rawParameters["playerMvManipulation"].append(temp[1]) # wandle die ersten beiden elemente von temp in ints um
-                                    
+                                        DEBUG("playerMvManipulation Wert  eingefügt", 3, rawParameters["playerMvManipulation"])
                                     elif (conditionName == "preferredNeighborIDs"):
                                         x = resultsInBlock[-1].replace("preferredNeighborIDs=", "")
-                                        DEBUG("preferredNeighborIDs-Wert ausgeschnitten", 4, x)
+                                        DEBUG("preferredNeighborIDs-Wert ausgeschnitten. Nutze " + str(x) + "zur Extraktion der Werte", 6)
                                         firstSplit = x.split("][")
-                                        DEBUG("erster split", 5, firstSplit)
+                                        DEBUG("erster split bei ][", 7, firstSplit)
                                         neighbors = []
                                         for split in firstSplit:
                                             neighbors.append(list())
-                                            DEBUG("Split vor Trim", 6, split)
+                                            DEBUG("Betrachte Element " + str(split), 8)
                                             split = split.replace("[[", "")
                                             split = split.replace("]]", "")
-                                            DEBUG("split getrimmt", 6, split)
+                                            DEBUG("Element getrimmt zu " + str(split), 8)
                                             secondSplit = split.split(",")
-                                            DEBUG("2. split", 6, secondSplit)
+                                            DEBUG("Splitte Element zu", 8, secondSplit)
                                             if (len(secondSplit) == 3):
                                                 neighbors[-1] = secondSplit
                                                 for i in range(0, len(neighbors[-1])):
                                                     neighbors[-1][i] = int(neighbors[-1][i])
-                                                    DEBUG("wert eingelesen(int)", 10, neighbors[-1][i])
+                                                    DEBUG("wert " + str(neighbors[-1][i]) + "eingelesen(int)", 9)
                                         if (len(secondSplit) == 3):
                                             rawParameters["preferredNeighborIDs"] = neighbors 
-                                            DEBUG("PreferredNeighbors eingelesen", 4, rawParameters["preferredNeighborIDs"])
+                                            DEBUG("PreferredNeighbors eingelesen", 3, rawParameters["preferredNeighborIDs"])
                                         else:
-                                            DEBUG("preferredNeighbor konnte nicht eingelesen werden (längen korrekt?), nutze default-Werte", 4)
+                                            DEBUG("preferredNeighbor konnte nicht eingelesen werden (längen korrekt?), nutze default-Werte", 3)
                                 else:
                                     if(conditionName == "groupID"):
-                                        DEBUG("Es wurde keine GroupID gefunden", 6)
+                                        DEBUG("Es wurde keine GroupID gefunden", 3)
                                 re.purge()
-                            DEBUG("füge neues TileID-Objekt der Liste hinzu", 7, rawParameters)
+                            DEBUG("füge neues TileID-Objekt der Liste hinzu", 2, rawParameters)
                             self.parsedTileIDs.append(rawParameters)
                     else:
                         DEBUG("keine ID Blöcke gefunden, überspringe Datei", 2)
