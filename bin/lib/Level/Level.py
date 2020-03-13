@@ -60,7 +60,7 @@ class Level:
     def get_neighbors(self, position={"X": 0, "Y": 0}):
         if(position=={"X": 0, "Y": 0}):
             position = self.currentTilePos
-        DEBUG("Level.get_neighbors(position{})", 4, position)
+        DEBUG("Level.get_neighbors(position{})", 5, position)
         # ändere Position auf den oben linken nachbarn
         neighbors = []
         # gehe Alle 3 möglichen NachbarZeilen durch
@@ -68,28 +68,28 @@ class Level:
             # füge eine neue Y Liste hinzu
             neighbors.append(list())
             line = position["Y"] + y
-            DEBUG("wähle Zeile: " + str(line), 5)
+            DEBUG("wähle Zeile: " + str(line), 6)
             # wenn Nachbar nicht vorhanden (Rand)
             # dann nehme entsrechenden randtile von der gegenüberliegenden Seite als nachbarn
             # erstellt eine von den tiles her eine endlos-Arena
             if (line < 0):
                 line = (len(self.tileIDMap) - 1)
-                DEBUG("oberen Rand erkannt, wähle gegenüberliegende Seite (Zeile " + str(line) + ") als benachbarte Zeile", 6)
+                DEBUG("oberen Rand erkannt, wähle gegenüberliegende Seite (Zeile " + str(line) + ") als benachbarte Zeile", 7)
             elif (line >= (len(self.tileIDMap))):
                 line = 0
-                DEBUG("unteren Rand erkannt, wähle gegenüberliegende Seite (Zeile " + str(line) + ") als benachbarte Zeile", 6)
+                DEBUG("unteren Rand erkannt, wähle gegenüberliegende Seite (Zeile " + str(line) + ") als benachbarte Zeile", 7)
             # wiederhole obiges für jedes Feld in aktueller Zeile
             for x in range(-1, 2):
                 pos = position["X"] + x 
-                DEBUG("wähle Position " + str(pos), 6)
+                DEBUG("wähle Position " + str(pos), 7)
                 if (pos < 0):
                     pos = (len(self.tileIDMap[line]) - 1)
-                    DEBUG("linken Rand erkannt, wähle gegenüberliegende Seite (Spalte " + str(pos) + ") als benachbarte Spalte", 7)
+                    DEBUG("linken Rand erkannt, wähle gegenüberliegende Seite (Spalte " + str(pos) + ") als benachbarte Spalte", 8)
                 elif (pos >= (len(self.tileIDMap[line]))):
                     pos = 0
-                    DEBUG("rechten Rand erkannt, wähle gegenüberliegende Seite (Spalte " + str(pos) + ") als benachbarte Spalte", 7)
+                    DEBUG("rechten Rand erkannt, wähle gegenüberliegende Seite (Spalte " + str(pos) + ") als benachbarte Spalte", 8)
                 neighbors[-1].append(self.tileIDMap[line][pos])
-        DEBUG("übergebe generierte NachbarListe zurück", 4, neighbors)
+        DEBUG("gebe generierte NachbarListe zurück", 5, neighbors)
         return neighbors
 
     # Lese .lvl Datei (debugging implementiert)
@@ -422,7 +422,7 @@ class Level:
             for y in self.tileIDMap:
                 DEBUG("betrachte Zeile: " + str(self.currentTilePos["Y"]), 2)
                 for x in y:
-                    DEBUG("betrachte Spalte: " + str(self.currentTilePos["Y"]), 3)
+                    DEBUG("betrachte Spalte: " + str(self.currentTilePos["X"]), 3)
                     # suche hier nach den nachbarn und der aktuellen position
                     DEBUG("erstelle Liste mit direkten Nachbarn", 4)
                     neighbors = self.get_neighbors(self.currentTilePos)
@@ -437,7 +437,7 @@ class Level:
                     foundMatches = []
                     for TileConf in matchingTileConfs:
                         debugCounter += 1
-                        DEBUG("vergleiche " +  str(debugCounter) + "/" + str(len(matchingTileConfs)), 5)
+                        DEBUG("vergleiche " +  str(debugCounter) + "/" + str(len(matchingTileConfs)), 4)
                         # rufe matchNeighbors auf und übergebe TileConf[neighbors] und self.getNeighbors(x)
                         matches = self.match_neighbors(TileConf["preferredNeighborIDs"], self.get_neighbors(self.currentTilePos))
                         if (matches != None):
@@ -466,6 +466,10 @@ class Level:
                             else:
                                 DEBUG("Es scheinen überhaupt keine TileConfs vorhanden zu sein, wähle stattdessen DEFAULT-Conf", 6)
                                 bestMatch = DEFAULT_TILE_CONF_PARAMETERS
+                    self.currentTilePos["X"] += 1              
+                self.currentTilePos["Y"] += 1
+        else:
+            DEBUG("Level ist bereits kompiliert")
         #speichere bestMatch in temporärer tileIDMap und überschreib diese bei abschluss des compileVorgangs.
         #verwerfe Liste bei schweren Fehlern
         
@@ -535,6 +539,7 @@ class Level:
                 for y in self.tileIDMap:
                     DEBUG("betrachte Zeile: " + str(self.currentTilePos["Y"]), 2)
                     for x in y:
+        #HIER IST WAS MIT CURRENTPOS NICHT RICHTIG
                         DEBUG("betrachte Spalte: " + str(self.currentTilePos["Y"]), 3)
                         # suche hier nach den nachbarn und der aktuellen position
                         DEBUG("erstelle Liste mit direkten Nachbarn", 4)

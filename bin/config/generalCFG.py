@@ -18,7 +18,7 @@ else:
 GAME_DIR = (os.path.join(os.path.dirname(os.path.dirname(__file__))))
 from bin.lib.tools.tools import listPrinter, dictPrinter
 DEBUG_ENABLED = True
-DEBUG_LEVEL = 20
+DEBUG_LEVEL = 4
 DELAY_ON_DEBUG = 0 #gibt ein Delay in s (darf float sein) an, wie lang nach jeder DEBUGGING-Nachricht gewartet werden soll.
 ON_DEBUG_USER_CONTINUES = False #wenn ein kontinueKey (pygame.event) angegeben ist, wird bis zur Eingabe von Enter gewartet.#
 #
