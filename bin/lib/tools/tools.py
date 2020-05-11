@@ -120,11 +120,11 @@ def regExTester(filePath = ""):
     print("dieses Tool vergleicht den Verzeichnis-Inhalt von\n" + filePath + "\nmit dem eingegebenen regEx-Ausdruck und gibt die Ergebnisse als Liste aus.")
     while(True):
         print("regulären Ausdruck eingeben:")
-        result = listPrinter(regExFileFinder(filePath, input(), justFiles = False), top = 7)
+        result = listPrinter(regExFileFinder(filePath, input(), justFiles = False))
         for x in result:
             print(x)
 #test_dictPrinter()
-#regExTester()
+regExTester(os.path.join("bin", "lvl", "000", "texture", "tiles"))
 
 
 #Debugging-Tool

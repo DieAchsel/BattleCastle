@@ -163,3 +163,9 @@ DATA_CONDITIONS_TILE ={
 #Werte, die genutzt werden, wenn es Probleme mit dem Laden der .lvl Dateien gibt
 #DIESE WERTE DÜRFEN NICHT ZUR LAUFZEIT VERÄNDERT WERDEN! ES HANDELT SICH UM FALLBACK-DATEN
 DEFAULT_BG_PATH = os.path.join(GAME_DIR, "gfx", "bg", "00", "Full.png")
+
+
+
+
+
+#Was für ein spass
